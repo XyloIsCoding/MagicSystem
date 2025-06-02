@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSStringProviderNodeInterface.h"
-#include "Node/XMSNode.h"
+#include "XMSValueProviderNode.h"
 #include "UObject/Object.h"
 #include "XMSStringProviderNode.generated.h"
 
@@ -14,7 +14,7 @@ class UXMSValueNode;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSNode, public IXMSStringProviderNodeInterface
+class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSValueProviderNode, public IXMSStringProviderNodeInterface
 {
 	GENERATED_BODY()
 
