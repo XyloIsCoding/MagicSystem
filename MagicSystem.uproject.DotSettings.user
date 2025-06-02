@@ -1,0 +1,30 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AIntelISPCTexComp_002EBuild_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FShared_003FEpic_0020Games_003FUE_005F5_002E4_003FEngine_003FSource_003FThirdParty_003FIntel_003FISPCTexComp_003FIntelISPCTexComp_002EBuild_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A68CC5E9FE7E541755A2CB1AFA4AECBF/Text/@EntryValue">$COPYRIGHT_LINE$
+
+#pragma once
+
+#include "CoreMinimal.h"
+$BASE_CLASS_INCLUDE_DIRECTIVE$
+#include "$UNPREFIXED_CLASS_NAME$.generated.h"
+
+// This class does not need to be modified.
+UINTERFACE()
+class $PREFIX$$UNPREFIXED_CLASS_NAME$ : public $PREFIXED_BASE_CLASS_NAME$
+{
+	GENERATED_BODY()
+};
+
+/**
+ * 
+ */
+class $CLASS_MODULE_API_MACRO$I$UNPREFIXED_CLASS_NAME$
+{
+	GENERATED_BODY()
+
+public:
+	
+	
+};
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A68CC5E9FE7E541755A2CB1AFA4AECBF/Field/=MY_005FHEADER_005FINCLUDE_005FDIRECTIVEAABB/@KeyIndexDefined">False</s:Boolean></wpf:ResourceDictionary>
