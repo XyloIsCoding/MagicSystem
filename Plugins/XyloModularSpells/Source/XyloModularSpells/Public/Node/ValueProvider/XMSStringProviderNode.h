@@ -19,6 +19,9 @@ class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSValueProviderNod
 	GENERATED_BODY()
 
 public:
+	UXMSStringProviderNode();
+	
+public:
 	virtual FString GetStringValue() const override;
 
 protected:

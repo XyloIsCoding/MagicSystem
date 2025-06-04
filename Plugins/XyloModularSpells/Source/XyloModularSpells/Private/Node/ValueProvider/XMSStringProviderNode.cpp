@@ -3,7 +3,12 @@
 
 #include "Node/ValueProvider/XMSStringProviderNode.h"
 
+#include "Node/Instruction/XMSPrintInstructionNode.h"
 #include "Node/Value/XMSValueNode.h"
+
+UXMSStringProviderNode::UXMSStringProviderNode()
+{
+}
 
 FString UXMSStringProviderNode::GetStringValue() const
 {

@@ -4,10 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "InstancedStruct.h"
+#include "XMSTypes.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Node/Value/XMSStringValueNodeInterface.h"
+#include "Node/ValueProvider/XMSStringProviderNodeInterface.h"
 #include "MagicSystemCharacter.generated.h"
 
+class IXMSIntegerProviderNodeInterface;
+class UXMSNode;
+class UXMSStringValueNode;
+class UXMSValueNode;
+class IXMSStringValueNodeInterface;
 class UXMSPrintInstructionNode;
 class USpringArmComponent;
 class UCameraComponent;
@@ -77,5 +85,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ExecuteTestNode();
+
+	//UPROPERTY(EditAnywhere, Instanced)
+	TXMSNode<UXMSNode, IXMSStringValueNodeInterface> Node;
+
+	UPROPERTY(EditAnywhere, Instanced)
+	TScriptInterface<UXMSValueNode> Test;
+
+	//UPROPERTY(EditAnywhere, Instanced)
+	TScriptInterface<IXMSStringProviderNodeInterface> Test2;
 }; 
 
