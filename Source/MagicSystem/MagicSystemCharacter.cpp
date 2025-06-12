@@ -10,11 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Node/Instruction/XMSPrintInstructionNode.h"
-#include "Node/Value/XMSIntegerValueNode.h"
-#include "Node/Value/XMSStringValueNode.h"
-#include "Node/ValueProvider/XMSIntegerProviderNode.h"
-#include "Node/ValueProvider/XMSStringProviderNode.h"
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -57,8 +53,7 @@ AMagicSystemCharacter::AMagicSystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
-	Node = NewObject<UXMSIntegerValueNode>();
+	
 }
 
 void AMagicSystemCharacter::BeginPlay()
@@ -69,9 +64,8 @@ void AMagicSystemCharacter::BeginPlay()
 
 void AMagicSystemCharacter::ExecuteTestNode()
 {
-	if (!IsValid(PrintInstructionNode)) return;
-
-	PrintInstructionNode->ExecuteNode();
+	
+	
 }
 
 //////////////////////////////////////////////////////////////////////////

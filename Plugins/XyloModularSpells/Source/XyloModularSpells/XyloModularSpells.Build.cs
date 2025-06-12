@@ -25,7 +25,7 @@ public class XyloModularSpells : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "StructUtils",
+				"Core", "StructUtils", "GameplayTags",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

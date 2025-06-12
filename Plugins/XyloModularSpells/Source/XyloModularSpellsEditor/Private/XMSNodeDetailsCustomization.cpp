@@ -4,7 +4,6 @@
 
 
 #include "DetailLayoutBuilder.h"
-#include "Node/XMSNode.h"
 
 
 TSharedRef<IDetailCustomization> FXMSNodeDetailsCustomization::MakeInstance()
@@ -19,9 +18,6 @@ void FXMSNodeDetailsCustomization::CustomizeDetails(IDetailLayoutBuilder& Detail
 
 	for (const TWeakObjectPtr<UObject>& Object : Objects)
 	{
-		if (UXMSNode* Node = Cast<UXMSNode>(Object.Get()))
-		{
-			
-		}
+		
 	}
 }

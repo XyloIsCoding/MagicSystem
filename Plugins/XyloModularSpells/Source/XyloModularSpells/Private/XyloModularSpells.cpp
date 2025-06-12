@@ -2,11 +2,14 @@
 
 #include "XyloModularSpells.h"
 
+#include "Node/XMSNodeRegistry.h"
+
 #define LOCTEXT_NAMESPACE "FXyloModularSpellsModule"
 
 void FXyloModularSpellsModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+	FXMSNodeRegistry::Load();
 }
 
 void FXyloModularSpellsModule::ShutdownModule()
