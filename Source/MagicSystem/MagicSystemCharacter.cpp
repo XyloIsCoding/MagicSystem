@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Node/Value/XMSStringValueNode.h"
+#include "Node/ValueProvider/XMSStringProviderNode.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -53,6 +55,7 @@ AMagicSystemCharacter::AMagicSystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
 	
 }
 
@@ -60,12 +63,33 @@ void AMagicSystemCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	TestNode = NewObject<UXMSStringProviderNode>();
+	UXMSStringValueNode* SVN = NewObject<UXMSStringValueNode>(TestNode);
+	SVN->SetString("TEST LOL");
+	TestNode->SetSubNode("StringNode", SVN);
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()
 {
-	
-	
+	if (TestNode)
+	{
+		UE_LOG(LogTemp, Warning, TEXT(">> %s"), *TestNode->GetString())
+
+		UXMSNode* StringNode = TestNode->GetSubNode("StringNode");
+		if (StringNode)
+		{
+			UE_LOG(LogTemp, Warning, TEXT(">> StringValueNode (using simple get): %s"), *StringNode->GetName());
+		}
+	}
+}
+
+void AMagicSystemCharacter::CollectGarbage()
+{
+	if (GEngine)
+	{
+		GEngine->ForceGarbageCollection();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

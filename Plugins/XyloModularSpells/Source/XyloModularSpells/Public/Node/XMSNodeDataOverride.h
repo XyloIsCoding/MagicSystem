@@ -8,6 +8,8 @@
 #include "XMSNodeDataOverride.generated.h"
 
 
+class XMSNode;
+
 USTRUCT(BlueprintType)
 struct FXMSNodeData
 {
@@ -17,10 +19,13 @@ struct FXMSNodeData
 	{
 	}
 	
-	FXMSNodeData(FGameplayTag InIdentifier)
-		: NodeIdentifier(InIdentifier)
+	FXMSNodeData(UClass* InClass)
+		: NodeClass(InClass)
 	{
 	}
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UClass> NodeClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayTag NodeIdentifier;
@@ -41,10 +46,15 @@ class XYLOMODULARSPELLS_API UXMSNodeDataOverride : public UDataAsset
 {
 	GENERATED_BODY()
 
+public:
 	UXMSNodeDataOverride(const FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(EditAnywhere, EditFixedSize, meta=(TitleProperty="Name"))
-	TArray<FXMSNodeData> Registry;
-
-	void TestFunction();
+public:
+	UFUNCTION(BlueprintCallable)
+	bool GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData);
+private:
+	void UpdateNodeDataArray();
+	UPROPERTY(EditAnywhere, EditFixedSize, meta=(TitleProperty="NodeClass"))
+	TArray<FXMSNodeData> NodesData;
+	
 };
