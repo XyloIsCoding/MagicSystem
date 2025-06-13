@@ -8,6 +8,8 @@
 #include "Node/XMSNodeContainer.h"
 #include "XMSStringProviderNode.generated.h"
 
+class UXMSStringValueNode;
+
 /**
  * 
  */
@@ -22,6 +24,6 @@ public:
 public:
 	virtual FString GetString() override;
 private:
-	TXMSNodeContainer<UXMSNode, IXMSStringProviderInterface> StringNode = { this, FString(TEXT("StringNode")),
+	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> StringNode = { this, FString(TEXT("StringNode")),
 		[](UClass* NodeClass){ return true; } };
 };

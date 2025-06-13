@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Node/Base/XMSNodeInterface.h"
 #include "UObject/Interface.h"
 #include "XMSStringValueInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UXMSStringValueInterface : public UXMSNodeInterface
+class UXMSStringValueInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +16,7 @@ class UXMSStringValueInterface : public UXMSNodeInterface
 /**
  * 
  */
-class XYLOMODULARSPELLS_API IXMSStringValueInterface : public IXMSNodeInterface
+class XYLOMODULARSPELLS_API IXMSStringValueInterface
 {
 	GENERATED_BODY()
 

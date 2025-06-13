@@ -5,15 +5,11 @@
 #include "CoreMinimal.h"
 #include "Base/XMSNode.h"
 
-class IXMSNodeInterface;
 class UXMSNode;
 
 
 template<typename Derived>
 concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
-
-template<typename Derived>
-concept NodeInterface = std::is_base_of_v<IXMSNodeInterface, Derived>;
 
 template<typename Derived, typename BaseClass, typename BaseInterface>
 concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<BaseClass, Derived> && std::is_base_of_v<BaseInterface, Derived>;
@@ -63,10 +59,6 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 
 	BaseInterface* Get()
 	{
-		if (BaseClass* NodePtr = Node.Get())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("TXMSNodeContainer::Get >> %s"), *NodePtr->GetName())
-		}
 		return Cast<BaseInterface>(Node.Get());
 	}
 
@@ -99,10 +91,6 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 protected:
 	virtual UXMSNode* GetGeneric() override
 	{
-		if (BaseClass* NodePtr = Node.Get())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("TXMSNodeContainer::GetGeneric >> %s"), *NodePtr->GetName())
-		}
 		return Node.Get();
 	}
 	
