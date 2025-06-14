@@ -14,21 +14,24 @@ concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
 template<typename Derived, typename BaseClass, typename BaseInterface>
 concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<BaseClass, Derived> && std::is_base_of_v<BaseInterface, Derived>;
 
-
+/**
+ * Interface class for TXMSNodeContainer
+ */
 struct FXMSNodeContainer
 {
 	friend UXMSNode;
 
 	FXMSNodeContainer(UXMSNode* Owner, const FString& Name)
 	{
+		// Register node container to SubNodes map of the owning node
 		Owner->SubNodes.Add(Name, this);
 	}
 	virtual ~FXMSNodeContainer()
 	{
-		
 	}
 
 public:
+	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) { return false; }
 protected:
 	virtual UXMSNode* GetGeneric() { return nullptr; }
@@ -36,6 +39,14 @@ protected:
 };
 
 
+/**
+ * Wrapper for nodes with constrains over what nodes can be contained.
+ * <p> Sub-nodes should always be wrapped by a TXMSNodeContainer since it allow them to be reflected
+ * through UXMSNode::SubNodes </p>
+ * 
+ * @tparam BaseClass: subclass of UXMSNode that this container is allowed to hold.
+ * @tparam BaseInterface: interface that the contained node must implement.
+ */
 template <NodeClass BaseClass, typename BaseInterface>
 struct TXMSNodeContainer : public FXMSNodeContainer
 {
@@ -46,12 +57,10 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 		, CompatibilityCheckFunction(Compatibility)
 		, Node(nullptr)
 	{
-		
 	}
 
 	virtual ~TXMSNodeContainer() override
 	{
-		//UE_LOG(LogTemp, Error, TEXT("TXMSNodeContainer getting deleted"))
 	}
 
 	TXMSNodeContainer& operator=(const TXMSNodeContainer& Other) = delete;
@@ -68,6 +77,7 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 		SetGeneric(static_cast<UXMSNode>(InNode));
 	}
 
+	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) override
 	{
 		if (!NodeClass->IsChildOf(BaseClass::StaticClass()))
@@ -107,14 +117,3 @@ private:
 	TStrongObjectPtr<BaseClass> Node;
 };
 
-
-/*
-class Test 
-{
-	TArray<TFunction<UXMSNode* (UClass*)>> Registry;
-	
-	void Register()
-	{
-		Registry.Add([](UClass* Class){ return NewObject<UXMSStringProviderNode>(); });
-	}
-};*/

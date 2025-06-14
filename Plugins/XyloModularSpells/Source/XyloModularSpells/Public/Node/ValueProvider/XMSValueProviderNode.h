@@ -8,7 +8,9 @@
 #include "XMSValueProviderNode.generated.h"
 
 /**
- * 
+ * Value Provider Nodes should be used as a sort of "cast" between value types.
+ * For example an IntegerProvider can implement the string value interface and the float value one, thus giving
+ * the ability to use any integer node as a string or float.
  */
 UCLASS(Abstract)
 class XYLOMODULARSPELLS_API UXMSValueProviderNode : public UXMSNode

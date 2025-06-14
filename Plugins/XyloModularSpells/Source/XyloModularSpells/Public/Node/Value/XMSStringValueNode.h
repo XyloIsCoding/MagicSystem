@@ -3,15 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "XMSStringValueInterface.h"
 #include "XMSValueNode.h"
-#include "Node/ValueProvider/XMSStringProviderInterface.h"
 #include "XMSStringValueNode.generated.h"
 
 /**
- * 
+ * Contains a raw string value.
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringValueNode : public UXMSValueNode, public IXMSStringProviderInterface
+class XYLOMODULARSPELLS_API UXMSStringValueNode : public UXMSValueNode, public IXMSStringValueInterface
 {
 	GENERATED_BODY()
 

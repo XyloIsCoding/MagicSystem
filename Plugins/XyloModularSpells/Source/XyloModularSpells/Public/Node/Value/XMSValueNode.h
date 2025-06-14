@@ -8,7 +8,7 @@
 #include "XMSValueNode.generated.h"
 
 /**
- * 
+ * Value Nodes contain a raw value of their type, and should only implement the interface for their value!
  */
 UCLASS(Abstract)
 class XYLOMODULARSPELLS_API UXMSValueNode : public UXMSNode
