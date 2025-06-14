@@ -7,18 +7,20 @@
 
 void FXMSNodeClassCache::InitForType(UClass* InClass)
 {
-	Classes.Reset();
+	Classes.Empty();
 
-	// Find all script structs of this type and add them to the list
-	// (not sure of a better way to do this but it should only happen once at startup)
-	for (TObjectIterator<UClass> It; It; ++It)
+	if (!InClass)
 	{
-		if (It->IsChildOf(InClass) && !It->HasAnyClassFlags(CLASS_Abstract))
-		{
-			Classes.Add(*It);
-		}
+		return;
 	}
-	
+
+	TArray<UClass*> FoundClasses;
+	GetDerivedClasses(InClass, FoundClasses, true);
+	FoundClasses.RemoveAll([](UClass* Class) {
+		return Class->HasAnyClassFlags(CLASS_Abstract);
+	});
+
+	Classes.Append(FoundClasses);
 	Classes.Sort([](const UClass& A, const UClass& B) { return A.GetName().ToLower() > B.GetName().ToLower(); });
 }
 

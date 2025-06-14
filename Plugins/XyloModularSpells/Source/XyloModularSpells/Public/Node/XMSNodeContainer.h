@@ -106,3 +106,15 @@ private:
 	CompatibilityCheck CompatibilityCheckFunction;
 	TStrongObjectPtr<BaseClass> Node;
 };
+
+
+/*
+class Test 
+{
+	TArray<TFunction<UXMSNode* (UClass*)>> Registry;
+	
+	void Register()
+	{
+		Registry.Add([](UClass* Class){ return NewObject<UXMSStringProviderNode>(); });
+	}
+};*/
