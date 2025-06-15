@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Node/Base/XMSNode.h"
+#include "Node/Base/XMSNodeWithMap.h"
 #include "UObject/Object.h"
 #include "XMSValueProviderNode.generated.h"
 
@@ -13,7 +13,7 @@
  * the ability to use any integer node as a string or float.
  */
 UCLASS(Abstract)
-class XYLOMODULARSPELLS_API UXMSValueProviderNode : public UXMSNode
+class XYLOMODULARSPELLS_API UXMSValueProviderNode : public UXMSNodeWithMap
 {
 	GENERATED_BODY()
 };

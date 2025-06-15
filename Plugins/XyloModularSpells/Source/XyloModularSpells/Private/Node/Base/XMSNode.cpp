@@ -11,18 +11,3 @@ UXMSNode::UXMSNode(const FObjectInitializer& ObjectInitializer)
 	
 }
 
-UXMSNode* UXMSNode::GetSubNode(const FString& SubNodeName)
-{
-	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
-	if (!ContainerPtrPtr) return nullptr;
-
-	return (*ContainerPtrPtr)->GetGeneric();
-}
-
-void UXMSNode::SetSubNode(const FString& SubNodeName, UXMSNode* InNode)
-{
-	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
-	if (!ContainerPtrPtr) return;
-
-	(*ContainerPtrPtr)->SetGeneric(InNode);
-}

@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "XMSIntegerValueInterface.h"
-#include "XMSStringValueInterface.h"
-#include "XMSValueNode.h"
+#include "Node/Base/XMSNodeWithValue.h"
 #include "XMSIntegerValueNode.generated.h"
 
 /**
  * Contains a raw integer value.
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSIntegerValueNode : public UXMSValueNode, public IXMSIntegerValueInterface
+class XYLOMODULARSPELLS_API UXMSIntegerValueNode : public UXMSNodeWithValue, public IXMSIntegerValueInterface
 {
 	GENERATED_BODY()
 
