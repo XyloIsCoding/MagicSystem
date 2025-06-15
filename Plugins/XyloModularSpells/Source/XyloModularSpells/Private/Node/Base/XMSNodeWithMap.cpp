@@ -3,20 +3,41 @@
 
 #include "Node/Base/XMSNodeWithMap.h"
 
+#include "XMSTypes.h"
 #include "Node/XMSNodeContainer.h"
 
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& SubNodeName)
+UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePath& Path, const FName& Identifier)
 {
-	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
+	
+}
+
+void UXMSNodeWithMap::GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes)
+{
+
+	
+	for (TPair<FName, FXMSNodeContainer*>& SubNode : SubNodes)
+	{
+		OutNodes.Nodes.Append({ /* Path + SubNode.Key */, SubNode.Value });
+	}
+}
+
+void UXMSNodeWithMap::SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode)
+{
+	
+}
+
+UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& Identifier)
+{
+	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(Identifier);
 	if (!ContainerPtrPtr) return nullptr;
 
 	return (*ContainerPtrPtr)->GetGeneric();
 }
 
-void UXMSNodeWithMap::SetSubNode(const FName& SubNodeName, UXMSNode* InNode)
+void UXMSNodeWithMap::SetSubNode(const FName& Identifier, UXMSNode* InNode)
 {
-	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
+	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(Identifier);
 	if (!ContainerPtrPtr) return;
 
 	(*ContainerPtrPtr)->SetGeneric(InNode);

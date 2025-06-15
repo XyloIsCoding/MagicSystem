@@ -6,6 +6,8 @@
 #include "UObject/Object.h"
 #include "XMSNode.generated.h"
 
+struct FXMSNodeQueryResult;
+struct FXMSNodePath;
 struct FXMSMultiNodeContainer;
 struct FXMSNodeContainer;
 
@@ -20,5 +22,9 @@ class XYLOMODULARSPELLS_API UXMSNode : public UObject
 public:
 	UXMSNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	// TODO: functions to get one or all sub-nodes or set a sub-node based on a path (TArray<TPair<FName, int32>>)
+public:
+	virtual UXMSNode* GetSubNode(const FXMSNodePath& Path, const FName& Identifier);
+	virtual void GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes);
+	virtual void GetAllSubNodesRecursive(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes);
+	virtual void SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode);
 };

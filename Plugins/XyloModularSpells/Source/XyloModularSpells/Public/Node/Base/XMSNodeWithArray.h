@@ -17,6 +17,11 @@ class XYLOMODULARSPELLS_API UXMSNodeWithArray : public UXMSNode
 	friend FXMSMultiNodeContainer;
 
 public:
+	virtual UXMSNode* GetSubNode(const FXMSNodePath& Path, const FName& Identifier) override;
+	virtual void GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes) override;
+	virtual void SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode) override;
+
+public:
 	virtual UXMSNode* GetSubNode(int32 Index);
 	virtual void SetSubNode(int32 Index, UXMSNode* InNode);
 	virtual void AddSubNode(UXMSNode* InNode);

@@ -5,6 +5,21 @@
 
 #include "Node/XMSNodeContainer.h"
 
+UXMSNode* UXMSNodeWithArray::GetSubNode(const FXMSNodePath& Path, const FName& Identifier)
+{
+	
+}
+
+void UXMSNodeWithArray::GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes)
+{
+	
+}
+
+void UXMSNodeWithArray::SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode)
+{
+	
+}
+
 UXMSNode* UXMSNodeWithArray::GetSubNode(int32 Index)
 {
 	FXMSMultiNodeContainer* ContainerPtr = SubNodes.Value;

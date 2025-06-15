@@ -32,10 +32,10 @@ struct FXMSNodeContainer
 {
 	friend UXMSNodeWithMap;
 
-	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Name)
+	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Identifier)
 	{
 		// Register node container to SubNodes map of the owning node
-		Owner->SubNodes.Add(Name, this);
+		Owner->SubNodes.Add(Identifier, this);
 	}
 	virtual ~FXMSNodeContainer()
 	{
@@ -71,8 +71,8 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Name, const CompatibilityCheck& Compatibility)
-		: FXMSNodeContainer(Owner, Name)
+	TXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Identifier, const CompatibilityCheck& Compatibility)
+		: FXMSNodeContainer(Owner, Identifier)
 		, CompatibilityCheckFunction(Compatibility)
 		, Node(nullptr)
 	{
@@ -157,10 +157,10 @@ struct FXMSMultiNodeContainer
 {
 	friend UXMSNodeWithArray;
 
-	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Name)
+	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier)
 	{
 		// Register node container to SubNodes map of the owning node
-		Owner->SubNodes = { Name, this };
+		Owner->SubNodes = { Identifier, this };
 	}
 	virtual ~FXMSMultiNodeContainer()
 	{
@@ -199,8 +199,8 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Name, const CompatibilityCheck& Compatibility)
-		: FXMSMultiNodeContainer(Owner, Name)
+	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier, const CompatibilityCheck& Compatibility)
+		: FXMSMultiNodeContainer(Owner, Identifier)
 		, CompatibilityCheckFunction(Compatibility)
 		, Nodes(nullptr)
 	{
