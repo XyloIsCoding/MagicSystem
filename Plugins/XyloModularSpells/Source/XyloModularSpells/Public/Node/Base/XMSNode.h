@@ -19,5 +19,6 @@ class XYLOMODULARSPELLS_API UXMSNode : public UObject
 	
 public:
 	UXMSNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+
+	// TODO: functions to get one or all sub-nodes or set a sub-node based on a path (TArray<TPair<FName, int32>>)
 };
