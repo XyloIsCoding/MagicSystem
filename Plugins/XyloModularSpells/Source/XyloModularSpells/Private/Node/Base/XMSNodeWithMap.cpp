@@ -6,7 +6,7 @@
 #include "Node/XMSNodeContainer.h"
 
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(const FString& SubNodeName)
+UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& SubNodeName)
 {
 	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
 	if (!ContainerPtrPtr) return nullptr;
@@ -14,7 +14,7 @@ UXMSNode* UXMSNodeWithMap::GetSubNode(const FString& SubNodeName)
 	return (*ContainerPtrPtr)->GetGeneric();
 }
 
-void UXMSNodeWithMap::SetSubNode(const FString& SubNodeName, UXMSNode* InNode)
+void UXMSNodeWithMap::SetSubNode(const FName& SubNodeName, UXMSNode* InNode)
 {
 	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(SubNodeName);
 	if (!ContainerPtrPtr) return;

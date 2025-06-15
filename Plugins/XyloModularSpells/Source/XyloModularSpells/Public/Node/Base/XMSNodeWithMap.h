@@ -7,7 +7,7 @@
 #include "XMSNodeWithMap.generated.h"
 
 /**
- * 
+ * Use a TXMSNodeContainer for each sub-node.
  */
 UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeWithMap : public UXMSNode
@@ -17,9 +17,9 @@ class XYLOMODULARSPELLS_API UXMSNodeWithMap : public UXMSNode
 	friend FXMSNodeContainer;
 	
 public:
-	virtual UXMSNode* GetSubNode(const FString& SubNodeName);
-	virtual void SetSubNode(const FString& SubNodeName, UXMSNode* InNode);
+	virtual UXMSNode* GetSubNode(const FName& SubNodeName);
+	virtual void SetSubNode(const FName& SubNodeName, UXMSNode* InNode);
 private:
-	/** Map containing subnodes owned by this node. Is automatically updated when a subnode is initialized */
-	TMap<FString, FXMSNodeContainer*> SubNodes;
+	/** Map containing sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
+	TMap<FName, FXMSNodeContainer*> SubNodes;
 };

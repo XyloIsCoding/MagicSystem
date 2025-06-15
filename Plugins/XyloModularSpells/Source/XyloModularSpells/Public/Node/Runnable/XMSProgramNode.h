@@ -22,6 +22,8 @@ public:
 	UXMSProgramNode();
 
 private:
-	TXMSMultiNodeContainer<UXMSInstructionNode, IXMSRunnableNodeInterface> Instructions = { this, FString(TEXT("Instructions")),
+	TXMSMultiNodeContainer<UXMSInstructionNode, IXMSRunnableNodeInterface> Instructions = {
+		this,
+		GET_MEMBER_NAME_CHECKED(ThisClass, Instructions),
 		[](UClass* NodeClass){ return true; } };
 };

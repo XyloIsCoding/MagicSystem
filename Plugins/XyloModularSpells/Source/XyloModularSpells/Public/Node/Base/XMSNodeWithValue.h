@@ -13,4 +13,6 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeWithValue : public UXMSNode
 {
 	GENERATED_BODY()
+
+	// TODO: Do some trick to store a void ptr to the value and cast it to right class or something
 };

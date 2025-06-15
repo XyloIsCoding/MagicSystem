@@ -67,7 +67,7 @@ void AMagicSystemCharacter::BeginPlay()
 	TestNode = NewObject<UXMSStringProviderNode>();
 	UXMSStringValueNode* SVN = NewObject<UXMSStringValueNode>(TestNode);
 	SVN->SetString("TEST LOL");
-	TestNode->SetSubNode("StringNode", SVN);
+	TestNode->SetSubNode(FName(TEXT("StringNode")), SVN);
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()
@@ -75,9 +75,8 @@ void AMagicSystemCharacter::ExecuteTestNode()
 	if (TestNode)
 	{
 		UE_LOG(LogTemp, Warning, TEXT(">> %s"), *TestNode->GetString())
-
-		UXMSNode* StringNode = TestNode->GetSubNode("StringNode");
-		if (StringNode)
+		
+		if (UXMSNode* StringNode = TestNode->GetSubNode(FName(TEXT("StringNode"))))
 		{
 			UE_LOG(LogTemp, Warning, TEXT(">> StringValueNode (using simple get): %s"), *StringNode->GetName());
 		}

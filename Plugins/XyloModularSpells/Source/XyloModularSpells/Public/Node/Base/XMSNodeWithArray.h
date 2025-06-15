@@ -7,7 +7,7 @@
 #include "XMSNodeWithArray.generated.h"
 
 /**
- * 
+ * Use a single TXMSMultiNodeContainer to add sub-nodes.
  */
 UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeWithArray : public UXMSNode
@@ -23,5 +23,6 @@ public:
 	virtual void InsertSubNode(int32 Index, UXMSNode* InNode);
 	virtual void RemoveSubNode(int32 Index);
 private:
-	TPair<FString, FXMSMultiNodeContainer*> SubNodes;
+	/** contains array of sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
+	TPair<FName, FXMSMultiNodeContainer*> SubNodes;
 };

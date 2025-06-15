@@ -24,6 +24,8 @@ public:
 	virtual int32 GetInteger() override;
 	virtual FString GetString() override;
 private:
-	TXMSNodeContainer<UXMSNode, IXMSIntegerValueInterface> IntegerNode = { this, FString(TEXT("IntegerNode")),
+	TXMSNodeContainer<UXMSNode, IXMSIntegerValueInterface> IntegerNode = {
+		this,
+		GET_MEMBER_NAME_CHECKED(ThisClass, IntegerNode),
 		[](UClass* NodeClass){ return true; } };
 };

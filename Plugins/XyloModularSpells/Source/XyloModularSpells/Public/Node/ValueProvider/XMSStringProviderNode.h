@@ -24,6 +24,8 @@ public:
 public:
 	virtual FString GetString() override;
 private:
-	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> StringNode = { this, FString(TEXT("StringNode")),
+	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> StringNode = {
+		this,
+		GET_MEMBER_NAME_CHECKED(ThisClass, StringNode),
 		[](UClass* NodeClass){ return true; } };
 };

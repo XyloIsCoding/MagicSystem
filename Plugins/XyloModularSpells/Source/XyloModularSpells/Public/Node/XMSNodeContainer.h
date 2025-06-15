@@ -7,10 +7,6 @@
 #include "Base/XMSNodeWithArray.h"
 #include "Base/XMSNodeWithMap.h"
 
-class UXMSNodeWithArray;
-class UXMSNodeWithMap;
-class UXMSNode;
-
 
 template<typename Derived>
 concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
@@ -20,6 +16,14 @@ concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/*====================================================================================================================*/
+/* FXMSNodeContainer */
 
 /**
  * Interface class for TXMSNodeContainer
@@ -28,7 +32,7 @@ struct FXMSNodeContainer
 {
 	friend UXMSNodeWithMap;
 
-	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FString& Name)
+	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Name)
 	{
 		// Register node container to SubNodes map of the owning node
 		Owner->SubNodes.Add(Name, this);
@@ -36,6 +40,9 @@ struct FXMSNodeContainer
 	virtual ~FXMSNodeContainer()
 	{
 	}
+
+	FXMSNodeContainer& operator=(const FXMSNodeContainer& Other) = delete;
+	FXMSNodeContainer& operator=(FXMSNodeContainer&& Other) = delete;
 
 public:
 	/** Checks if a class is compatible with this container */
@@ -45,11 +52,16 @@ protected:
 	virtual void SetGeneric(UXMSNode* InNode) {}
 };
 
+// ~FXMSNodeContainer
+/*====================================================================================================================*/
+
+/*====================================================================================================================*/
+/* TXMSNodeContainer */
 
 /**
  * Wrapper for nodes with constrains over what nodes can be contained.
  * <p> Sub-nodes should always be wrapped by a TXMSNodeContainer since it allow them to be reflected
- * through UXMSNode::SubNodes </p>
+ * through UXMSNodeWithMap::SubNodes </p>
  * 
  * @tparam BaseClass: subclass of UXMSNode that this container is allowed to hold.
  * @tparam BaseInterface: interface that the contained node must implement.
@@ -59,7 +71,7 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSNodeContainer(UXMSNodeWithMap* Owner, const FString& Name, const CompatibilityCheck& Compatibility)
+	TXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Name, const CompatibilityCheck& Compatibility)
 		: FXMSNodeContainer(Owner, Name)
 		, CompatibilityCheckFunction(Compatibility)
 		, Node(nullptr)
@@ -124,17 +136,28 @@ private:
 	TStrongObjectPtr<BaseClass> Node;
 };
 
+// ~TXMSNodeContainer
+/*====================================================================================================================*/
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/*====================================================================================================================*/
+/* FXMSMultiNodeContainer */
 
 /**
- * Interface class for TXMSNodeContainer
+ * Interface class for TXMSMultiNodeContainer
  */
 struct FXMSMultiNodeContainer
 {
 	friend UXMSNodeWithArray;
 
-	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FString& Name)
+	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Name)
 	{
 		// Register node container to SubNodes map of the owning node
 		Owner->SubNodes = { Name, this };
@@ -142,6 +165,9 @@ struct FXMSMultiNodeContainer
 	virtual ~FXMSMultiNodeContainer()
 	{
 	}
+
+	FXMSMultiNodeContainer& operator=(const FXMSMultiNodeContainer& Other) = delete;
+	FXMSMultiNodeContainer& operator=(FXMSMultiNodeContainer&& Other) = delete;
 
 public:
 	/** Checks if a class is compatible with this container */
@@ -154,10 +180,16 @@ protected:
 	virtual void Remove(int32 Index) {}
 };
 
+// ~FXMSMultiNodeContainer
+/*====================================================================================================================*/
+
+/*====================================================================================================================*/
+/* TXMSMultiNodeContainer */
+
 /**
- * Wrapper for nodes with constrains over what nodes can be contained.
+ * Wrapper for array of nodes with constrains over what nodes can be contained.
  * <p> Sub-nodes should always be wrapped by a TXMSMultiNodeContainer since it allow them to be reflected
- * through UXMSNode::SubNodes </p>
+ * through UXMSNodeWithArray::SubNodes </p>
  * 
  * @tparam BaseClass: subclass of UXMSNode that this container is allowed to hold.
  * @tparam BaseInterface: interface that the contained node must implement.
@@ -167,7 +199,7 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FString& Name, const CompatibilityCheck& Compatibility)
+	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Name, const CompatibilityCheck& Compatibility)
 		: FXMSMultiNodeContainer(Owner, Name)
 		, CompatibilityCheckFunction(Compatibility)
 		, Nodes(nullptr)
@@ -270,4 +302,7 @@ private:
 	CompatibilityCheck CompatibilityCheckFunction;
 	TArray<TStrongObjectPtr<BaseClass>> Nodes;
 };
+
+// ~TXMSMultiNodeContainer
+/*====================================================================================================================*/
 

@@ -10,8 +10,7 @@ struct FXMSMultiNodeContainer;
 struct FXMSNodeContainer;
 
 /**
- * Use TXMSNodeContainer to add a sub-node.
- * It is preferable to make sub-nodes private, and access them through GetSubNode and SetSubNode
+ * 
  */
 UCLASS(Abstract)
 class XYLOMODULARSPELLS_API UXMSNode : public UObject
