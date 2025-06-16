@@ -6,6 +6,8 @@
 #include "XMSNode.h"
 #include "XMSNodeWithMap.generated.h"
 
+struct FXMSNodeContainer;
+
 /**
  * Use a TXMSNodeContainer for each sub-node.
  */
@@ -16,10 +18,22 @@ class XYLOMODULARSPELLS_API UXMSNodeWithMap : public UXMSNode
 
 	friend FXMSNodeContainer;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNode Interface
+	 */
+	
 public:
-	virtual UXMSNode* GetSubNode(const FXMSNodePath& Path, const FName& Identifier) override;
-	virtual void GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes) override;
-	virtual void SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode) override;
+	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) override;
+	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) override;
+	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeWithMap
+	 */
 	
 public:
 	virtual UXMSNode* GetSubNode(const FName& Identifier);

@@ -3,12 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "XMSRunnableNodeInterface.h"
 #include "Instruction/XMSInstructionNode.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithArray.h"
 #include "XMSProgramNode.generated.h"
-
-class IXMSRunnableNodeInterface;
 
 /**
  * 
@@ -21,7 +20,13 @@ class XYLOMODULARSPELLS_API UXMSProgramNode : public UXMSNodeWithArray
 public:
 	UXMSProgramNode();
 
-private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSProgramNode
+	 */
+	
+public:
 	TXMSMultiNodeContainer<UXMSInstructionNode, IXMSRunnableNodeInterface> Instructions = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, Instructions),

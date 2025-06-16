@@ -20,5 +20,14 @@ FString FXMSNodePath::ToString() const
 		}
 		StringPath.Append(FString::Printf(TEXT(".%s"), *IdentifierString));
 	}
-	return StringPath;
+	return StringPath.RightChop(0);;
 }
+
+bool FXMSNodePath::GetPathElement(int32 Index, FXMSNodePathElement& OutPathElement)
+{
+	if (!Path.IsValidIndex(Index)) return false;
+	
+	OutPathElement = Path[Index];
+	return true;
+}
+

@@ -21,9 +21,22 @@ class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSValueProviderNod
 public:
 	UXMSStringProviderNode();
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSStringValueInterface Interface
+	 */
+	
 public:
 	virtual FString GetString() override;
-private:
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSStringProviderNode
+	 */
+	
+public:
 	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> StringNode = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, StringNode),

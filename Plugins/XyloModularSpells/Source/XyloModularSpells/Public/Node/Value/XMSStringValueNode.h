@@ -15,9 +15,23 @@ class XYLOMODULARSPELLS_API UXMSStringValueNode : public UXMSNodeWithValue, publ
 {
 	GENERATED_BODY()
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSStringValueInterface Interface
+	 */
+
+public:
+	virtual FString GetString() override { return String; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSStringValueNode
+	 */
+	
 public:
 	virtual void SetString(const FString& InString);
-	virtual FString GetString() override { return String; }
 private:
 	UPROPERTY()
 	FString String = FString(TEXT("DefaultText"));

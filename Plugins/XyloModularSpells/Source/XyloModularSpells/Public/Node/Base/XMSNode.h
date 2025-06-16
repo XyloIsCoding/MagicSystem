@@ -7,9 +7,7 @@
 #include "XMSNode.generated.h"
 
 struct FXMSNodeQueryResult;
-struct FXMSNodePath;
-struct FXMSMultiNodeContainer;
-struct FXMSNodeContainer;
+struct FXMSNodePathElement;
 
 /**
  * 
@@ -22,9 +20,14 @@ class XYLOMODULARSPELLS_API UXMSNode : public UObject
 public:
 	UXMSNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNode
+	 */
+	
 public:
-	virtual UXMSNode* GetSubNode(const FXMSNodePath& Path, const FName& Identifier);
-	virtual void GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes);
-	virtual void GetAllSubNodesRecursive(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes);
-	virtual void SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode);
+	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) { return nullptr; }
+	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) {}
+	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
 };

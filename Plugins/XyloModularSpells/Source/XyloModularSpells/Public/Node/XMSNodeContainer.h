@@ -85,6 +85,9 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 	TXMSNodeContainer& operator=(const TXMSNodeContainer& Other) = delete;
 	TXMSNodeContainer& operator=(TXMSNodeContainer&& Other) = delete;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
 	BaseInterface* Get()
 	{
 		return Cast<BaseInterface>(Node.Get());
@@ -96,6 +99,9 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 		SetGeneric(static_cast<UXMSNode>(InNode));
 	}
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) override
 	{
@@ -117,6 +123,8 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 		return true;
 	}
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 protected:
 	virtual UXMSNode* GetGeneric() override
 	{
@@ -130,6 +138,8 @@ protected:
 			Node.Reset(InNode);
 		}
 	}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 private:
 	CompatibilityCheck CompatibilityCheckFunction;
@@ -174,6 +184,7 @@ public:
 	virtual bool IsCompatible(UClass* NodeClass) { return false; }
 protected:
 	virtual UXMSNode* GetGeneric(int32 Index) { return nullptr; }
+	virtual TArray<UXMSNode*> GetAllGeneric() { return TArray<UXMSNode*>(); }
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void AddGeneric(UXMSNode* InNode) {}
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) {}
@@ -202,7 +213,7 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier, const CompatibilityCheck& Compatibility)
 		: FXMSMultiNodeContainer(Owner, Identifier)
 		, CompatibilityCheckFunction(Compatibility)
-		, Nodes(nullptr)
+		, Nodes()
 	{
 	}
 
@@ -213,6 +224,9 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 	TXMSMultiNodeContainer& operator=(const TXMSMultiNodeContainer& Other) = delete;
 	TXMSMultiNodeContainer& operator=(TXMSMultiNodeContainer&& Other) = delete;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
 	BaseInterface* Get(int32 Index)
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
@@ -223,21 +237,34 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 	void Set(int32 Index, NodeType* InNode)
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
-		SetGeneric(Index, static_cast<UXMSNode>(InNode));
+		if (InNode && IsCompatible(InNode->GetClass()))
+		{
+			Nodes[Index].Reset(InNode);
+		}
 	}
 
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Add(NodeType* InNode)
 	{
-		AddGeneric(InNode);
+		if (InNode && IsCompatible(InNode->GetClass()))
+		{
+			Nodes.Add(TStrongObjectPtr<BaseClass>(InNode));
+		}
 	}
 
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Insert(int32 Index, NodeType* InNode)
 	{
-		InsertGeneric(Index, InNode);
+		if (!Nodes.IsValidIndex(Index)) return;
+		if (InNode && IsCompatible(InNode->GetClass()))
+		{
+			Nodes.Insert(TStrongObjectPtr<BaseClass>(InNode), Index);
+		}
 	}
-	
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
 	virtual void Remove(int32 Index) override
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
@@ -265,11 +292,24 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 		return true;
 	}
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 protected:
 	virtual UXMSNode* GetGeneric(int32 Index) override
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Nodes[Index].Get();
+	}
+
+	virtual TArray<UXMSNode*> GetAllGeneric() override
+	{
+		TArray<UXMSNode*> Result;
+		Result.Reserve(Nodes.Num());
+		for (TStrongObjectPtr<BaseClass>& Node : Nodes)
+		{
+			Result.Add(Node.Get());
+		}
+		return Result;
 	}
 	
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) override
@@ -277,7 +317,7 @@ protected:
 		if (!Nodes.IsValidIndex(Index)) return;
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Nodes[Index].Reset(InNode);
+			Nodes[Index].Reset(Cast<BaseClass>(InNode));
 		}
 	}
 
@@ -285,7 +325,7 @@ protected:
 	{
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Nodes.Add({InNode});
+			Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
 		}
 	}
 	
@@ -294,9 +334,11 @@ protected:
 		if (!Nodes.IsValidIndex(Index)) return;
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Nodes.Insert({InNode}, Index);
+			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
 		}
 	}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 private:
 	CompatibilityCheck CompatibilityCheckFunction;

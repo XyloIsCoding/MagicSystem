@@ -15,9 +15,23 @@ class XYLOMODULARSPELLS_API UXMSIntegerValueNode : public UXMSNodeWithValue, pub
 {
 	GENERATED_BODY()
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSIntegerValueInterface Interface
+	 */
+	
+public:
+	virtual int32 GetInteger() override { return Integer; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSIntegerValueNode
+	 */
+
 public:
 	virtual void SetInteger(int32 InInteger);
-	virtual int32 GetInteger() override { return Integer; }
 private:
 	int32 Integer = 0;
 };

@@ -20,10 +20,31 @@ class XYLOMODULARSPELLS_API UXMSIntegerProviderNode : public UXMSValueProviderNo
 public:
 	UXMSIntegerProviderNode();
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSIntegerValueInterface Interface
+	 */
+	
 public:
 	virtual int32 GetInteger() override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSStringValueInterface Interface
+	 */
+
+public:
 	virtual FString GetString() override;
-private:
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSIntegerProviderNode
+	 */
+	
+public:
 	TXMSNodeContainer<UXMSNode, IXMSIntegerValueInterface> IntegerNode = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, IntegerNode),

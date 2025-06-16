@@ -6,26 +6,40 @@
 #include "XMSTypes.h"
 #include "Node/XMSNodeContainer.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePath& Path, const FName& Identifier)
+/*
+ * UXMSNode Interface
+ */
+
+UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePathElement& PathElement)
 {
-	
+	return GetSubNode(PathElement.Identifier);
 }
 
-void UXMSNodeWithMap::GetAllSubNodes(const FXMSNodePath& Path, FXMSNodeQueryResult& OutNodes)
+void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes)
 {
-
-	
 	for (TPair<FName, FXMSNodeContainer*>& SubNode : SubNodes)
 	{
-		OutNodes.Nodes.Append({ /* Path + SubNode.Key */, SubNode.Value });
+		if (!SubNode.Value)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			continue;
+		}
+		OutNodes.Nodes.Emplace(FXMSNodePathElement(SubNode.Key), SubNode.Value->GetGeneric());
 	}
 }
 
-void UXMSNodeWithMap::SetSubNode(const FXMSNodePath& Path, const FName& Identifier, UXMSNode* InNode)
+void UXMSNodeWithMap::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode)
 {
-	
+	SetSubNode(PathElement.Identifier, InNode);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeWithMap
+ */
 
 UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& Identifier)
 {
