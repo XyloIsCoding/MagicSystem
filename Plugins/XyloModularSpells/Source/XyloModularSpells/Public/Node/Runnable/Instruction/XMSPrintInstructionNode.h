@@ -3,21 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSRunnableNodeInterface.h"
 #include "Node/XMSNodeContainer.h"
-#include "Node/Base/XMSNodeWithArray.h"
-#include "XMSProgramNode.generated.h"
+#include "Node/Base/XMSNodeWithMap.h"
+#include "Node/Runnable/XMSRunnableNodeInterface.h"
+#include "Node/Value/XMSStringValueInterface.h"
+#include "XMSPrintInstructionNode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSProgramNode : public UXMSNodeWithArray, public IXMSRunnableNodeInterface
+class XYLOMODULARSPELLS_API UXMSPrintInstructionNode : public UXMSNodeWithMap, public IXMSRunnableNodeInterface
 {
 	GENERATED_BODY()
-
-public:
-	UXMSProgramNode();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,8 +33,8 @@ public:
 	 */
 	
 public:
-	TXMSMultiNodeContainer<UXMSNode, IXMSRunnableNodeInterface> Instructions = {
+	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> OutputString = {
 		this,
-		GET_MEMBER_NAME_CHECKED(ThisClass, Instructions),
+		GET_MEMBER_NAME_CHECKED(ThisClass, OutputString),
 		[](UClass* NodeClass){ return true; } };
 };

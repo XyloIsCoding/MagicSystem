@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSRunnableNodeInterface
 	GENERATED_BODY()
 
 public:
+	virtual int32 ExecuteNode() = 0;
 };

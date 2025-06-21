@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSValueProviderNode.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Value/XMSIntegerValueInterface.h"
 #include "Node/Value/XMSStringValueInterface.h"
@@ -13,7 +12,7 @@
  * Provides type conversion from IntegerValue to other value types.
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSIntegerProviderNode : public UXMSValueProviderNode, public IXMSIntegerValueInterface, public IXMSStringValueInterface
+class XYLOMODULARSPELLS_API UXMSIntegerProviderNode : public UXMSNodeWithMap, public IXMSIntegerValueInterface, public IXMSStringValueInterface
 {
 	GENERATED_BODY()
 

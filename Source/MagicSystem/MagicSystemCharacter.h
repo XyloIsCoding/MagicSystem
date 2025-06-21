@@ -9,6 +9,7 @@
 #include "Logging/LogMacros.h"
 #include "MagicSystemCharacter.generated.h"
 
+class UXMSProgramNode;
 class UXMSStringProviderNode;
 class IXMSIntegerProviderNodeInterface;
 class UXMSNode;
@@ -80,9 +81,12 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UPROPERTY()
-	TObjectPtr<UXMSStringProviderNode> TestNode;
+	TObjectPtr<UXMSProgramNode> TestNode;
 	UPROPERTY()
-	TObjectPtr<UXMSStringProviderNode> TestNodeDeserialized;
+	TObjectPtr<UXMSProgramNode> TestNodeDeserialized;
+
+	UFUNCTION(BlueprintCallable)
+	void CreateNode();
 	
 	UFUNCTION(BlueprintCallable)
 	void ExecuteTestNode();

@@ -11,7 +11,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "XMSNodeStaticLibrary.h"
+#include "Node/Runnable/XMSProgramNode.h"
+#include "Node/Runnable/Instruction/XMSPrintInstructionNode.h"
+#include "Node/Value/XMSIntegerValueNode.h"
 #include "Node/Value/XMSStringValueNode.h"
+#include "Node/ValueProvider/XMSIntegerProviderNode.h"
 #include "Node/ValueProvider/XMSStringProviderNode.h"
 
 
@@ -65,22 +69,52 @@ void AMagicSystemCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	TestNode = NewObject<UXMSStringProviderNode>(this);
-	UXMSStringValueNode* SVN = NewObject<UXMSStringValueNode>(TestNode);
-	SVN->SetString("TEST LOL");
-	TestNode->SetSubNode(GET_MEMBER_NAME_CHECKED(UXMSStringProviderNode, StringNode), SVN);
+	CreateNode();
+}
+
+void AMagicSystemCharacter::CreateNode()
+{
+	TestNode = NewObject<UXMSProgramNode>(this);
+	
+	UXMSStringValueNode* StringValueNode1 = NewObject<UXMSStringValueNode>(this);
+	StringValueNode1->SetString("First");
+	UXMSStringProviderNode* StringProviderNode1 = NewObject<UXMSStringProviderNode>(this);
+	StringProviderNode1->StringNode.Set(StringValueNode1);
+	UXMSPrintInstructionNode* PrintInstruction1 = NewObject<UXMSPrintInstructionNode>(this);
+	PrintInstruction1->OutputString.Set(StringProviderNode1);
+
+	UXMSStringValueNode* StringValueNode2 = NewObject<UXMSStringValueNode>(this);
+	StringValueNode2->SetString("Second");
+	UXMSStringProviderNode* StringProviderNode2 = NewObject<UXMSStringProviderNode>(this);
+	StringProviderNode2->StringNode.Set(StringValueNode2);
+	UXMSPrintInstructionNode* PrintInstruction2 = NewObject<UXMSPrintInstructionNode>(this);
+	PrintInstruction2->OutputString.Set(StringProviderNode2);
+
+	UXMSStringValueNode* StringValueNode3 = NewObject<UXMSStringValueNode>(this);
+	StringValueNode3->SetString("Third");
+	UXMSStringProviderNode* StringProviderNode3 = NewObject<UXMSStringProviderNode>(this);
+	StringProviderNode3->StringNode.Set(StringValueNode3);
+	UXMSPrintInstructionNode* PrintInstruction3 = NewObject<UXMSPrintInstructionNode>(this);
+	PrintInstruction3->OutputString.Set(StringProviderNode3);
+
+	UXMSIntegerValueNode* IntegerValueNode1 = NewObject<UXMSIntegerValueNode>(this);
+	IntegerValueNode1->SetInteger(12345);
+	UXMSIntegerProviderNode* IntegerProviderNode1 = NewObject<UXMSIntegerProviderNode>(this);
+	IntegerProviderNode1->IntegerNode.Set(IntegerValueNode1);
+	UXMSPrintInstructionNode* PrintInstruction4 = NewObject<UXMSPrintInstructionNode>(this);
+	PrintInstruction4->OutputString.Set(IntegerProviderNode1);
+	
+	TestNode->Instructions.Add(PrintInstruction1);
+	TestNode->Instructions.Add(PrintInstruction2);
+	TestNode->Instructions.Add(PrintInstruction3);
+	TestNode->Instructions.Add(PrintInstruction4);
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()
 {
 	if (TestNode)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(">> %s"), *TestNode->GetString())
-		
-		if (UXMSNode* StringNode = TestNode->GetSubNode(GET_MEMBER_NAME_CHECKED(UXMSStringProviderNode, StringNode)))
-		{
-			UE_LOG(LogTemp, Warning, TEXT(">> StringValueNode (using simple get): %s"), *StringNode->GetName());
-		}
+		TestNode->ExecuteNode();
 	}
 }
 
@@ -117,10 +151,10 @@ void AMagicSystemCharacter::SerializeTestNode(const FString& Path)
 		return;
 	}
 	
-	
-	TestNodeDeserialized = NewObject<UXMSStringProviderNode>(this);
+	TestNodeDeserialized = NewObject<UXMSProgramNode>(this);
 	TestNodeDeserialized->DeserializeFromJson(NewNodeJson);
-	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Deserialized run : %s"), *TestNodeDeserialized->GetString())
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Running TestNodeDeserialized ..."));
+	TestNodeDeserialized->ExecuteNode();
 }
 
 void AMagicSystemCharacter::CollectGarbage()

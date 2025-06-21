@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSValueProviderNode.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Value/XMSStringValueInterface.h"
 #include "XMSStringProviderNode.generated.h"
@@ -14,7 +13,7 @@ class UXMSStringValueNode;
  * Provides type conversion from StringValue to other value types.
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSValueProviderNode, public IXMSStringValueInterface
+class XYLOMODULARSPELLS_API UXMSStringProviderNode : public UXMSNodeWithMap, public IXMSStringValueInterface
 {
 	GENERATED_BODY()
 
