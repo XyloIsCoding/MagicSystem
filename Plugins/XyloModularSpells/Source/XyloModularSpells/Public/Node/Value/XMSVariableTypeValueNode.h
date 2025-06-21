@@ -3,15 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSStringValueInterface.h"
+#include "XMSVariableTypeValueInterface.h"
+#include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithValue.h"
-#include "XMSStringValueNode.generated.h"
+#include "XMSVariableTypeValueNode.generated.h"
 
 /**
- * Contains a raw string value.
+ * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringValueNode : public UXMSNodeWithValue, public IXMSStringValueInterface
+class XYLOMODULARSPELLS_API UXMSVariableTypeValueNode : public UXMSNodeWithValue, public IXMSVariableTypeValueInterface
 {
 	GENERATED_BODY()
 
@@ -24,25 +25,24 @@ class XYLOMODULARSPELLS_API UXMSStringValueNode : public UXMSNodeWithValue, publ
 public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
-	
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * IXMSStringValueInterface Interface
-	 */
-
-public:
-	virtual FString GetString(bool& bOutResult) override { return String; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSStringValueNode
+	 * IXMSVariableTypeValueInterface Interface
 	 */
 	
 public:
-	virtual void SetString(const FString& InString);
+	virtual int32 GetVariableType() override { return VariableType; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSVariableTypeValueNode
+	 */
+
+public:
+	virtual void SetVariableType(int32 InType);
 private:
-	UPROPERTY()
-	FString String = FString(TEXT("DefaultText"));
+	int32 VariableType = 0;
 };

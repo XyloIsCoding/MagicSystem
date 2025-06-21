@@ -10,7 +10,7 @@
  * IXMSStringValueInterface Interface
  */
 
-FString UXMSStringOperationNode::GetString()
+FString UXMSStringOperationNode::GetString(bool& bOutResult)
 {
 	if (IXMSStringOperatorInterface* StringOperatorInterface = StringOperator.Get())
 	{

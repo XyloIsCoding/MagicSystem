@@ -18,7 +18,15 @@ int32 UXMSPrintInstructionNode::ExecuteNode()
 		UE_LOG(LogTemp, Warning, TEXT("SpellOutput >> ERROR: No string to print"))
 		return 0;
 	}
+
+	bool bStringFound;
+	FString OutputString = StringValueInterface->GetString(bStringFound);
+	if (!bStringFound)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpellOutput >> ERROR: Unable to find string"))
+		return 0;
+	}
 	
-	UE_LOG(LogTemp, Warning, TEXT("SpellOutput >> %s"), *StringValueInterface->GetString())
+	UE_LOG(LogTemp, Warning, TEXT("SpellOutput >> %s"), *OutputString)
 	return 1;
 }

@@ -72,3 +72,19 @@ public:
 	UPROPERTY()
 	TMap<FXMSNodePathElement, UXMSNode*> Nodes;
 };
+
+
+namespace XMSVariableType
+{
+	UENUM()
+	enum EXMSVariableType
+	{
+		EVT_Integer,
+		EVT_Float,
+		EVT_Vector,
+		EVT_Rotator,
+		EVT_String,
+		EVT_Object
+	};
+}
+

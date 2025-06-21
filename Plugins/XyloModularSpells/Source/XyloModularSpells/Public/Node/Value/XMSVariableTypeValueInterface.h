@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "XMSStringValueInterface.generated.h"
+#include "XMSVariableTypeValueInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UXMSStringValueInterface : public UInterface
+class UXMSVariableTypeValueInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,10 +16,10 @@ class UXMSStringValueInterface : public UInterface
 /**
  * 
  */
-class XYLOMODULARSPELLS_API IXMSStringValueInterface
+class XYLOMODULARSPELLS_API IXMSVariableTypeValueInterface
 {
 	GENERATED_BODY()
 
 public:
-	virtual FString GetString(bool& bOutResult) = 0;
+	virtual int32 GetVariableType() = 0;
 };

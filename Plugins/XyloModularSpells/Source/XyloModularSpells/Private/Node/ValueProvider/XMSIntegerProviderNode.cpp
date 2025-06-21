@@ -16,7 +16,7 @@ int32 UXMSIntegerProviderNode::GetInteger()
 	return IntegerValueInterface->GetInteger();
 }
 
-FString UXMSIntegerProviderNode::GetString()
+FString UXMSIntegerProviderNode::GetString(bool& bOutResult)
 {
 	return FString::FromInt(GetInteger());
 }

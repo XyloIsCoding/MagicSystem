@@ -5,36 +5,36 @@
 #include "CoreMinimal.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
-#include "Node/Value/XMSStringValueInterface.h"
-#include "String/XMSStringOperatorInterface.h"
-#include "XMSStringOperationNode.generated.h"
+#include "Node/Runnable/XMSRunnableNodeInterface.h"
+#include "XMSVariableSetterNode.generated.h"
 
+class IXMSVariableSetterInterface;
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringOperationNode : public UXMSNodeWithMap, public IXMSStringValueInterface
+class XYLOMODULARSPELLS_API UXMSVariableSetterNode : public UXMSNodeWithMap, public  IXMSRunnableNodeInterface
 {
 	GENERATED_BODY()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * IXMSStringValueInterface Interface
+	 * IXMSRunnableNodeInterface Interface
 	 */
 
 public:
-	virtual FString GetString(bool& bOutResult) override;
+	virtual int32 ExecuteNode() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSStringOperationNode
+	 * UXMSCreateVariableNode
 	 */
 	
 public:
-	TXMSNodeContainer<UXMSNode, IXMSStringOperatorInterface> StringOperator = {
+	TXMSNodeContainer<UXMSNode, IXMSVariableSetterInterface> Setter = {
 		this,
-		GET_MEMBER_NAME_CHECKED(ThisClass, StringOperator),
+		GET_MEMBER_NAME_CHECKED(ThisClass, Setter),
 		[](UClass* NodeClass){ return true; } };
 };
