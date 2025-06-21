@@ -186,6 +186,7 @@ public:
 	virtual bool IsCompatible(UClass* NodeClass) { return false; }
 protected:
 	virtual UXMSNode* GetGeneric(int32 Index) { return nullptr; }
+	/** @return All stored nodes, even if nullptr */
 	virtual TArray<UXMSNode*> GetAllGeneric() { return TArray<UXMSNode*>(); }
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void AddGeneric(UXMSNode* InNode) {}
@@ -233,6 +234,18 @@ public:
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Cast<BaseInterface>(Nodes[Index].Get());
+	}
+
+	/** @return All stored nodes, even if nullptr */
+	TArray<BaseInterface*> GetAll()
+	{
+		TArray<BaseInterface*> Result;
+		Result.Reserve(Nodes.Num());
+		for (TStrongObjectPtr<BaseClass>& Node : Nodes)
+		{
+			Result.Add(Cast<BaseInterface>(Node.Get()));
+		}
+		return Result;
 	}
 	
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>

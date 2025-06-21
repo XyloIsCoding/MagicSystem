@@ -30,11 +30,8 @@ TSharedPtr<FJsonObject> UXMSNodeWithArray::SerializeToJson(bool& bOutSuccess)
 	for (UXMSNode* SubNode : SubNodes.Value->GetAllGeneric())
 	{
 		bool bSerializedSubNode = false;
-		TSharedPtr<FJsonObject> SubNodeJson = SubNode->SerializeToJson(bSerializedSubNode);
-		if (bSerializedSubNode)
-		{
-			SubNodesJsonArray.Add(MakeShareable(new FJsonValueObject(SubNodeJson)));
-		}
+		TSharedPtr<FJsonObject> SubNodeJson = SubNode? SubNode->SerializeToJson(bSerializedSubNode) : MakeShareable<>(new FJsonObject);
+		SubNodesJsonArray.Add(MakeShareable(new FJsonValueObject(SubNodeJson)));
 		bSerializedAny |= bSerializedSubNode;
 	}
 
