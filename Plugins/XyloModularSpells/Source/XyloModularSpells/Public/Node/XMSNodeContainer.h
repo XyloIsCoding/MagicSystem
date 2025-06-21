@@ -96,7 +96,7 @@ public:
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Set(NodeType* InNode)
 	{
-		SetGeneric(static_cast<UXMSNode>(InNode));
+		SetGeneric(static_cast<UXMSNode*>(InNode));
 	}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
