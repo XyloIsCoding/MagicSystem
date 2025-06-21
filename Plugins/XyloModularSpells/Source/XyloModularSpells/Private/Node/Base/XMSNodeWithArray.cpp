@@ -111,6 +111,11 @@ void UXMSNodeWithArray::SetSubNode(const FXMSNodePathElement& PathElement, UXMSN
 	SetSubNode(PathElement.Index, InNode);
 }
 
+void UXMSNodeWithArray::GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const
+{
+	OutIdentifiers.Add(SubNodes.Key);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

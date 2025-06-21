@@ -3,12 +3,38 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
 #include "XMSNodeDataOverride.generated.h"
 
 
-class XMSNode;
+class UXMSNode;
+
+USTRUCT(BlueprintType)
+struct FXMSSubNodeData
+{
+	GENERATED_BODY()
+
+	FXMSSubNodeData()
+	{
+	}
+	
+	FXMSSubNodeData(FName InIdentifier)
+		: Identifier(InIdentifier)
+	{
+	}
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FName Identifier;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(MultiLine=true))
+	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UTexture2D> Glyph;
+};
 
 USTRUCT(BlueprintType)
 struct FXMSNodeData
@@ -22,19 +48,25 @@ struct FXMSNodeData
 	FXMSNodeData(UClass* InClass)
 		: NodeClass(InClass)
 	{
+		UpdateSubNodes();
 	}
+
+	void UpdateSubNodes();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UClass> NodeClass;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FGameplayTag NodeIdentifier;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(MultiLine=true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(MultiLine=true))
 	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UTexture2D> Glyph;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
+	TArray<FXMSSubNodeData> SubNodes;
 };
 
 
@@ -49,6 +81,11 @@ class XYLOMODULARSPELLS_API UXMSNodeDataOverride : public UDataAsset
 public:
 	UXMSNodeDataOverride(const FObjectInitializer& ObjectInitializer);
 
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+	
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	bool GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData);

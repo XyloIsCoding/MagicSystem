@@ -31,9 +31,12 @@ public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess);
 	/** Init this node from a Json object, also instantiating all sub-nodes recursively using the passed in outer */
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>);
+	
 	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) { return nullptr; }
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) {}
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
+
+	virtual void GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
 	
 protected:
 	static const FString NodeClassJsonKey;

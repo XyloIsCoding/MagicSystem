@@ -27,9 +27,12 @@ class XYLOMODULARSPELLS_API UXMSNodeWithArray : public UXMSNode
 public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
+	
 	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) override;
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) override;
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
+
+	virtual void GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
