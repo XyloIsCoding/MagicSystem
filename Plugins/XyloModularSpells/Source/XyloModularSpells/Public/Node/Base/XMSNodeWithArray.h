@@ -11,7 +11,7 @@ struct FXMSMultiNodeContainer;
 /**
  * Use a single TXMSMultiNodeContainer to add sub-nodes.
  */
-UCLASS()
+UCLASS(Abstract)
 class XYLOMODULARSPELLS_API UXMSNodeWithArray : public UXMSNode
 {
 	GENERATED_BODY()
@@ -25,6 +25,8 @@ class XYLOMODULARSPELLS_API UXMSNodeWithArray : public UXMSNode
 	 */
 	
 public:
+	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
+	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
 	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) override;
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) override;
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;

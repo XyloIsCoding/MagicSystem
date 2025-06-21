@@ -3,6 +3,7 @@
 
 #include "Node/Base/XMSNodeWithArray.h"
 
+#include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
 #include "Node/XMSNodeContainer.h"
 
@@ -12,6 +13,81 @@
 /*
  * UXMSNode Interface
  */
+
+TSharedPtr<FJsonObject> UXMSNodeWithArray::SerializeToJson(bool& bOutSuccess)
+{
+	TSharedPtr<FJsonObject> NodeJson = Super::SerializeToJson(bOutSuccess);
+
+	if (!SubNodes.Value)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		return NodeJson;
+	}
+
+	// Serialize sub-nodes recursively
+	bool bSerializedAny = false;
+	TArray<TSharedPtr<FJsonValue>> SubNodesJsonArray;
+	for (UXMSNode* SubNode : SubNodes.Value->GetAllGeneric())
+	{
+		bool bSerializedSubNode = false;
+		TSharedPtr<FJsonObject> SubNodeJson = SubNode->SerializeToJson(bSerializedSubNode);
+		if (bSerializedSubNode)
+		{
+			SubNodesJsonArray.Add(MakeShareable(new FJsonValueObject(SubNodeJson)));
+		}
+		bSerializedAny |= bSerializedSubNode;
+	}
+
+	// Avoid adding the array containing all sub-nodes if none of them was serialized
+	if (bSerializedAny)
+	{
+		NodeJson->SetArrayField(SubNodes.Key.ToString(), SubNodesJsonArray);
+	}
+	
+	return NodeJson;
+}
+
+void UXMSNodeWithArray::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
+{
+	Super::DeserializeFromJson(JsonObject);
+
+	if (!SubNodes.Value)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::DeserializeFromJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		return;
+	}
+	
+	const TArray<TSharedPtr<FJsonValue>>* SubNodesJsonArrayPtr;
+	if (!JsonObject->TryGetArrayField(SubNodes.Key.ToString(), SubNodesJsonArrayPtr))
+	{
+		// No sub-nodes array. We can stop here since there is no data to initialize sub-nodes with
+		return;
+	}
+
+	// Instantiate sub-nodes of the appropriate class and initialize them recursively
+	for (const TSharedPtr<FJsonValue>& SubNodeJson : *SubNodesJsonArrayPtr)
+	{
+		TSharedPtr<FJsonObject> SubNodeJsonObject = SubNodeJson->AsObject();
+
+		// Get sub-node Class Name
+		FString SubNodeClassName;
+		if (!SubNodeJsonObject->TryGetStringField(NodeClassJsonKey, SubNodeClassName))
+		{
+			// Could not get class for sub-node
+			continue;
+		}
+		// Set sub-node and initialize it
+		UClass* SubNodeClass = UXMSNodeStaticLibrary::GetNodeClassByName(SubNodeClassName);
+		if (SubNodes.Value->IsCompatible(SubNodeClass))
+		{
+			if (UXMSNode* NewSubNode = NewObject<UXMSNode>(GetOuter(), SubNodeClass))
+			{
+				SubNodes.Value->AddGeneric(NewSubNode);
+				NewSubNode->DeserializeFromJson(SubNodeJsonObject);
+			}
+		}
+	}
+}
 
 UXMSNode* UXMSNodeWithArray::GetSubNode(const FXMSNodePathElement& PathElement)
 {

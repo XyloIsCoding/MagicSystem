@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "XMSNodeStaticLibrary.h"
 #include "Node/Value/XMSStringValueNode.h"
 #include "Node/ValueProvider/XMSStringProviderNode.h"
 
@@ -64,7 +65,7 @@ void AMagicSystemCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	TestNode = NewObject<UXMSStringProviderNode>();
+	TestNode = NewObject<UXMSStringProviderNode>(this);
 	UXMSStringValueNode* SVN = NewObject<UXMSStringValueNode>(TestNode);
 	SVN->SetString("TEST LOL");
 	TestNode->SetSubNode(GET_MEMBER_NAME_CHECKED(UXMSStringProviderNode, StringNode), SVN);
@@ -81,6 +82,45 @@ void AMagicSystemCharacter::ExecuteTestNode()
 			UE_LOG(LogTemp, Warning, TEXT(">> StringValueNode (using simple get): %s"), *StringNode->GetName());
 		}
 	}
+}
+
+void AMagicSystemCharacter::SerializeTestNode(const FString& Path)
+{
+	// Serialize node
+	bool bSerializeSuccess;
+	TSharedPtr<FJsonObject> NodeJson = TestNode->SerializeToJson(bSerializeSuccess);
+	if (!bSerializeSuccess)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Failed to serialize node"));
+		return;
+	}
+
+	// write to json
+	bool bWriteJsonSuccess;
+	FString WriteOutMessage;
+	UXMSNodeStaticLibrary::WriteJson(Path, NodeJson, bWriteJsonSuccess, WriteOutMessage);
+	if (!bWriteJsonSuccess)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Failed to write to json : %s"), *WriteOutMessage);
+		return;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Sucessfully wrote to json"));
+
+	// Test deserialization
+	bool bReadJsonSuccess;
+	FString ReadOutMessage;
+	TSharedPtr<FJsonObject> NewNodeJson = UXMSNodeStaticLibrary::ReadJson(Path, bReadJsonSuccess, ReadOutMessage);
+	if (!bReadJsonSuccess)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Failed to read from json : %s"), *ReadOutMessage);
+		return;
+	}
+	
+	
+	TestNodeDeserialized = NewObject<UXMSStringProviderNode>(this);
+	TestNodeDeserialized->DeserializeFromJson(NewNodeJson);
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Deserialized run : %s"), *TestNodeDeserialized->GetString())
 }
 
 void AMagicSystemCharacter::CollectGarbage()

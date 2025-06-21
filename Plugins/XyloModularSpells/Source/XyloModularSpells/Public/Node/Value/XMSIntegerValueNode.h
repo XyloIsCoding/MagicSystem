@@ -18,6 +18,16 @@ class XYLOMODULARSPELLS_API UXMSIntegerValueNode : public UXMSNodeWithValue, pub
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UXMSNode Interface
+	 */
+
+public:
+	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
+	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * IXMSIntegerValueInterface Interface
 	 */
 	

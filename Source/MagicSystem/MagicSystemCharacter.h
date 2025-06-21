@@ -81,9 +81,14 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<UXMSStringProviderNode> TestNode;
+	UPROPERTY()
+	TObjectPtr<UXMSStringProviderNode> TestNodeDeserialized;
 	
 	UFUNCTION(BlueprintCallable)
 	void ExecuteTestNode();
+
+	UFUNCTION(BlueprintCallable)
+	void SerializeTestNode(const FString& Path);
 
 	UFUNCTION(BlueprintCallable)
 	void CollectGarbage();

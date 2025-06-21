@@ -105,6 +105,8 @@ public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) override
 	{
+		if (!NodeClass) return false;
+		
 		if (!NodeClass->IsChildOf(BaseClass::StaticClass()))
 		{
 			return false;
@@ -274,6 +276,8 @@ public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) override
 	{
+		if (!NodeClass) return false;
+		
 		if (!NodeClass->IsChildOf(BaseClass::StaticClass()))
 		{
 			return false;

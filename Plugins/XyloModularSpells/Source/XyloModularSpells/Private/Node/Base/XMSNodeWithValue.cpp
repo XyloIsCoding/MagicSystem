@@ -2,3 +2,22 @@
 
 
 #include "Node/Base/XMSNodeWithValue.h"
+
+
+const FString UXMSNodeWithValue::ValueJsonKey = FString(TEXT("Value"));
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNode Interface
+	 */
+
+TSharedPtr<FJsonObject> UXMSNodeWithValue::SerializeToJson(bool& bOutSuccess)
+{
+	return Super::SerializeToJson(bOutSuccess);
+}
+
+void UXMSNodeWithValue::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
+{
+	Super::DeserializeFromJson(JsonObject);
+}
