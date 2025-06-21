@@ -35,7 +35,10 @@ struct FXMSNodeContainer
 	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Identifier)
 	{
 		// Register node container to SubNodes map of the owning node
-		Owner->SubNodes.Add(Identifier, this);
+		if (Owner)
+		{
+			Owner->SubNodes.Add(Identifier, this);
+		}
 	}
 	virtual ~FXMSNodeContainer()
 	{
@@ -172,7 +175,10 @@ struct FXMSMultiNodeContainer
 	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier)
 	{
 		// Register node container to SubNodes map of the owning node
-		Owner->SubNodes = { Identifier, this };
+		if (Owner)
+		{
+			Owner->SubNodes = { Identifier, this };
+		}
 	}
 	virtual ~FXMSMultiNodeContainer()
 	{
