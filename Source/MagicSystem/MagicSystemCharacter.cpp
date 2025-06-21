@@ -17,6 +17,7 @@
 #include "Node/Value/XMSStringValueNode.h"
 #include "Node/ValueProvider/XMSIntegerProviderNode.h"
 #include "Node/ValueProvider/XMSStringProviderNode.h"
+#include "Spell/XMSSpellActor.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -114,7 +115,9 @@ void AMagicSystemCharacter::ExecuteTestNode()
 {
 	if (TestNode)
 	{
-		TestNode->ExecuteNode();
+		AXMSSpellActor* Spell = GetWorld()->SpawnActorDeferred<AXMSSpellActor>(AXMSSpellActor::StaticClass(), GetActorTransform(), this, this);
+		Spell->Instruction.Set(UXMSNodeStaticLibrary::CopyNode<>(Spell, TestNode.Get()));
+		Spell->FinishSpawning(GetActorTransform());
 	}
 }
 

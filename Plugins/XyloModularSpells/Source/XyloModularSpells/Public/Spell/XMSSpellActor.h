@@ -66,21 +66,27 @@ public:
 public:
 	virtual void SetIntegerValue(FString Name, int32 Value) override;
 	virtual bool GetIntegerValue(FString Name, int32& OutValue) override;
+	virtual void GetAllIntegerValueNames(TArray<FString>& OutNames) override;
 	
 	virtual void SetFlotValue(FString Name, float Value) override;
 	virtual bool GetFlotValue(FString Name, float& OutValue) override;
+	virtual void GetAllFloatValueNames(TArray<FString>& OutNames) override;
 	
 	virtual void SetVectorValue(FString Name, FVector Value) override;
 	virtual bool GetVectorValue(FString Name, FVector& OutValue) override;
+	virtual void GetAllVectorValueNames(TArray<FString>& OutNames) override;
 	
 	virtual void SetRotatorValue(FString Name, FRotator Value) override;
 	virtual bool GetRotatorValue(FString Name, FRotator& OutValue) override;
+	virtual void GetAllRotatorValueNames(TArray<FString>& OutNames) override;
 	
 	virtual void SetStringValue(FString Name, FString Value) override;
 	virtual bool GetStringValue(FString Name, FString& OutValue) override;
+	virtual void GetAllStringValueNames(TArray<FString>& OutNames) override;
 
 	virtual void SetObjectValue(FString Name, UObject* Value) override;
 	virtual bool GetObjectValue(FString Name, UObject*& OutValue) override;
+	virtual void GetAllObjectValueNames(TArray<FString>& OutNames) override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

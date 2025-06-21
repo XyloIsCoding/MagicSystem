@@ -19,6 +19,11 @@ AXMSSpellActor::AXMSSpellActor()
 void AXMSSpellActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (IXMSRunnableNodeInterface* RunnableNodeInterface = Instruction.Get())
+	{
+		RunnableNodeInterface->ExecuteNode();
+	}
 }
 
 void AXMSSpellActor::Tick(float DeltaTime)
@@ -46,6 +51,11 @@ bool AXMSSpellActor::GetIntegerValue(FString Name, int32& OutValue)
 	return true;
 }
 
+void AXMSSpellActor::GetAllIntegerValueNames(TArray<FString>& OutNames)
+{
+	Brain.IntegerVariables.GetKeys(OutNames);
+}
+
 void AXMSSpellActor::SetFlotValue(FString Name, float Value)
 {
 	Brain.FloatVariables.Add(Name, Value);
@@ -58,6 +68,11 @@ bool AXMSSpellActor::GetFlotValue(FString Name, float& OutValue)
 	
 	OutValue = *ValuePtr;
 	return true;
+}
+
+void AXMSSpellActor::GetAllFloatValueNames(TArray<FString>& OutNames)
+{
+	Brain.FloatVariables.GetKeys(OutNames);
 }
 
 void AXMSSpellActor::SetVectorValue(FString Name, FVector Value)
@@ -74,6 +89,11 @@ bool AXMSSpellActor::GetVectorValue(FString Name, FVector& OutValue)
 	return true;
 }
 
+void AXMSSpellActor::GetAllVectorValueNames(TArray<FString>& OutNames)
+{
+	Brain.VectorVariables.GetKeys(OutNames);
+}
+
 void AXMSSpellActor::SetRotatorValue(FString Name, FRotator Value)
 {
 	Brain.RotatorVariables.Add(Name, Value);
@@ -86,6 +106,11 @@ bool AXMSSpellActor::GetRotatorValue(FString Name, FRotator& OutValue)
 	
 	OutValue = *ValuePtr;
 	return true;
+}
+
+void AXMSSpellActor::GetAllRotatorValueNames(TArray<FString>& OutNames)
+{
+	Brain.RotatorVariables.GetKeys(OutNames);
 }
 
 void AXMSSpellActor::SetStringValue(FString Name, FString Value)
@@ -102,6 +127,11 @@ bool AXMSSpellActor::GetStringValue(FString Name, FString& OutValue)
 	return true;
 }
 
+void AXMSSpellActor::GetAllStringValueNames(TArray<FString>& OutNames)
+{
+	Brain.StringVariables.GetKeys(OutNames);
+}
+
 void AXMSSpellActor::SetObjectValue(FString Name, UObject* Value)
 {
 	Brain.ObjectVariables.Add(Name, Value);
@@ -114,6 +144,11 @@ bool AXMSSpellActor::GetObjectValue(FString Name, UObject*& OutValue)
 	
 	OutValue = *ValuePtr;
 	return true;
+}
+
+void AXMSSpellActor::GetAllObjectValueNames(TArray<FString>& OutNames)
+{
+	Brain.ObjectVariables.GetKeys(OutNames);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -30,5 +30,11 @@ public:
 	 * @param InNode: Node to copy
 	 * @return: Reparented copy of InNode */
 	static UXMSNode* CopyNode(UObject* Outer, UXMSNode* InNode);
+
+	template <typename T> requires std::is_base_of_v<UXMSNode, T>
+	static T* CopyNode(UObject* Outer, T* InNode)
+	{
+		return static_cast<T*>(CopyNode(Outer, static_cast<UXMSNode*>(InNode)));
+	}
 };
 
