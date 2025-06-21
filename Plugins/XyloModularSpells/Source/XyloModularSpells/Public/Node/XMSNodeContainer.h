@@ -140,7 +140,7 @@ protected:
 	{
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Node.Reset(InNode);
+			Node.Reset(Cast<BaseClass>(InNode));
 		}
 	}
 
