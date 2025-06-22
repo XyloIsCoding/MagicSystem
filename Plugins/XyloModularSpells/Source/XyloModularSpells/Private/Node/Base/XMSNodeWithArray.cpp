@@ -161,3 +161,7 @@ void UXMSNodeWithArray::RemoveSubNode(int32 Index)
 
 	ContainerPtr->Remove(Index);
 }
+
+void UXMSNodeWithArray::OnNodeChanged(const FName& Identifier, int32 Index)
+{
+}

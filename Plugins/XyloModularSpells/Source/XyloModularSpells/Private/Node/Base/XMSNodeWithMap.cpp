@@ -133,3 +133,7 @@ void UXMSNodeWithMap::SetSubNode(const FName& Identifier, UXMSNode* InNode)
 
 	(*ContainerPtrPtr)->SetGeneric(InNode);
 }
+
+void UXMSNodeWithMap::OnNodeChanged(const FName& Identifier)
+{
+}

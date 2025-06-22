@@ -14,6 +14,8 @@ concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
 template<typename Derived, typename BaseClass, typename BaseInterface>
 concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<BaseClass, Derived> && std::is_base_of_v<BaseInterface, Derived>;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeChangedSignature, const FName&)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSArrayNodeChangedSignature, const FName&, int32)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,16 +34,19 @@ struct FXMSNodeContainer
 {
 	friend UXMSNodeWithMap;
 
-	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Identifier)
+	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& InIdentifier)
+		: Identifier(InIdentifier)
 	{
 		// Register node container to SubNodes map of the owning node
 		if (Owner)
 		{
 			Owner->SubNodes.Add(Identifier, this);
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithMap::OnNodeChanged);
 		}
 	}
 	virtual ~FXMSNodeContainer()
 	{
+		NodeChangedDelegate.Remove(NodeChangedDelegateHandle);
 	}
 
 	FXMSNodeContainer& operator=(const FXMSNodeContainer& Other) = delete;
@@ -53,6 +58,10 @@ public:
 protected:
 	virtual UXMSNode* GetGeneric() { return nullptr; }
 	virtual void SetGeneric(UXMSNode* InNode) {}
+
+	FName Identifier;
+	FXMSNodeChangedSignature NodeChangedDelegate;
+	FDelegateHandle NodeChangedDelegateHandle;
 };
 
 // ~FXMSNodeContainer
@@ -99,7 +108,11 @@ public:
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Set(NodeType* InNode)
 	{
-		SetGeneric(static_cast<UXMSNode*>(InNode));
+		if (InNode && IsCompatible(InNode->GetClass()))
+		{
+			Node.Reset(InNode);
+			NodeChangedDelegate.Broadcast(Identifier);
+		}
 	}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -141,6 +154,7 @@ protected:
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
 			Node.Reset(Cast<BaseClass>(InNode));
+			NodeChangedDelegate.Broadcast(Identifier);
 		}
 	}
 
@@ -172,16 +186,19 @@ struct FXMSMultiNodeContainer
 {
 	friend UXMSNodeWithArray;
 
-	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier)
+	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& InIdentifier)
+		: Identifier(InIdentifier)
 	{
 		// Register node container to SubNodes map of the owning node
 		if (Owner)
 		{
 			Owner->SubNodes = { Identifier, this };
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithArray::OnNodeChanged);
 		}
 	}
 	virtual ~FXMSMultiNodeContainer()
 	{
+		NodeChangedDelegate.Remove(NodeChangedDelegateHandle);
 	}
 
 	FXMSMultiNodeContainer& operator=(const FXMSMultiNodeContainer& Other) = delete;
@@ -198,6 +215,10 @@ protected:
 	virtual void AddGeneric(UXMSNode* InNode) {}
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void Remove(int32 Index) {}
+
+	FName Identifier;
+	FXMSArrayNodeChangedSignature NodeChangedDelegate;
+	FDelegateHandle NodeChangedDelegateHandle;
 };
 
 // ~FXMSMultiNodeContainer
@@ -261,6 +282,7 @@ public:
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
 			Nodes[Index].Reset(InNode);
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 
@@ -269,7 +291,8 @@ public:
 	{
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Nodes.Add(TStrongObjectPtr<BaseClass>(InNode));
+			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(InNode));
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 
@@ -280,6 +303,7 @@ public:
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(InNode), Index);
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 
@@ -341,6 +365,7 @@ protected:
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
 			Nodes[Index].Reset(Cast<BaseClass>(InNode));
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 
@@ -348,7 +373,8 @@ protected:
 	{
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
-			Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
+			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 	
@@ -358,6 +384,7 @@ protected:
 		if (InNode && IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
+			NodeChangedDelegate.Broadcast(Identifier, Index);
 		}
 	}
 
