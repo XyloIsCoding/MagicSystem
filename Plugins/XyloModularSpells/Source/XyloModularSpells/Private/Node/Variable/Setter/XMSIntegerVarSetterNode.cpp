@@ -3,8 +3,29 @@
 
 #include "Node/Variable/Setter/XMSIntegerVarSetterNode.h"
 
+#include "XMSTypes.h"
 #include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellEditor/XMSSpellEditorInterface.h"
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNode Interface
+ */
+
+void UXMSIntegerVarSetterNode::OnNodeChanged(const FName& Identifier)
+{
+	Super::OnNodeChanged(Identifier);
+
+	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableName)))
+	{
+		if (UXMSVariableNameNode* VariableNameNode = Cast<UXMSVariableNameNode>(VariableName.Get()))
+		{
+			VariableNameNode->SetType(XMSVariableType::EVT_Integer);
+		}
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

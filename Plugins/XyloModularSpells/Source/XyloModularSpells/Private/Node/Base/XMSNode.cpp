@@ -3,6 +3,8 @@
 
 #include "Node/Base/XMSNode.h"
 
+#include "SpellEditor/XMSSpellEditorInterface.h"
+
 
 const FString UXMSNode::NodeClassJsonKey = FString(TEXT("NodeClass"));
 
@@ -10,6 +12,17 @@ UXMSNode::UXMSNode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNode
+ */
+
+bool UXMSNode::IsInSpellEditorContext() const
+{
+	return GetOuter() && GetOuter()->Implements<IXMSSpellEditorInterface::UClassType>();
 }
 
 TSharedPtr<FJsonObject> UXMSNode::SerializeToJson(bool& bOutSuccess)

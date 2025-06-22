@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Variable/Setter/XMSStringVarSetterNode.h"
+#include "Node/Variable/Getter/XMSStringVarGetterNode.h"
 
 #include "XMSTypes.h"
 #include "Spell/XMSSpellExecutorInterface.h"
@@ -14,7 +14,7 @@
  * UXMSNode Interface
  */
 
-void UXMSStringVarSetterNode::OnNodeChanged(const FName& Identifier)
+void UXMSStringVarGetterNode::OnNodeChanged(const FName& Identifier)
 {
 	Super::OnNodeChanged(Identifier);
 
@@ -30,27 +30,39 @@ void UXMSStringVarSetterNode::OnNodeChanged(const FName& Identifier)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * IXMSVariableSetterInterface Interface
+ * IXMSStringValueInterface Interface
  */
 
-bool UXMSStringVarSetterNode::SetVariable()
+bool UXMSStringVarGetterNode::GetString(FString& OutString)
 {
 	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
-	if (!SpellExecutor) return false;
+	if (!SpellExecutor)
+	{
+		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));
+		return false;
+	}
 
 	IXMSStringValueInterface* VariableNameNode = VariableName.Get();
-	if (!VariableNameNode) return false;
-
-	IXMSStringValueInterface* Value = StringValue.Get();
-	if (!Value) return false;
-
+	if (!VariableNameNode)
+	{
+		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));
+		return false;
+	}
+	
 	FString VariableNameString;
-	if (!VariableNameNode->GetString(VariableNameString)) return false;
-	if (VariableNameString.IsEmpty()) return false;
+	if (!VariableNameNode->GetString(VariableNameString))
+	{
+		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));
+		return false;
+	}
 
 	FString VariableValueString;
-	if (!Value->GetString(VariableValueString)) return false;
+	if (!SpellExecutor->GetStringValue(VariableNameString, VariableValueString))
+	{
+		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));
+		return false;
+	}
 	
-	SpellExecutor->SetStringValue(VariableNameString, VariableValueString);
-	return true;
+	OutString = VariableValueString;
+	return false;
 }

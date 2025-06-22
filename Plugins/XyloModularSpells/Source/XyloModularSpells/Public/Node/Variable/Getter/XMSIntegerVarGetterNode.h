@@ -3,18 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSVariableSetterInterface.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
+#include "Node/Value/XMSIntegerValueInterface.h"
 #include "Node/Value/XMSStringValueInterface.h"
 #include "Node/Value/XMSVariableNameNode.h"
-#include "XMSStringVarSetterNode.generated.h"
+#include "XMSIntegerVarGetterNode.generated.h"
+
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringVarSetterNode : public UXMSNodeWithMap, public IXMSVariableSetterInterface
+class XYLOMODULARSPELLS_API UXMSIntegerVarGetterNode : public UXMSNodeWithMap, public IXMSIntegerValueInterface
 {
 	GENERATED_BODY()
 
@@ -30,26 +31,21 @@ protected:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * IXMSVariableSetterInterface Interface
+	 * IXMSIntegerValueInterface Interface
 	 */
-
+	
 public:
-	virtual bool SetVariable() override;
+	virtual int32 GetInteger() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSStringVarSetterNode
+	 * UXMSIntegerVarGetterNode
 	 */
 	
 public:
 	TXMSNodeContainer<UXMSVariableNameNode, IXMSStringValueInterface> VariableName = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, VariableName),
-		[](UClass* NodeClass){ return true; } };
-
-	TXMSNodeContainer<UXMSNode, IXMSStringValueInterface> StringValue = {
-		this,
-		GET_MEMBER_NAME_CHECKED(ThisClass, StringValue),
 		[](UClass* NodeClass){ return true; } };
 };

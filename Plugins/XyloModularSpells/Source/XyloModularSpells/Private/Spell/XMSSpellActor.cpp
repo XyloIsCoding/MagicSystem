@@ -37,12 +37,12 @@ void AXMSSpellActor::Tick(float DeltaTime)
  * IXMSSpellExecutorInterface Interface
  */
 
-void AXMSSpellActor::SetIntegerValue(FString Name, int32 Value)
+void AXMSSpellActor::SetIntegerValue(const FString& Name, int32 Value)
 {
 	Brain.IntegerVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetIntegerValue(FString Name, int32& OutValue)
+bool AXMSSpellActor::GetIntegerValue(const FString& Name, int32& OutValue)
 {
 	int32* ValuePtr = Brain.IntegerVariables.Find(Name);
 	if (!ValuePtr) return false;
@@ -56,12 +56,12 @@ void AXMSSpellActor::GetAllIntegerValueNames(TArray<FString>& OutNames)
 	Brain.IntegerVariables.GetKeys(OutNames);
 }
 
-void AXMSSpellActor::SetFlotValue(FString Name, float Value)
+void AXMSSpellActor::SetFlotValue(const FString& Name, float Value)
 {
 	Brain.FloatVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetFlotValue(FString Name, float& OutValue)
+bool AXMSSpellActor::GetFlotValue(const FString& Name, float& OutValue)
 {
 	float* ValuePtr = Brain.FloatVariables.Find(Name);
 	if (!ValuePtr) return false;
@@ -75,12 +75,12 @@ void AXMSSpellActor::GetAllFloatValueNames(TArray<FString>& OutNames)
 	Brain.FloatVariables.GetKeys(OutNames);
 }
 
-void AXMSSpellActor::SetVectorValue(FString Name, FVector Value)
+void AXMSSpellActor::SetVectorValue(const FString& Name, FVector Value)
 {
 	Brain.VectorVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetVectorValue(FString Name, FVector& OutValue)
+bool AXMSSpellActor::GetVectorValue(const FString& Name, FVector& OutValue)
 {
 	FVector* ValuePtr = Brain.VectorVariables.Find(Name);
 	if (!ValuePtr) return false;
@@ -94,12 +94,12 @@ void AXMSSpellActor::GetAllVectorValueNames(TArray<FString>& OutNames)
 	Brain.VectorVariables.GetKeys(OutNames);
 }
 
-void AXMSSpellActor::SetRotatorValue(FString Name, FRotator Value)
+void AXMSSpellActor::SetRotatorValue(const FString& Name, FRotator Value)
 {
 	Brain.RotatorVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetRotatorValue(FString Name, FRotator& OutValue)
+bool AXMSSpellActor::GetRotatorValue(const FString& Name, FRotator& OutValue)
 {
 	FRotator* ValuePtr = Brain.RotatorVariables.Find(Name);
 	if (!ValuePtr) return false;
@@ -113,12 +113,12 @@ void AXMSSpellActor::GetAllRotatorValueNames(TArray<FString>& OutNames)
 	Brain.RotatorVariables.GetKeys(OutNames);
 }
 
-void AXMSSpellActor::SetStringValue(FString Name, FString Value)
+void AXMSSpellActor::SetStringValue(const FString& Name, FString Value)
 {
 	Brain.StringVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetStringValue(FString Name, FString& OutValue)
+bool AXMSSpellActor::GetStringValue(const FString& Name, FString& OutValue)
 {
 	FString* ValuePtr = Brain.StringVariables.Find(Name);
 	if (!ValuePtr) return false;
@@ -132,12 +132,12 @@ void AXMSSpellActor::GetAllStringValueNames(TArray<FString>& OutNames)
 	Brain.StringVariables.GetKeys(OutNames);
 }
 
-void AXMSSpellActor::SetObjectValue(FString Name, UObject* Value)
+void AXMSSpellActor::SetObjectValue(const FString& Name, UObject* Value)
 {
 	Brain.ObjectVariables.Add(Name, Value);
 }
 
-bool AXMSSpellActor::GetObjectValue(FString Name, UObject*& OutValue)
+bool AXMSSpellActor::GetObjectValue(const FString& Name, UObject*& OutValue)
 {
 	UObject** ValuePtr = Brain.ObjectVariables.Find(Name);
 	if (!ValuePtr) return false;

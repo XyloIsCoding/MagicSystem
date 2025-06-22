@@ -8,7 +8,7 @@
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Value/XMSIntegerValueInterface.h"
 #include "Node/Value/XMSStringValueInterface.h"
-#include "Node/Value/XMSStringValueNode.h"
+#include "Node/Value/XMSVariableNameNode.h"
 #include "XMSIntegerVarSetterNode.generated.h"
 
 /**
@@ -18,6 +18,15 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSIntegerVarSetterNode : public UXMSNodeWithMap, public IXMSVariableSetterInterface
 {
 	GENERATED_BODY()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNode Interface
+	 */
+
+protected:
+	virtual void OnNodeChanged(const FName& Identifier) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +44,7 @@ public:
 	 */
 	
 public:
-	TXMSNodeContainer<UXMSStringValueNode, IXMSStringValueInterface> VariableName = {
+	TXMSNodeContainer<UXMSVariableNameNode, IXMSStringValueInterface> VariableName = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, VariableName),
 		[](UClass* NodeClass){ return true; } };

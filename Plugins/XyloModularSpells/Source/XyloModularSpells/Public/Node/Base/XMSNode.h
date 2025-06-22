@@ -27,6 +27,8 @@ public:
 	 */
 	
 public:
+	bool IsInSpellEditorContext() const;
+	
 	/** Serialize this node and all its sub-nodes to Json recursively */
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess);
 	/** Init this node from a Json object, also instantiating all sub-nodes recursively using the passed in outer */

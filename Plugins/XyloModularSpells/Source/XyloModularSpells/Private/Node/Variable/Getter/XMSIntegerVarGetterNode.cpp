@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Variable/Setter/XMSStringVarSetterNode.h"
+#include "Node/Variable/Getter/XMSIntegerVarGetterNode.h"
 
 #include "XMSTypes.h"
 #include "Spell/XMSSpellExecutorInterface.h"
@@ -14,7 +14,7 @@
  * UXMSNode Interface
  */
 
-void UXMSStringVarSetterNode::OnNodeChanged(const FName& Identifier)
+void UXMSIntegerVarGetterNode::OnNodeChanged(const FName& Identifier)
 {
 	Super::OnNodeChanged(Identifier);
 
@@ -22,7 +22,7 @@ void UXMSStringVarSetterNode::OnNodeChanged(const FName& Identifier)
 	{
 		if (UXMSVariableNameNode* VariableNameNode = Cast<UXMSVariableNameNode>(VariableName.Get()))
 		{
-			VariableNameNode->SetType(XMSVariableType::EVT_String);
+			VariableNameNode->SetType(XMSVariableType::EVT_Integer);
 		}
 	}
 }
@@ -30,27 +30,34 @@ void UXMSStringVarSetterNode::OnNodeChanged(const FName& Identifier)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * IXMSVariableSetterInterface Interface
+ * IXMSIntegerValueInterface Interface
  */
 
-bool UXMSStringVarSetterNode::SetVariable()
+int32 UXMSIntegerVarGetterNode::GetInteger()
 {
 	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
-	if (!SpellExecutor) return false;
+	if (!SpellExecutor)
+	{
+		return 0;
+	}
 
 	IXMSStringValueInterface* VariableNameNode = VariableName.Get();
-	if (!VariableNameNode) return false;
-
-	IXMSStringValueInterface* Value = StringValue.Get();
-	if (!Value) return false;
-
-	FString VariableNameString;
-	if (!VariableNameNode->GetString(VariableNameString)) return false;
-	if (VariableNameString.IsEmpty()) return false;
-
-	FString VariableValueString;
-	if (!Value->GetString(VariableValueString)) return false;
+	if (!VariableNameNode)
+	{
+		return 0;
+	}
 	
-	SpellExecutor->SetStringValue(VariableNameString, VariableValueString);
-	return true;
+	FString VariableNameString;
+	if (!VariableNameNode->GetString(VariableNameString))
+	{
+		return 0;
+	}
+
+	int32 VariableValueInt;
+	if (!SpellExecutor->GetIntegerValue(VariableNameString, VariableValueInt))
+	{
+		return  0;
+	}
+	
+	return VariableValueInt;
 }

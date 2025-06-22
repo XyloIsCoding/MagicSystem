@@ -10,6 +10,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UXMSNode Interface
+ */
+
+void UXMSVariableDefinitionNode::OnNodeChanged(const FName& Identifier)
+{
+	Super::OnNodeChanged(Identifier);
+
+	// TODO: Bind OnVariableTypeChanged and OnVariableNameChanged
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * IXMSRunnableNodeInterface Interface
  */
 
@@ -53,6 +66,23 @@ int32 UXMSVariableDefinitionNode::ExecuteNode()
 	}
 
 	return 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSVariableDefinitionNode
+ */
+
+void UXMSVariableDefinitionNode::OnVariableTypeChanged(int32 NewType)
+{
+	// TODO: try change type of registered variable
+}
+
+void UXMSVariableDefinitionNode::OnVariableNameChanged(const FString& NewName, const FString& OldName)
+{
+	// TODO: if variable name is already used, then broadcast error to gui
+	// TODO: call unregister for previous variable and register for new one
 }
 
 	
