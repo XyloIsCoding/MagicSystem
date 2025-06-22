@@ -21,5 +21,5 @@ class XYLOMODULARSPELLS_API IXMSStringValueInterface
 	GENERATED_BODY()
 
 public:
-	virtual FString GetString(bool& bOutResult) = 0;
+	virtual bool GetString(FString& OutString) = 0;
 };

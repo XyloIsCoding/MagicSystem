@@ -11,10 +11,14 @@ UXMSStringProviderNode::UXMSStringProviderNode()
 	
 }
 
-FString UXMSStringProviderNode::GetString(bool& bOutResult)
+bool UXMSStringProviderNode::GetString(FString& OutString)
 {
 	IXMSStringValueInterface* StringValueInterface = StringNode.Get();
-	if (!StringValueInterface) return FString(TEXT("ERROR: UXMSStringProviderNode::GetString >> Failed to get string!"));
+	if (!StringValueInterface)
+	{
+		OutString = FString(TEXT("ERROR: UXMSStringProviderNode::GetString >> Failed to get string!"));
+		return false;
+	}
 	
-	return StringValueInterface->GetString(bOutResult);
+	return StringValueInterface->GetString(OutString);
 }

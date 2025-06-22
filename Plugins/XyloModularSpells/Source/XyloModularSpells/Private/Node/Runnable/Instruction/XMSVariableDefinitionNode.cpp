@@ -23,10 +23,10 @@ int32 UXMSVariableDefinitionNode::ExecuteNode()
 
 	IXMSStringValueInterface* VariableNameNode = VariableName.Get();
 	if (!VariableNameNode) return 0;
-
-	bool bStringFound;
-	FString VariableNameString = VariableNameNode->GetString(bStringFound);
-	if (!bStringFound) return 0;
+	
+	FString VariableNameString;
+	if (!VariableNameNode->GetString(VariableNameString)) return 0;
+	if (VariableNameString.IsEmpty()) return 0;
 	
 	switch (VariableTypeNode->GetVariableType())
 	{

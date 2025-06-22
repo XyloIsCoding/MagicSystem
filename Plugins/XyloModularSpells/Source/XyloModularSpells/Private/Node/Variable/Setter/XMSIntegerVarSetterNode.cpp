@@ -22,10 +22,10 @@ bool UXMSIntegerVarSetterNode::SetVariable()
 
 	IXMSIntegerValueInterface* Value = IntegerValue.Get();
 	if (!Value) return false;
-
-	bool bStringFound;
-	FString VariableNameString = VariableNameNode->GetString(bStringFound);
-	if (!bStringFound) return false;
+	
+	FString VariableNameString;
+	if (!VariableNameNode->GetString(VariableNameString)) return false;
+	if (VariableNameString.IsEmpty()) return false;
 	
 	SpellExecutor->SetIntegerValue(VariableNameString, Value->GetInteger());
 	return true;

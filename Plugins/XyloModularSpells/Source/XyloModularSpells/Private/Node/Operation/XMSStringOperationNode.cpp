@@ -10,11 +10,15 @@
  * IXMSStringValueInterface Interface
  */
 
-FString UXMSStringOperationNode::GetString(bool& bOutResult)
+bool UXMSStringOperationNode::GetString(FString& OutString)
 {
-	if (IXMSStringOperatorInterface* StringOperatorInterface = StringOperator.Get())
+	IXMSStringOperatorInterface* StringOperatorInterface = StringOperator.Get();
+	if (!StringOperatorInterface)
 	{
-		return StringOperatorInterface->ApplyStringOperation();
+		OutString = FString(TEXT("ERROR: UXMSStringOperationNode::GetString >> Failed to get string!"));
+		return false;
 	}
-	return FString(TEXT("ERROR: UXMSStringOperationNode::GetString >> Failed to get string!"));
+	
+	OutString = StringOperatorInterface->ApplyStringOperation();
+	return true;
 }

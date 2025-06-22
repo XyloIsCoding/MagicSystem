@@ -24,7 +24,7 @@ class XYLOMODULARSPELLS_API UXMSStringOperationNode : public UXMSNodeWithMap, pu
 	 */
 
 public:
-	virtual FString GetString(bool& bOutResult) override;
+	virtual bool GetString(FString& OutString) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

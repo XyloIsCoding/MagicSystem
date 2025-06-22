@@ -23,13 +23,12 @@ bool UXMSStringVarSetterNode::SetVariable()
 	IXMSStringValueInterface* Value = StringValue.Get();
 	if (!Value) return false;
 
-	bool bStringFound;
-	FString VariableNameString = VariableNameNode->GetString(bStringFound);
-	if (!bStringFound) return false;
+	FString VariableNameString;
+	if (!VariableNameNode->GetString(VariableNameString)) return false;
+	if (VariableNameString.IsEmpty()) return false;
 
-	bool bStringValueFound;
-	FString VariableValueString = Value->GetString(bStringValueFound);
-	if (!bStringValueFound) return false;
+	FString VariableValueString;
+	if (!Value->GetString(VariableValueString)) return false;
 	
 	SpellExecutor->SetStringValue(VariableNameString, VariableValueString);
 	return true;
