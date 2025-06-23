@@ -13,9 +13,16 @@
  * UXMSNode Interface
  */
 
-void UXMSVariableDefinitionNode::OnNodeChanged(const FName& Identifier)
+void UXMSVariableDefinitionNode::OnRemovedFromParent()
 {
-	Super::OnNodeChanged(Identifier);
+	Super::OnRemovedFromParent();
+
+	// TODO: unregister variable
+}
+
+void UXMSVariableDefinitionNode::OnSubNodeChanged(const FName& Identifier)
+{
+	Super::OnSubNodeChanged(Identifier);
 
 	// TODO: Bind OnVariableTypeChanged and OnVariableNameChanged
 }

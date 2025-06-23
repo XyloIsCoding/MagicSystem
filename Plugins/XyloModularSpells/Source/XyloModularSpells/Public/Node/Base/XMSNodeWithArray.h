@@ -47,7 +47,7 @@ public:
 	virtual void InsertSubNode(int32 Index, UXMSNode* InNode);
 	virtual void RemoveSubNode(int32 Index);
 protected:
-	virtual void OnNodeChanged(const FName& Identifier, int32 Index);
+	virtual void OnSubNodeChanged(const FName& Identifier, int32 Index);
 private:
 	/** contains array of sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
 	TPair<FName, FXMSMultiNodeContainer*> SubNodes;

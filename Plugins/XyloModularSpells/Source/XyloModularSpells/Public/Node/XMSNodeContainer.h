@@ -41,7 +41,7 @@ struct FXMSNodeContainer
 		if (Owner)
 		{
 			Owner->SubNodes.Add(Identifier, this);
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithMap::OnNodeChanged);
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithMap::OnSubNodeChanged);
 		}
 	}
 	virtual ~FXMSNodeContainer()
@@ -203,7 +203,7 @@ struct FXMSMultiNodeContainer
 		if (Owner)
 		{
 			Owner->SubNodes = { Identifier, this };
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithArray::OnNodeChanged);
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithArray::OnSubNodeChanged);
 		}
 	}
 	virtual ~FXMSMultiNodeContainer()

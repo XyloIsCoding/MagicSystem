@@ -26,7 +26,7 @@ class XYLOMODULARSPELLS_API UXMSIntegerVarSetterNode : public UXMSNodeWithMap, p
 	 */
 
 protected:
-	virtual void OnNodeChanged(const FName& Identifier) override;
+	virtual void OnSubNodeChanged(const FName& Identifier) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

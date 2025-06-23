@@ -14,9 +14,9 @@
  * UXMSNode Interface
  */
 
-void UXMSStringVarGetterNode::OnNodeChanged(const FName& Identifier)
+void UXMSStringVarGetterNode::OnSubNodeChanged(const FName& Identifier)
 {
-	Super::OnNodeChanged(Identifier);
+	Super::OnSubNodeChanged(Identifier);
 
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableName)))
 	{

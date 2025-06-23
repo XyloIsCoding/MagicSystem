@@ -26,7 +26,8 @@ class XYLOMODULARSPELLS_API UXMSVariableDefinitionNode : public UXMSNodeWithMap,
 	 */
 
 public:
-	virtual void OnNodeChanged(const FName& Identifier) override;
+	virtual void OnRemovedFromParent() override;
+	virtual void OnSubNodeChanged(const FName& Identifier) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
