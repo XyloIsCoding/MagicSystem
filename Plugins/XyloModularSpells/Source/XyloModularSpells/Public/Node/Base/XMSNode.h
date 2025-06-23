@@ -46,7 +46,7 @@ public:
 	 * <p> An example would be loop nodes, which allow "break" or "continue" to be used inside their scope */
 	virtual void GetNodeFlags(FGameplayTagContainer& OutFlags) const {}
 	/** Calls GetNodeFlags on all nodes higher in hierarchy */
-	virtual void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
+	void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
 
 public:
 	/** Should only be called by NodeContainers! */
