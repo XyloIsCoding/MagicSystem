@@ -13,9 +13,9 @@
  * UXMSNode Interface
  */
 
-void UXMSVariableDefinitionNode::OnRemovedFromParent()
+void UXMSVariableDefinitionNode::PreRemovedFromParent()
 {
-	Super::OnRemovedFromParent();
+	Super::PreRemovedFromParent();
 
 	// TODO: unregister variable
 }

@@ -48,6 +48,17 @@ void UXMSNode::GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const
 	}
 }
 
+void UXMSNode::RemoveFromParent()
+{
+	PreRemovedFromParent();
+	
+	ParentNode = nullptr;
+	PathFromParent.Index = 0;
+	PathFromParent.Identifier = NAME_None;
+
+	PostRemovedFromParent();
+}
+
 void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
 {
 	ParentNode = InParentNode;

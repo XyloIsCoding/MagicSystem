@@ -55,10 +55,11 @@ public:
 	void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
 
 protected:
-	virtual void OnRemovedFromParent() {}
-	
+	virtual void PreRemovedFromParent() {}
+	virtual void PostRemovedFromParent() {}
 private:
 	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);
+	void RemoveFromParent();
 	
 protected:
 	static const FString NodeClassJsonKey;
