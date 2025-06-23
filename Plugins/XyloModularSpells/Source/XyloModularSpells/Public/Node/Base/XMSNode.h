@@ -8,6 +8,8 @@
 #include "UObject/Object.h"
 #include "XMSNode.generated.h"
 
+struct FXMSNodeContainer;
+struct FXMSMultiNodeContainer;
 struct FXMSNodeQueryResult;
 struct FXMSNodePathElement;
 
@@ -18,6 +20,9 @@ UCLASS(Abstract)
 class XYLOMODULARSPELLS_API UXMSNode : public UObject
 {
 	GENERATED_BODY()
+
+	friend FXMSMultiNodeContainer;
+	friend FXMSNodeContainer;
 	
 public:
 	UXMSNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
@@ -42,15 +47,19 @@ public:
 
 	/** @return: the Identifiers of all sub-nodes */
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
+	
 	/** Fills OutFlags with flags defining special behaviour for this node
 	 * <p> An example would be loop nodes, which allow "break" or "continue" to be used inside their scope */
 	virtual void GetNodeFlags(FGameplayTagContainer& OutFlags) const {}
 	/** Calls GetNodeFlags on all nodes higher in hierarchy */
 	void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
 
-public:
-	/** Should only be called by NodeContainers! */
+protected:
+	virtual void OnRemovedFromParent() {}
+	
+private:
 	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);
+	
 protected:
 	static const FString NodeClassJsonKey;
 	UPROPERTY()
