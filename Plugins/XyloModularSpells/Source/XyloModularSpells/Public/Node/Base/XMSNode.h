@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+#include "XMSTypes.h"
 #include "UObject/Object.h"
 #include "XMSNode.generated.h"
 
@@ -38,8 +40,21 @@ public:
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) {}
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
 
-	virtual void GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
-	
+	/** @return: the Identifiers of all sub-nodes */
+	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
+	/** Fills OutFlags with flags defining special behaviour for this node
+	 * <p> An example would be loop nodes, which allow "break" or "continue" to be used inside their scope */
+	virtual void GetNodeFlags(FGameplayTagContainer& OutFlags) const {}
+	/** Calls GetNodeFlags on all nodes higher in hierarchy */
+	virtual void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
+
+public:
+	/** Should only be called by NodeContainers! */
+	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);
 protected:
 	static const FString NodeClassJsonKey;
+	UPROPERTY()
+	TWeakObjectPtr<UXMSNode> ParentNode;
+	UPROPERTY()
+	FXMSNodePathElement PathFromParent;
 };

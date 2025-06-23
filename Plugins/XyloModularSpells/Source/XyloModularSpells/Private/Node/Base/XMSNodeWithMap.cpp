@@ -107,7 +107,7 @@ void UXMSNodeWithMap::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNod
 	SetSubNode(PathElement.Identifier, InNode);
 }
 
-void UXMSNodeWithMap::GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const
+void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const
 {
 	SubNodes.GetKeys(OutIdentifiers);
 }

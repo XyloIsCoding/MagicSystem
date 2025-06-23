@@ -38,4 +38,20 @@ void UXMSNode::DeserializeFromJson(TSharedPtr<FJsonObject>)
 	
 }
 
+void UXMSNode::GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const
+{
+	GetNodeFlags(OutFlags);
+	
+	if (UXMSNode* Parent = ParentNode.Get())
+	{
+		Parent->GetNodeFlagsRecursive(OutFlags);
+	}
+}
+
+void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
+{
+	ParentNode = InParentNode;
+	PathFromParent = InPathFromParent;
+}
+
 

@@ -32,7 +32,7 @@ public:
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) override;
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
 
-	virtual void GetNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
+	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

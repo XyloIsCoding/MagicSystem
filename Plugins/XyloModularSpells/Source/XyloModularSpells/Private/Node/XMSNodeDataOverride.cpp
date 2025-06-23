@@ -14,7 +14,7 @@ void FXMSNodeData::UpdateSubNodes()
 		// Get sub-nodes identifiers
 		UXMSNode* DefaultNode = NodeClass->GetDefaultObject<UXMSNode>();
 		TArray<FName> SubNodesIdentifiers;
-		DefaultNode->GetNodesIdentifiers(SubNodesIdentifiers);
+		DefaultNode->GetSubNodesIdentifiers(SubNodesIdentifiers);
 
 		TArray<FXMSSubNodeData> TempArray;
 		for (FName Identifier : SubNodesIdentifiers)
