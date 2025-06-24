@@ -189,10 +189,14 @@ void AMagicSystemCharacter::SerializeTestNode(const FString& Path)
 		return;
 	}
 	
-	TestNodeDeserialized = NewObject<UXMSProgramNode>(this);
-	TestNodeDeserialized->DeserializeFromJson(NewNodeJson);
 	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Running TestNodeDeserialized ..."));
-	TestNodeDeserialized->ExecuteNode();
+	AXMSSpellActor* Spell = GetWorld()->SpawnActorDeferred<AXMSSpellActor>(AXMSSpellActor::StaticClass(), GetActorTransform(), this, this);
+
+	UXMSProgramNode* DeserializedNode = NewObject<UXMSProgramNode>(Spell);
+	DeserializedNode->DeserializeFromJson(NewNodeJson);
+	Spell->Instruction.Set(DeserializedNode);
+	
+	Spell->FinishSpawning(GetActorTransform());
 }
 
 void AMagicSystemCharacter::CollectGarbage()
