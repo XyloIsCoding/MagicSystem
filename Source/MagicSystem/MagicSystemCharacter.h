@@ -7,6 +7,7 @@
 #include "XMSTypes.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "SpellEditor/XMSSpellEditorInterface.h"
 #include "MagicSystemCharacter.generated.h"
 
 class UXMSProgramNode;
@@ -26,7 +27,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AMagicSystemCharacter : public ACharacter
+class AMagicSystemCharacter : public ACharacter, public IXMSSpellEditorInterface
 {
 	GENERATED_BODY()
 
@@ -79,7 +80,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+	
 
+	
 	UPROPERTY()
 	TObjectPtr<UXMSProgramNode> TestNode;
 	UPROPERTY()
@@ -96,6 +100,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CollectGarbage();
+
+public:
+	virtual UXMSSpellEditorComponent* GetSpellEditorComponent() override { return SpellEditorComponent; }
+protected:
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
 
 }; 
 

@@ -13,11 +13,15 @@
 #include "XMSNodeStaticLibrary.h"
 #include "Node/Runnable/XMSProgramNode.h"
 #include "Node/Runnable/Instruction/XMSPrintInstructionNode.h"
+#include "Node/Runnable/Instruction/XMSVariableSetterNode.h"
 #include "Node/Value/XMSIntegerValueNode.h"
 #include "Node/Value/XMSStringValueNode.h"
 #include "Node/ValueProvider/XMSIntegerProviderNode.h"
 #include "Node/ValueProvider/XMSStringProviderNode.h"
+#include "Node/Variable/Getter/XMSIntegerVarGetterNode.h"
+#include "Node/Variable/Setter/XMSIntegerVarSetterNode.h"
 #include "Spell/XMSSpellActor.h"
+#include "SpellEditor/XMSSpellEditorComponent.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -62,7 +66,7 @@ AMagicSystemCharacter::AMagicSystemCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
-	
+	SpellEditorComponent = CreateDefaultSubobject<UXMSSpellEditorComponent>(TEXT("SpellEditorComponent"));
 }
 
 void AMagicSystemCharacter::BeginPlay()
@@ -76,39 +80,70 @@ void AMagicSystemCharacter::BeginPlay()
 void AMagicSystemCharacter::CreateNode()
 {
 	TestNode = NewObject<UXMSProgramNode>(this);
+
+
+	UXMSVariableDeclarationNode* Variable1Declaration = NewObject<UXMSVariableDeclarationNode>(this);
+	TestNode->Instructions.Add(Variable1Declaration);
+	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
+	Variable1Declaration->VariableName.Set(Variable1Name);
+	Variable1Name->SetString("Pippo");
+	UXMSVariableTypeValueNode* Variable1Type = NewObject<UXMSVariableTypeValueNode>(this);
+	Variable1Declaration->VariableType.Set(Variable1Type);
+	Variable1Type->SetVariableType(XMSVariableType::EVT_Integer);
+
+	UXMSVariableSetterNode* Variable1Setter = NewObject<UXMSVariableSetterNode>(this);
+	TestNode->Instructions.Add(Variable1Setter);
+	UXMSIntegerVarSetterNode* Variable1IntegerSetter = NewObject<UXMSIntegerVarSetterNode>(this);
+	Variable1Setter->Setter.Set(Variable1IntegerSetter);
+	UXMSVariableNameNode* Variable1NameGetter = NewObject<UXMSVariableNameNode>(this);
+	Variable1IntegerSetter->VariableName.Set(Variable1NameGetter);
+	Variable1NameGetter->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
+	UXMSIntegerValueNode* Variable1Value = NewObject<UXMSIntegerValueNode>(this);
+	Variable1IntegerSetter->IntegerValue.Set(Variable1Value);
+	Variable1Value->SetInteger(10);
+
+	UXMSPrintInstructionNode* PrintVariable1 = NewObject<UXMSPrintInstructionNode>(this);
+	TestNode->Instructions.Add(PrintVariable1);
+	UXMSIntegerProviderNode* Variable1IntegerProvider = NewObject<UXMSIntegerProviderNode>(this);
+	PrintVariable1->OutputString.Set(Variable1IntegerProvider);
+	UXMSIntegerVarGetterNode* Variable1IntegerGetter = NewObject<UXMSIntegerVarGetterNode>(this);
+	Variable1IntegerProvider->IntegerNode.Set(Variable1IntegerGetter);
+	UXMSVariableNameNode* Variable1NameGetterP2 = NewObject<UXMSVariableNameNode>(this);
+	Variable1IntegerGetter->VariableName.Set(Variable1NameGetterP2);
+	Variable1NameGetterP2->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
+
+
 	
-	UXMSStringValueNode* StringValueNode1 = NewObject<UXMSStringValueNode>(this);
-	StringValueNode1->SetString("First");
-	UXMSStringProviderNode* StringProviderNode1 = NewObject<UXMSStringProviderNode>(this);
-	StringProviderNode1->StringNode.Set(StringValueNode1);
-	UXMSPrintInstructionNode* PrintInstruction1 = NewObject<UXMSPrintInstructionNode>(this);
-	PrintInstruction1->OutputString.Set(StringProviderNode1);
+	UXMSVariableDeclarationNode* Variable2Declaration = NewObject<UXMSVariableDeclarationNode>(this);
+	TestNode->Instructions.Add(Variable2Declaration);
+	UXMSStringValueNode* Variable2Name = NewObject<UXMSStringValueNode>(this);
+	Variable2Declaration->VariableName.Set(Variable2Name);
+	Variable2Name->SetString("Pluto");
+	UXMSVariableTypeValueNode* Variable2Type = NewObject<UXMSVariableTypeValueNode>(this);
+	Variable2Declaration->VariableType.Set(Variable2Type);
+	Variable2Type->SetVariableType(XMSVariableType::EVT_Integer);
 
-	UXMSStringValueNode* StringValueNode2 = NewObject<UXMSStringValueNode>(this);
-	StringValueNode2->SetString("Second");
-	UXMSStringProviderNode* StringProviderNode2 = NewObject<UXMSStringProviderNode>(this);
-	StringProviderNode2->StringNode.Set(StringValueNode2);
-	UXMSPrintInstructionNode* PrintInstruction2 = NewObject<UXMSPrintInstructionNode>(this);
-	PrintInstruction2->OutputString.Set(StringProviderNode2);
+	UXMSVariableSetterNode* Variable2Setter = NewObject<UXMSVariableSetterNode>(this);
+	TestNode->Instructions.Add(Variable2Setter);
+	UXMSIntegerVarSetterNode* Variable2IntegerSetter = NewObject<UXMSIntegerVarSetterNode>(this);
+	Variable2Setter->Setter.Set(Variable2IntegerSetter);
+	UXMSVariableNameNode* Variable2NameGetter = NewObject<UXMSVariableNameNode>(this);
+	Variable2IntegerSetter->VariableName.Set(Variable2NameGetter);
+	Variable2NameGetter->SelectByIndex(1); // 1 is Pluto because it is the second int variable declared
+	UXMSIntegerValueNode* Variable2Value = NewObject<UXMSIntegerValueNode>(this);
+	Variable2IntegerSetter->IntegerValue.Set(Variable2Value);
+	Variable2Value->SetInteger(15);
 
-	UXMSStringValueNode* StringValueNode3 = NewObject<UXMSStringValueNode>(this);
-	StringValueNode3->SetString("Third");
-	UXMSStringProviderNode* StringProviderNode3 = NewObject<UXMSStringProviderNode>(this);
-	StringProviderNode3->StringNode.Set(StringValueNode3);
-	UXMSPrintInstructionNode* PrintInstruction3 = NewObject<UXMSPrintInstructionNode>(this);
-	PrintInstruction3->OutputString.Set(StringProviderNode3);
-
-	UXMSIntegerValueNode* IntegerValueNode1 = NewObject<UXMSIntegerValueNode>(this);
-	IntegerValueNode1->SetInteger(12345);
-	UXMSIntegerProviderNode* IntegerProviderNode1 = NewObject<UXMSIntegerProviderNode>(this);
-	IntegerProviderNode1->IntegerNode.Set(IntegerValueNode1);
-	UXMSPrintInstructionNode* PrintInstruction4 = NewObject<UXMSPrintInstructionNode>(this);
-	PrintInstruction4->OutputString.Set(IntegerProviderNode1);
+	UXMSPrintInstructionNode* PrintVariable2 = NewObject<UXMSPrintInstructionNode>(this);
+	TestNode->Instructions.Add(PrintVariable2);
+	UXMSIntegerProviderNode* Variable2IntegerProvider = NewObject<UXMSIntegerProviderNode>(this);
+	PrintVariable2->OutputString.Set(Variable2IntegerProvider);
+	UXMSIntegerVarGetterNode* Variable2IntegerGetter = NewObject<UXMSIntegerVarGetterNode>(this);
+	Variable2IntegerProvider->IntegerNode.Set(Variable2IntegerGetter);
+	UXMSVariableNameNode* Variable2NameGetterP2 = NewObject<UXMSVariableNameNode>(this);
+	Variable2IntegerGetter->VariableName.Set(Variable2NameGetterP2);
+	Variable2NameGetterP2->SelectByIndex(1); // 1 is Pluto because it is the second int variable declared
 	
-	TestNode->Instructions.Add(PrintInstruction1);
-	TestNode->Instructions.Add(PrintInstruction2);
-	TestNode->Instructions.Add(PrintInstruction3);
-	TestNode->Instructions.Add(PrintInstruction4);
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()
