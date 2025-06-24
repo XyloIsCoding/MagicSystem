@@ -34,14 +34,15 @@ struct FXMSNodeContainer
 {
 	friend UXMSNodeWithMap;
 
-	FXMSNodeContainer(UXMSNodeWithMap* Owner, FName InIdentifier)
+	FXMSNodeContainer(UXMSNodeWithMap* InOwner, FName InIdentifier)
 		: Identifier(InIdentifier)
+		, Owner(InOwner)
 	{
 		// Register node container to SubNodes map of the owning node
-		if (Owner)
+		if (InOwner)
 		{
-			Owner->SubNodes.Add(Identifier, this);
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithMap::OnSubNodeChanged);
+			InOwner->SubNodes.Add(Identifier, this);
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(InOwner, &UXMSNodeWithMap::OnSubNodeChanged);
 		}
 	}
 	virtual ~FXMSNodeContainer()
@@ -201,14 +202,15 @@ struct FXMSMultiNodeContainer
 {
 	friend UXMSNodeWithArray;
 
-	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, FName InIdentifier)
+	FXMSMultiNodeContainer(UXMSNodeWithArray* InOwner, FName InIdentifier)
 		: Identifier(InIdentifier)
+		, Owner(InOwner)
 	{
 		// Register node container to SubNodes map of the owning node
-		if (Owner)
+		if (InOwner)
 		{
-			Owner->SubNodes = { Identifier, this };
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(Owner, &UXMSNodeWithArray::OnSubNodeChanged);
+			InOwner->SubNodes = { Identifier, this };
+			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(InOwner, &UXMSNodeWithArray::OnSubNodeChanged);
 		}
 	}
 	virtual ~FXMSMultiNodeContainer()

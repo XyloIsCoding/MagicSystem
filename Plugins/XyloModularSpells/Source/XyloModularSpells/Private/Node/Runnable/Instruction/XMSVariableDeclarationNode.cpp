@@ -34,6 +34,9 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 {
 	Super::OnSubNodeChanged(Identifier);
 
+	// We do not need to deal with OnVariableTypeChanged and OnVariableNameChanged outside of editor
+	if (!IsInSpellEditorContext()) return;
+	
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableType)))
 	{
 		if (UXMSVariableTypeValueNode* VariableTypeNode = VariableType.Get())
@@ -130,6 +133,7 @@ void UXMSVariableDeclarationNode::OnVariableNameChanged(const FString& NewName, 
 	if (NewName.IsEmpty())
 	{
 		// TODO: gui error
+		return;
 	}
 	
 	if (UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter()))

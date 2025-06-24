@@ -30,6 +30,8 @@ void UXMSSpellEditorComponent::BeginPlay()
 
 void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type)
 {
+	if (Name.IsEmpty()) return;
+	
 	FXMSScopedVariable* ScopedVariable = GetVariable(DeclarationNode);
 	if (!ScopedVariable)
 	{

@@ -118,7 +118,7 @@ void UXMSVariableNameNode::CacheString(int32 Index)
 {
 	FString OldName = CachedName;
 
-	if (Index > 0)
+	if (Index >= 0)
 	{
 		TArray<FString> Strings;
 		GetOptions(Strings);
