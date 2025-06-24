@@ -9,15 +9,18 @@
 #include "Node/Value/XMSStringValueNode.h"
 #include "Node/Value/XMSVariableTypeValueInterface.h"
 #include "Node/Value/XMSVariableTypeValueNode.h"
-#include "XMSVariableDefinitionNode.generated.h"
+#include "XMSVariableDeclarationNode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVariableDefinitionNode : public UXMSNodeWithMap, public  IXMSRunnableNodeInterface
+class XYLOMODULARSPELLS_API UXMSVariableDeclarationNode : public UXMSNodeWithMap, public  IXMSRunnableNodeInterface
 {
 	GENERATED_BODY()
+
+public:
+	UXMSVariableDeclarationNode();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,11 +44,13 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVariableDefinitionNode
+	 * UXMSVariableDeclarationNode
 	 */
 
 public:
-	virtual void OnVariableTypeChanged(int32 NewType);
+	FDelegateHandle VariableTypeChangedHandle;
+	FDelegateHandle VariableNameChangedHandle;
+	virtual void OnVariableTypeChanged(int32 NewType, int32 OldType);
 	virtual void OnVariableNameChanged(const FString& NewName, const FString& OldName);
 	
 public:

@@ -47,7 +47,7 @@ struct FXMSNodePathElement
 	void Reset()
 	{
 		Identifier = NAME_None;
-		Index = 0;
+		Index = INDEX_NONE;
 	}
 
 	UPROPERTY()
@@ -85,6 +85,7 @@ namespace XMSVariableType
 	UENUM()
 	enum EXMSVariableType
 	{
+		EVT_None,
 		EVT_Integer,
 		EVT_Float,
 		EVT_Vector,

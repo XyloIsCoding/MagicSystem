@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "XMSVariableTypeValueInterface.h"
-#include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSVariableTypeValueNode.generated.h"
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableTypeChangedSignature, int32 /* New */ , int32 /* Old */ )
 
 /**
  * 
@@ -42,6 +43,7 @@ public:
 	 */
 
 public:
+	FXMSVariableTypeChangedSignature VariableTypeChangedDelegate;
 	virtual void SetVariableType(int32 InType);
 private:
 	int32 VariableType = 0;

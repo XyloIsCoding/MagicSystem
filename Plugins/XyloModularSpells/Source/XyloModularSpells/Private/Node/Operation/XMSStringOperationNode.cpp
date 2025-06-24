@@ -12,7 +12,7 @@
 
 bool UXMSStringOperationNode::GetString(FString& OutString)
 {
-	IXMSStringOperatorInterface* StringOperatorInterface = StringOperator.Get();
+	IXMSStringOperatorInterface* StringOperatorInterface = StringOperator.GetInterface();
 	if (!StringOperatorInterface)
 	{
 		OutString = FString(TEXT("ERROR: UXMSStringOperationNode::GetString >> Failed to get string!"));

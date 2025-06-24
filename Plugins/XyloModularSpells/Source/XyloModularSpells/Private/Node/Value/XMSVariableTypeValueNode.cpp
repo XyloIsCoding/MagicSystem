@@ -33,5 +33,8 @@ void UXMSVariableTypeValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> Json
 
 void UXMSVariableTypeValueNode::SetVariableType(int32 InType)
 {
+	int32 OldType = VariableType;
 	VariableType = InType;
+	
+	VariableTypeChangedDelegate.Broadcast(VariableType, OldType);
 }

@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+class UXMSSpellEditorComponent;
 class UXMSNode;
 
 /**
@@ -36,5 +37,7 @@ public:
 	{
 		return static_cast<T*>(CopyNode(Outer, static_cast<UXMSNode*>(InNode)));
 	}
+
+	static UXMSSpellEditorComponent* GetSpellEditorComponent(UObject* Actor);
 };
 

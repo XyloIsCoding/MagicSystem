@@ -20,7 +20,7 @@ void AXMSSpellActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (IXMSRunnableNodeInterface* RunnableNodeInterface = Instruction.Get())
+	if (IXMSRunnableNodeInterface* RunnableNodeInterface = Instruction.GetInterface())
 	{
 		RunnableNodeInterface->ExecuteNode();
 	}

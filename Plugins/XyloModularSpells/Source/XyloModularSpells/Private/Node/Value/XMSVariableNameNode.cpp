@@ -3,6 +3,8 @@
 
 #include "Node/Value/XMSVariableNameNode.h"
 
+#include "XMSNodeStaticLibrary.h"
+#include "SpellEditor/XMSSpellEditorComponent.h"
 #include "SpellEditor/XMSSpellEditorInterface.h"
 
 
@@ -16,7 +18,7 @@ TSharedPtr<FJsonObject> UXMSVariableNameNode::SerializeToJson(bool& bOutSuccess)
 {
 	TSharedPtr<FJsonObject> NodeJson = Super::SerializeToJson(bOutSuccess);
 
-	NodeJson->SetStringField(ValueJsonKey, CachedString);
+	NodeJson->SetStringField(ValueJsonKey, CachedName);
 
 	// Only serialize StringIndex if we are editing the spell
 	if (IsInSpellEditorContext())
@@ -32,7 +34,7 @@ void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 {
 	Super::DeserializeFromJson(JsonObject);
 
-	JsonObject->TryGetStringField(ValueJsonKey, CachedString);
+	JsonObject->TryGetStringField(ValueJsonKey, CachedName);
 
 	// Only deserialize StringIndex if we are editing the spell
 	if (IsInSpellEditorContext())
@@ -50,12 +52,12 @@ void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 
 bool UXMSVariableNameNode::GetString(FString& OutString)
 {
-	if (CachedString.IsEmpty())
+	if (CachedName.IsEmpty())
 	{
 		return false;
 	}
 	
-	OutString = CachedString;
+	OutString = CachedName;
 	return true;
 }
 
@@ -83,20 +85,26 @@ void UXMSVariableNameNode::SetType(int32 InVariableType)
 
 void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
 {
-	IXMSSpellEditorInterface* SpellEditor = Cast<IXMSSpellEditorInterface>(GetOuter());
+	UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter());
 	if (!SpellEditor) return;
 	
-	SpellEditor->GetInScopeVariablesByType(VariableType, OutStringOptions);
+	SpellEditor->GetVariablesNamesByType(VariableType, this, OutStringOptions);
 }
 
 void UXMSVariableNameNode::CacheString()
 {
+	FString OldName = CachedName;
+	
 	TArray<FString> Strings;
 	GetOptions(Strings);
-	if (!Strings.IsValidIndex(StringIndex))
+	if (Strings.IsValidIndex(StringIndex))
 	{
-		CachedString.Empty();	
+		CachedName = Strings[StringIndex];
+	}
+	else
+	{
+		CachedName.Empty();
 	}
 
-	CachedString = Strings[StringIndex];
+	VariableNameChangedDelegate.Broadcast(CachedName, OldName);
 }

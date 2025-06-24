@@ -45,5 +45,8 @@ bool UXMSStringValueNode::GetString(FString& OutString)
 
 void UXMSStringValueNode::SetString(const FString& InString)
 {
+	FString OldString = String;
 	String = InString;
+
+	StringValueChangedDelegate.Broadcast(String, OldString);
 }

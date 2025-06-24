@@ -5,6 +5,8 @@
 
 #include "XMSModularSpellsSubsystem.h"
 #include "Node/Base/XMSNode.h"
+#include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellEditor/XMSSpellEditorComponent.h"
 
 FString UXMSNodeStaticLibrary::ReadStringFromFile(FString FilePath, bool& bOutSuccess, FString& OutInfoMessage)
 {
@@ -116,4 +118,13 @@ UXMSNode* UXMSNodeStaticLibrary::CopyNode(UObject* Outer, UXMSNode* InNode)
 	
 	NewNode->DeserializeFromJson(NodeJson);
 	return NewNode;
+}
+
+UXMSSpellEditorComponent* UXMSNodeStaticLibrary::GetSpellEditorComponent(UObject* Actor)
+{
+	if (!Actor) return nullptr;
+	IXMSSpellExecutorInterface* SpellExecutorInterface = Cast<IXMSSpellExecutorInterface>(Actor);
+	if (!SpellExecutorInterface) return nullptr;
+
+	return Cast<UXMSSpellEditorComponent>(Actor);
 }

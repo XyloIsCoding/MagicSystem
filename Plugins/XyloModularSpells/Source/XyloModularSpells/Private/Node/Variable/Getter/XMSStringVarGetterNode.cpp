@@ -20,7 +20,7 @@ void UXMSStringVarGetterNode::OnSubNodeChanged(const FName& Identifier)
 
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableName)))
 	{
-		if (UXMSVariableNameNode* VariableNameNode = Cast<UXMSVariableNameNode>(VariableName.Get()))
+		if (UXMSVariableNameNode* VariableNameNode = VariableName.Get())
 		{
 			VariableNameNode->SetType(XMSVariableType::EVT_String);
 		}
@@ -42,7 +42,7 @@ bool UXMSStringVarGetterNode::GetString(FString& OutString)
 		return false;
 	}
 
-	IXMSStringValueInterface* VariableNameNode = VariableName.Get();
+	IXMSStringValueInterface* VariableNameNode = VariableName.GetInterface();
 	if (!VariableNameNode)
 	{
 		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));

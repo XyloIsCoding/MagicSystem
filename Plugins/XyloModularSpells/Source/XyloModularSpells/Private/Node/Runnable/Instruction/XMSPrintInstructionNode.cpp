@@ -12,7 +12,7 @@
 
 int32 UXMSPrintInstructionNode::ExecuteNode()
 {
-	IXMSStringValueInterface* StringValueInterface = OutputString.Get();
+	IXMSStringValueInterface* StringValueInterface = OutputString.GetInterface();
 	if (!StringValueInterface)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SpellOutput >> ERROR: No string to print"))

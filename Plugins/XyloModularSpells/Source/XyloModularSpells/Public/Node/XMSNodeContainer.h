@@ -108,9 +108,14 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
-	BaseInterface* Get()
+	BaseInterface* GetInterface()
 	{
 		return Cast<BaseInterface>(Node.Get());
+	}
+
+	BaseClass* Get()
+	{
+		return Node.Get();
 	}
 
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
@@ -275,10 +280,16 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
-	BaseInterface* Get(int32 Index)
+	BaseInterface* GetInterface(int32 Index)
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Cast<BaseInterface>(Nodes[Index].Get());
+	}
+
+	BaseClass* Get(int32 Index)
+	{
+		if (!Nodes.IsValidIndex(Index)) return nullptr;
+		return Nodes[Index].Get();
 	}
 
 	/** @return All stored nodes, even if nullptr */

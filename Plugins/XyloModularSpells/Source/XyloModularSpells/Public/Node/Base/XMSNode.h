@@ -54,8 +54,20 @@ public:
 	/** Calls GetNodeFlags on all nodes higher in hierarchy */
 	void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
 
+	/**
+	 * @param OutHierarchy: Ordered array with all the parents hierarchy of this node, ordered from the closest
+	 *						relative to the further one (parent, grandparent, grand grandparent, ...)
+	 */
+	void GetHierarchy(TArray<UXMSNode*>& OutHierarchy) const;
+	bool IsInScopeOf(UXMSNode* Other) const;
+	bool IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHierarchy) const;
+
 protected:
+	/** Called when this node is set in a container */
+	virtual void OnParentSet() {}
+	/** Called before the parent data of this node is deleted */
 	virtual void PreRemovedFromParent() {}
+	/** Called after the parent data of this node is deleted */
 	virtual void PostRemovedFromParent() {}
 private:
 	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);

@@ -20,7 +20,7 @@ void UXMSIntegerVarSetterNode::OnSubNodeChanged(const FName& Identifier)
 
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableName)))
 	{
-		if (UXMSVariableNameNode* VariableNameNode = Cast<UXMSVariableNameNode>(VariableName.Get()))
+		if (UXMSVariableNameNode* VariableNameNode = VariableName.Get())
 		{
 			VariableNameNode->SetType(XMSVariableType::EVT_Integer);
 		}
@@ -38,10 +38,10 @@ bool UXMSIntegerVarSetterNode::SetVariable()
 	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
 	if (!SpellExecutor) return false;
 
-	IXMSStringValueInterface* VariableNameNode = VariableName.Get();
+	IXMSStringValueInterface* VariableNameNode = VariableName.GetInterface();
 	if (!VariableNameNode) return false;
 
-	IXMSIntegerValueInterface* Value = IntegerValue.Get();
+	IXMSIntegerValueInterface* Value = IntegerValue.GetInterface();
 	if (!Value) return false;
 	
 	FString VariableNameString;

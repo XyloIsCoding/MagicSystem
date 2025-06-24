@@ -10,7 +10,7 @@ UXMSIntegerProviderNode::UXMSIntegerProviderNode()
 
 int32 UXMSIntegerProviderNode::GetInteger()
 {
-	IXMSIntegerValueInterface* IntegerValueInterface = IntegerNode.Get();
+	IXMSIntegerValueInterface* IntegerValueInterface = IntegerNode.GetInterface();
 	if (!IntegerValueInterface) return 0;
 	
 	return IntegerValueInterface->GetInteger();

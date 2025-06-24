@@ -14,7 +14,7 @@
 
 int32 UXMSVariableSetterNode::ExecuteNode()
 {
-	IXMSVariableSetterInterface* VariableSetter = Setter.Get();
+	IXMSVariableSetterInterface* VariableSetter = Setter.GetInterface();
 	if (!VariableSetter) return 0;
 
 	if (VariableSetter->SetVariable()) return 1;

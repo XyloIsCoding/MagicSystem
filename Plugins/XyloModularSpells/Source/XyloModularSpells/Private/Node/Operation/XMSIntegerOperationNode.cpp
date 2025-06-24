@@ -12,7 +12,7 @@
 
 int32 UXMSIntegerOperationNode::GetInteger()
 {
-	if (IXMSIntegerOperatorInterface* IntegerOperatorInterface = IntegerOperator.Get())
+	if (IXMSIntegerOperatorInterface* IntegerOperatorInterface = IntegerOperator.GetInterface())
 	{
 		return IntegerOperatorInterface->ApplyIntegerOperation();
 	}

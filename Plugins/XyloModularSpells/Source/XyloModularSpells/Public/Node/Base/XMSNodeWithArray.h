@@ -47,6 +47,8 @@ public:
 	virtual void InsertSubNode(int32 Index, UXMSNode* InNode);
 	virtual void RemoveSubNode(int32 Index);
 protected:
+	/** Called when a sub-node is set in one of the container of this node
+	 * @note This is called AFTER parent is set on the sub-node */
 	virtual void OnSubNodeChanged(const FName& Identifier, int32 Index);
 private:
 	/** contains array of sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */

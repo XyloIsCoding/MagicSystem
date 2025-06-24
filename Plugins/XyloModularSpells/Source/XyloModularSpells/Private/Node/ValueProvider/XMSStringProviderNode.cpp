@@ -13,7 +13,7 @@ UXMSStringProviderNode::UXMSStringProviderNode()
 
 bool UXMSStringProviderNode::GetString(FString& OutString)
 {
-	IXMSStringValueInterface* StringValueInterface = StringNode.Get();
+	IXMSStringValueInterface* StringValueInterface = StringNode.GetInterface();
 	if (!StringValueInterface)
 	{
 		OutString = FString(TEXT("ERROR: UXMSStringProviderNode::GetString >> Failed to get string!"));

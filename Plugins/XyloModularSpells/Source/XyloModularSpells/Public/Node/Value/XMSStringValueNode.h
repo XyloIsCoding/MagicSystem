@@ -7,6 +7,8 @@
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSStringValueNode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSStringValueChangedSignature, const FString& /* New */ , const FString& /* Old */ )
+
 /**
  * Contains a raw string value.
  */
@@ -41,8 +43,9 @@ public:
 	 */
 	
 public:
+	FXMSStringValueChangedSignature StringValueChangedDelegate;
 	virtual void SetString(const FString& InString);
 private:
 	UPROPERTY()
-	FString String = FString(TEXT("DefaultText"));
+	FString String = FString();
 };

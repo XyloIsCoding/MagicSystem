@@ -7,8 +7,10 @@
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSVariableNameNode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableNameChangedSignature, const FString& /* New */ , const FString& /* Old */ )
+
 /**
- * 
+ * Call SetType from the parent node!!!
  */
 UCLASS()
 class XYLOMODULARSPELLS_API UXMSVariableNameNode : public UXMSNodeWithValue, public IXMSStringValueInterface
@@ -41,7 +43,9 @@ public:
 	 */
 	
 public:
+	FXMSVariableNameChangedSignature VariableNameChangedDelegate;
 	virtual void SetStringIndex(int32 InStringIndex);
+	/** Set the type of variables that can be used by this node */
 	virtual void SetType(int32 InVariableType);
 	virtual void GetOptions(TArray<FString>& OutStringOptions) const;
 protected:
@@ -53,5 +57,5 @@ private:
 	UPROPERTY()
 	int32 VariableType = 0;
 	UPROPERTY()
-	FString CachedString = FString();
+	FString CachedName = FString();
 };
