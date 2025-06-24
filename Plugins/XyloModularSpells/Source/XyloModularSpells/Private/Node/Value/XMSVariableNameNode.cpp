@@ -23,7 +23,6 @@ TSharedPtr<FJsonObject> UXMSVariableNameNode::SerializeToJson(bool& bOutSuccess)
 	// Only serialize StringIndex if we are editing the spell
 	if (IsInSpellEditorContext())
 	{
-		NodeJson->SetNumberField(TEXT("EditorStringIndex"), StringIndex);
 		NodeJson->SetNumberField(TEXT("EditorVariableType"), VariableType);
 	}
 	
@@ -39,7 +38,6 @@ void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 	// Only deserialize StringIndex if we are editing the spell
 	if (IsInSpellEditorContext())
 	{
-		JsonObject->TryGetNumberField(TEXT("EditorStringIndex"), StringIndex);
 		JsonObject->TryGetNumberField(TEXT("EditorVariableType"), VariableType);
 	}
 }
@@ -67,12 +65,11 @@ bool UXMSVariableNameNode::GetString(FString& OutString)
  * UXMSStringValueNode
  */
 
-void UXMSVariableNameNode::SetStringIndex(int32 InStringIndex)
+void UXMSVariableNameNode::SelectByIndex(int32 InStringIndex)
 {
 	if (!IsInSpellEditorContext()) return;
 	
-	StringIndex = InStringIndex;
-	CacheString();
+	CacheString(InStringIndex);
 }
 
 void UXMSVariableNameNode::SetType(int32 InVariableType)
@@ -80,7 +77,7 @@ void UXMSVariableNameNode::SetType(int32 InVariableType)
 	if (!IsInSpellEditorContext()) return;
 	
 	VariableType = InVariableType;
-	CacheString();
+	CacheString(0);
 }
 
 void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
@@ -91,15 +88,15 @@ void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
 	SpellEditor->GetVariablesNamesByType(VariableType, this, OutStringOptions);
 }
 
-void UXMSVariableNameNode::CacheString()
+void UXMSVariableNameNode::CacheString(int32 Index)
 {
 	FString OldName = CachedName;
 	
 	TArray<FString> Strings;
 	GetOptions(Strings);
-	if (Strings.IsValidIndex(StringIndex))
+	if (Strings.IsValidIndex(Index))
 	{
-		CachedName = Strings[StringIndex];
+		CachedName = Strings[Index];
 	}
 	else
 	{

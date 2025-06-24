@@ -44,16 +44,14 @@ public:
 	
 public:
 	FXMSVariableNameChangedSignature VariableNameChangedDelegate;
-	virtual void SetStringIndex(int32 InStringIndex);
+	virtual void SelectByIndex(int32 InStringIndex);
 	/** Set the type of variables that can be used by this node */
 	virtual void SetType(int32 InVariableType);
 	virtual void GetOptions(TArray<FString>& OutStringOptions) const;
 protected:
-	virtual void CacheString();
+	virtual void CacheString(int32 Index);
 
 private:
-	UPROPERTY()
-	int32 StringIndex = 0;
 	UPROPERTY()
 	int32 VariableType = 0;
 	UPROPERTY()
