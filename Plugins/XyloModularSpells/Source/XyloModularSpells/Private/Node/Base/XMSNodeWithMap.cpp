@@ -118,7 +118,7 @@ void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) cons
  * UXMSNodeWithMap
  */
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& Identifier)
+UXMSNode* UXMSNodeWithMap::GetSubNode(FName Identifier)
 {
 	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(Identifier);
 	if (!ContainerPtrPtr) return nullptr;
@@ -126,7 +126,7 @@ UXMSNode* UXMSNodeWithMap::GetSubNode(const FName& Identifier)
 	return (*ContainerPtrPtr)->GetGeneric();
 }
 
-void UXMSNodeWithMap::SetSubNode(const FName& Identifier, UXMSNode* InNode)
+void UXMSNodeWithMap::SetSubNode(FName Identifier, UXMSNode* InNode)
 {
 	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(Identifier);
 	if (!ContainerPtrPtr) return;
@@ -134,6 +134,6 @@ void UXMSNodeWithMap::SetSubNode(const FName& Identifier, UXMSNode* InNode)
 	(*ContainerPtrPtr)->SetGeneric(InNode);
 }
 
-void UXMSNodeWithMap::OnSubNodeChanged(const FName& Identifier)
+void UXMSNodeWithMap::OnSubNodeChanged(FName Identifier)
 {
 }

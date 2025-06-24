@@ -14,7 +14,7 @@
  * UXMSNode Interface
  */
 
-void UXMSIntegerVarSetterNode::OnSubNodeChanged(const FName& Identifier)
+void UXMSIntegerVarSetterNode::OnSubNodeChanged(FName Identifier)
 {
 	Super::OnSubNodeChanged(Identifier);
 

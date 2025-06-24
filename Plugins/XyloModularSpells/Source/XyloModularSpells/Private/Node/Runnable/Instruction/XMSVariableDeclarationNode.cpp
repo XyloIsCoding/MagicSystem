@@ -30,7 +30,7 @@ void UXMSVariableDeclarationNode::PreRemovedFromParent()
 	}
 }
 
-void UXMSVariableDeclarationNode::OnSubNodeChanged(const FName& Identifier)
+void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 {
 	Super::OnSubNodeChanged(Identifier);
 

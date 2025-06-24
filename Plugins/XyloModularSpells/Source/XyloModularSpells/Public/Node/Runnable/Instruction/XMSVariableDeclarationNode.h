@@ -30,7 +30,7 @@ public:
 
 public:
 	virtual void PreRemovedFromParent() override;
-	virtual void OnSubNodeChanged(const FName& Identifier) override;
+	virtual void OnSubNodeChanged(FName Identifier) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

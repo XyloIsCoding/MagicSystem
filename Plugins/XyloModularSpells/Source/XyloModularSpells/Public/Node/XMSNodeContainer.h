@@ -14,8 +14,8 @@ concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
 template<typename Derived, typename BaseClass, typename BaseInterface>
 concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<BaseClass, Derived> && std::is_base_of_v<BaseInterface, Derived>;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeChangedSignature, const FName&)
-DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSArrayNodeChangedSignature, const FName&, int32)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeChangedSignature, FName)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSArrayNodeChangedSignature, FName, int32)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ struct FXMSNodeContainer
 {
 	friend UXMSNodeWithMap;
 
-	FXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& InIdentifier)
+	FXMSNodeContainer(UXMSNodeWithMap* Owner, FName InIdentifier)
 		: Identifier(InIdentifier)
 	{
 		// Register node container to SubNodes map of the owning node
@@ -91,7 +91,7 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSNodeContainer(UXMSNodeWithMap* Owner, const FName& Identifier, const CompatibilityCheck& Compatibility)
+	TXMSNodeContainer(UXMSNodeWithMap* Owner, FName Identifier, const CompatibilityCheck& Compatibility)
 		: FXMSNodeContainer(Owner, Identifier)
 		, CompatibilityCheckFunction(Compatibility)
 		, Node(nullptr)
@@ -201,7 +201,7 @@ struct FXMSMultiNodeContainer
 {
 	friend UXMSNodeWithArray;
 
-	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& InIdentifier)
+	FXMSMultiNodeContainer(UXMSNodeWithArray* Owner, FName InIdentifier)
 		: Identifier(InIdentifier)
 	{
 		// Register node container to SubNodes map of the owning node
@@ -263,7 +263,7 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 {
 	using CompatibilityCheck = TFunction<bool (UClass*)>;
 
-	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, const FName& Identifier, const CompatibilityCheck& Compatibility)
+	TXMSMultiNodeContainer(UXMSNodeWithArray* Owner, FName Identifier, const CompatibilityCheck& Compatibility)
 		: FXMSMultiNodeContainer(Owner, Identifier)
 		, CompatibilityCheckFunction(Compatibility)
 		, Nodes()

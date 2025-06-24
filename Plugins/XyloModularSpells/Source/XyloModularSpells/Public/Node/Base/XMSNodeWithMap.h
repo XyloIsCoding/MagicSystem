@@ -41,10 +41,10 @@ public:
 	 */
 	
 public:
-	virtual UXMSNode* GetSubNode(const FName& Identifier);
-	virtual void SetSubNode(const FName& Identifier, UXMSNode* InNode);
+	virtual UXMSNode* GetSubNode(FName Identifier);
+	virtual void SetSubNode(FName Identifier, UXMSNode* InNode);
 protected:
-	virtual void OnSubNodeChanged(const FName& Identifier);
+	virtual void OnSubNodeChanged(FName Identifier);
 private:
 	/** Map containing sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
 	TMap<FName, FXMSNodeContainer*> SubNodes;
