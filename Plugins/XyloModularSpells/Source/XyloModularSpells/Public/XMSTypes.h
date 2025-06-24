@@ -44,6 +44,12 @@ struct FXMSNodePathElement
 		return HashCombine(FCrc::MemCrc32(&This.Identifier, sizeof(This.Identifier)), FCrc::MemCrc32(&This.Index, sizeof(This.Index)));
 	}
 
+	void Reset()
+	{
+		Identifier = NAME_None;
+		Index = 0;
+	}
+
 	UPROPERTY()
 	FName Identifier = NAME_None;
 	UPROPERTY()

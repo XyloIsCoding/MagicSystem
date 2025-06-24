@@ -53,8 +53,7 @@ void UXMSNode::RemoveFromParent()
 	PreRemovedFromParent();
 	
 	ParentNode = nullptr;
-	PathFromParent.Index = 0;
-	PathFromParent.Identifier = NAME_None;
+	PathFromParent.Reset();
 
 	PostRemovedFromParent();
 }
