@@ -26,6 +26,8 @@ class XYLOMODULARSPELLS_API UXMSVariableNameNode : public UXMSNodeWithValue, pub
 public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
+protected:
+	virtual void OnParentSet() override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +46,7 @@ public:
 	
 public:
 	FXMSVariableNameChangedSignature VariableNameChangedDelegate;
+	virtual void OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType);
 	virtual void SelectByIndex(int32 InStringIndex);
 	/** Set the type of variables that can be used by this node */
 	virtual void SetType(int32 InVariableType);

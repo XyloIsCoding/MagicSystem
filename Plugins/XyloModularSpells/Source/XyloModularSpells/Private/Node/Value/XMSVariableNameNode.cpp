@@ -42,6 +42,16 @@ void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 	}
 }
 
+void UXMSVariableNameNode::OnParentSet()
+{
+	Super::OnParentSet();
+
+	if (UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter()))
+	{
+		SpellEditor->DeclaredVariableListChangedDelegate.AddUObject(this, &ThisClass::OnDeclaredVariablesListChanged);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -65,6 +75,20 @@ bool UXMSVariableNameNode::GetString(FString& OutString)
  * UXMSStringValueNode
  */
 
+void UXMSVariableNameNode::OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType)
+{
+	if (NewVariableType != VariableType && OldVariableType != VariableType) return;
+
+	// Declared variable list changed for the variable type of this node, so we want to check if the CachedName is
+	// still a valid option, else we reset CachedName
+	TArray<FString> Strings;
+	GetOptions(Strings);
+	if (!Strings.Contains(CachedName))
+	{
+		CacheString(-1);
+	}
+}
+
 void UXMSVariableNameNode::SelectByIndex(int32 InStringIndex)
 {
 	if (!IsInSpellEditorContext()) return;
@@ -77,7 +101,9 @@ void UXMSVariableNameNode::SetType(int32 InVariableType)
 	if (!IsInSpellEditorContext()) return;
 	
 	VariableType = InVariableType;
-	CacheString(0);
+	// We use -1 because we do not want a random variable to be selected without the user noticing,
+	// so we ask to cache an empty string so gui can show error.
+	CacheString(-1);
 }
 
 void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
@@ -91,17 +117,24 @@ void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
 void UXMSVariableNameNode::CacheString(int32 Index)
 {
 	FString OldName = CachedName;
-	
-	TArray<FString> Strings;
-	GetOptions(Strings);
-	if (Strings.IsValidIndex(Index))
+
+	if (Index > 0)
 	{
-		CachedName = Strings[Index];
+		TArray<FString> Strings;
+		GetOptions(Strings);
+		if (Strings.IsValidIndex(Index))
+		{
+			CachedName = Strings[Index];
+		}
+		else
+		{
+			CachedName.Empty();
+		}
 	}
 	else
 	{
 		CachedName.Empty();
 	}
-
+	
 	VariableNameChangedDelegate.Broadcast(CachedName, OldName);
 }

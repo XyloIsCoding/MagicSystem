@@ -33,18 +33,36 @@ void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationN
 	FXMSScopedVariable* ScopedVariable = GetVariable(DeclarationNode);
 	if (!ScopedVariable)
 	{
-		if (!HasVariable(Name)) ScopedVariables.Add(FXMSScopedVariable(Name, Type, DeclarationNode));
+		if (!HasVariable(Name))
+		{
+			int32 Index = ScopedVariables.Add(FXMSScopedVariable(Name, Type, DeclarationNode));
+			
+			const FXMSScopedVariable& NewScopedVariable = ScopedVariables[Index];
+			// Since it is a new variable, I use new name and type as old too
+			DeclaredVariableListChangedDelegate.Broadcast(NewScopedVariable.Name, NewScopedVariable.Type, NewScopedVariable.Name, NewScopedVariable.Type);
+		}
 		return;
 	}
 
+	bool bUpdated = false;
+	FString OldName = ScopedVariable->Name;
+	int32 OldType = ScopedVariable->Type;
+	
 	if (ScopedVariable->Name != Name && !HasVariable(Name))
 	{
 		ScopedVariable->Name = Name;
+		bUpdated = true;
 	}
 
 	if (ScopedVariable->Type != Type)
 	{
 		ScopedVariable->Type = Type;
+		bUpdated = true;
+	}
+
+	if (bUpdated)
+	{
+		DeclaredVariableListChangedDelegate.Broadcast(ScopedVariable->Name, ScopedVariable->Type, OldName, OldType);
 	}
 }
 
@@ -55,7 +73,10 @@ void UXMSSpellEditorComponent::UpdateVariableType(UXMSVariableDeclarationNode* D
 
 	if (ScopedVariable->Type != Type)
 	{
+		int32 OldType = ScopedVariable->Type;
 		ScopedVariable->Type = Type;
+		// Since name did not change, I use new name as old too
+		DeclaredVariableListChangedDelegate.Broadcast(ScopedVariable->Name, ScopedVariable->Type, ScopedVariable->Name, OldType);
 	}
 }
 
@@ -66,7 +87,12 @@ void UXMSSpellEditorComponent::UnRegisterVariable(UXMSVariableDeclarationNode* D
 		FXMSScopedVariable& ScopedVariable = *It;
 		if (DeclarationNode == ScopedVariable.DeclarationNode.Get())
 		{
+			FString VariableName = ScopedVariable.Name;
+			int32 VariableType = ScopedVariable.Type;
+			
 			It.RemoveCurrent();
+			// Since we are removing the variable, I use new name and type as old too
+			DeclaredVariableListChangedDelegate.Broadcast(VariableName, VariableType, VariableName, VariableType);
 		}
 	}
 }

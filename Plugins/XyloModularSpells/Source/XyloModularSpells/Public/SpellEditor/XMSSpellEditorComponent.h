@@ -40,6 +40,8 @@ struct FXMSScopedVariable
 	TWeakObjectPtr<UXMSVariableDeclarationNode> DeclarationNode;
 };
 
+DECLARE_MULTICAST_DELEGATE_FourParams(FXMSDeclaredVariableListChangedSignature, const FString& /* NeVariableName */, int32 /* NeVariableType */, const FString& /* OldVariableName */, int32 /* OldVariableType */)
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class XYLOMODULARSPELLS_API UXMSSpellEditorComponent : public UActorComponent
 {
@@ -66,6 +68,8 @@ protected:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
+	/** Broadcasts the Name and Type of the changed variable */
+	FXMSDeclaredVariableListChangedSignature DeclaredVariableListChangedDelegate;
 	void RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type);
 	void UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, int32 Type);
 	void UnRegisterVariable(UXMSVariableDeclarationNode* DeclarationNode);
