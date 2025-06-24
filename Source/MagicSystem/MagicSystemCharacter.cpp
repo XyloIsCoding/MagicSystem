@@ -84,10 +84,10 @@ void AMagicSystemCharacter::CreateNode()
 
 	UXMSVariableDeclarationNode* Variable1Declaration = NewObject<UXMSVariableDeclarationNode>(this);
 	TestNode->Instructions.Add(Variable1Declaration);
-	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
 	UXMSVariableTypeValueNode* Variable1Type = NewObject<UXMSVariableTypeValueNode>(this);
 	Variable1Declaration->VariableType.Set(Variable1Type);
 	Variable1Type->SetVariableType(XMSVariableType::EVT_Integer);
+	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
 	Variable1Declaration->VariableName.Set(Variable1Name);
 	Variable1Name->SetString("Pippo");
 
@@ -112,14 +112,12 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1IntegerGetter->VariableName.Set(Variable1NameGetterP2);
 	Variable1NameGetterP2->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
 
-
-	
 	UXMSVariableDeclarationNode* Variable2Declaration = NewObject<UXMSVariableDeclarationNode>(this);
 	TestNode->Instructions.Add(Variable2Declaration);
-	UXMSStringValueNode* Variable2Name = NewObject<UXMSStringValueNode>(this);
 	UXMSVariableTypeValueNode* Variable2Type = NewObject<UXMSVariableTypeValueNode>(this);
 	Variable2Declaration->VariableType.Set(Variable2Type);
 	Variable2Type->SetVariableType(XMSVariableType::EVT_Integer);
+	UXMSStringValueNode* Variable2Name = NewObject<UXMSStringValueNode>(this);
 	Variable2Declaration->VariableName.Set(Variable2Name);
 	Variable2Name->SetString("Pluto");
 
