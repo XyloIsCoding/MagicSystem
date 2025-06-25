@@ -105,13 +105,7 @@ void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 	SubNodes.Value->GetAllGeneric(SubNodesList);
 	for (auto It = SubNodesList.CreateIterator(); It; ++It)
 	{
-		FXMSNodePathElement PathElement;
-		PathElement.Identifier = SubNodes.Key;
-		PathElement.Index = It.GetIndex();
-		UXMSNode* SubNode = *It;
-		FString SubNodeName = IsValid(SubNode) ? SubNode->GetName() : FString(TEXT("Unknown"));
-		UE_LOG(LogTemp, Warning, TEXT("UXMSNodeWithArray::GetAllSubNodes >> SubNode [%s], from path (%s | %i)"), *SubNodeName, *PathElement.Identifier.ToString(), PathElement.Index)
-		OutNodes.Nodes.Add(PathElement, SubNode);
+		OutNodes.Nodes.Add(FXMSNodePathElement(SubNodes.Key, It.GetIndex()), *It);
 	}
 }
 
