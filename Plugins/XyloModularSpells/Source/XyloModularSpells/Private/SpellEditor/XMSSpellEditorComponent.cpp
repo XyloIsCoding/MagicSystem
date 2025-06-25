@@ -9,7 +9,7 @@
 #include "UI/XMSNodeCanvasWidget.h"
 #include "UI/XMSArraySubNodeWidget.h"
 #include "UI/XMSMapSubNodeWidget.h"
-#include "UI/XMSNodeWithValueWidget.h"
+#include "UI/XMSNodeValueWidget.h"
 
 
 UXMSSpellEditorComponent::UXMSSpellEditorComponent()
@@ -223,9 +223,9 @@ UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController*
 	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(OwningNode))
 	{
 		if (!Data->WidgetClassOverride) return nullptr;
-		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeWithValueWidget::StaticClass())) return nullptr;
+		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
 		
-		UXMSNodeWithValueWidget* Widget = CreateWidget<UXMSNodeWithValueWidget>(PlayerController, Data->WidgetClassOverride);
+		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(PlayerController, Data->WidgetClassOverride);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);

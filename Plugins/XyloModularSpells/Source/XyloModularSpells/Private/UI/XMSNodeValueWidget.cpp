@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/XMSNodeWithValueWidget.h"
+#include "UI/XMSNodeValueWidget.h"
 #include "Node/Base/XMSNodeWithValue.h"
 
 
@@ -11,7 +11,7 @@
  * UXMSSubNodeWidget
  */
 
-void UXMSNodeWithValueWidget::OnSpellEditorComponentSet()
+void UXMSNodeValueWidget::OnSpellEditorComponentSet()
 {
 	Super::OnSpellEditorComponentSet();
 }
@@ -19,10 +19,10 @@ void UXMSNodeWithValueWidget::OnSpellEditorComponentSet()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSNodeWithValueWidget
+ * UXMSNodeValueWidget
  */
 
-void UXMSNodeWithValueWidget::SetValueNode(UXMSNodeWithValue* OwningNode)
+void UXMSNodeValueWidget::SetValueNode(UXMSNodeWithValue* OwningNode)
 {
 	ValueNode = OwningNode;
 }
