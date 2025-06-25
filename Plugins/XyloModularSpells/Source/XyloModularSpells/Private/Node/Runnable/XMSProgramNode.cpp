@@ -16,7 +16,9 @@ UXMSProgramNode::UXMSProgramNode()
 
 int32 UXMSProgramNode::ExecuteNode()
 {
-	for (IXMSRunnableNodeInterface* RunnableNodeInterface : Instructions.GetAll())
+	TArray<IXMSRunnableNodeInterface*> InstructionsArray;
+	Instructions.GetAll(InstructionsArray);
+	for (IXMSRunnableNodeInterface* RunnableNodeInterface : InstructionsArray)
 	{
 		if (RunnableNodeInterface)
 		{

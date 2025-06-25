@@ -227,7 +227,7 @@ public:
 protected:
 	virtual UXMSNode* GetGeneric(int32 Index) const { return nullptr; }
 	/** @return All stored nodes, even if nullptr */
-	virtual TArray<UXMSNode*> GetAllGeneric() const { return TArray<UXMSNode*>(); }
+	virtual void GetAllGeneric(TArray<UXMSNode*>& OutSubNodes) const {}
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void AddGeneric(UXMSNode* InNode) {}
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) {}
@@ -295,14 +295,12 @@ public:
 	}
 
 	/** @return All stored nodes, even if nullptr */
-	TArray<BaseInterface*> GetAll() const
+	void GetAll(TArray<BaseInterface*>& OutSubNodes) const
 	{
-		TArray<BaseInterface*> Result;
 		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
-			Result.Add(Cast<BaseInterface>(Node.Get()));
+			OutSubNodes.Add(Cast<BaseInterface>(Node.Get()));
 		}
-		return Result;
 	}
 	
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
@@ -379,14 +377,12 @@ protected:
 		return Nodes[Index].Get();
 	}
 
-	virtual TArray<UXMSNode*> GetAllGeneric() const override
+	virtual void GetAllGeneric(TArray<UXMSNode*>& OutSubNodes) const override
 	{
-		TArray<UXMSNode*> Result;
 		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
-			Result.Add(Node.Get());
+			OutSubNodes.Add(Node.Get());
 		}
-		return Result;
 	}
 	
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) override

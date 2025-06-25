@@ -27,7 +27,9 @@ TSharedPtr<FJsonObject> UXMSNodeWithArray::SerializeToJson(bool& bOutSuccess)
 	// Serialize sub-nodes recursively
 	bool bSerializedAny = false;
 	TArray<TSharedPtr<FJsonValue>> SubNodesJsonArray;
-	for (UXMSNode* SubNode : SubNodes.Value->GetAllGeneric())
+	TArray<UXMSNode*> SubNodesList;
+	SubNodes.Value->GetAllGeneric(SubNodesList);
+	for (UXMSNode* SubNode : SubNodesList)
 	{
 		bool bSerializedSubNode = false;
 		TSharedPtr<FJsonObject> SubNodeJson = SubNode? SubNode->SerializeToJson(bSerializedSubNode) : MakeShareable<>(new FJsonObject);
@@ -99,7 +101,9 @@ void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
 		return;
 	}
-	for (auto It = SubNodes.Value->GetAllGeneric().CreateIterator(); It; ++It)
+	TArray<UXMSNode*> SubNodesList;
+	SubNodes.Value->GetAllGeneric(SubNodesList);
+	for (auto It = SubNodesList.CreateIterator(); It; ++It)
 	{
 		FXMSNodePathElement PathElement;
 		PathElement.Identifier = SubNodes.Key;
@@ -113,7 +117,7 @@ void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 
 void UXMSNodeWithArray::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
 {
-	OutNodes.Append(SubNodes.Value->GetAllGeneric());
+	SubNodes.Value->GetAllGeneric(OutNodes);
 }
 
 void UXMSNodeWithArray::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode)
