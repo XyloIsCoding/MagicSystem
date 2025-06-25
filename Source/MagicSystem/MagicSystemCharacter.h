@@ -92,8 +92,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateWidget();
-
-	void AddWidgetsForSubNodes(UXMSNode* Node);
 	
 	UFUNCTION(BlueprintCallable)
 	void CreateNode();
@@ -108,7 +106,7 @@ public:
 	void CollectGarbage();
 
 	UPROPERTY()
-	TObjectPtr<UXMSNodeCanvasWidget> NodeWidget;
+	TObjectPtr<UXMSNodeCanvasWidget> NodeCanvasWidget;
 
 public:
 	virtual UXMSSpellEditorComponent* GetSpellEditorComponent() override { return SpellEditorComponent; }

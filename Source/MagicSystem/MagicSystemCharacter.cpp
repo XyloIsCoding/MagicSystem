@@ -82,48 +82,16 @@ void AMagicSystemCharacter::BeginPlay()
 
 void AMagicSystemCharacter::CreateWidget()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Called"))
 	if (!TestNode || !SpellEditorComponent) return;
 	
-	if (!NodeWidget)
+	if (!NodeCanvasWidget)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Creating canvass"))
-		NodeWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
-		if (!NodeWidget) return;
-		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Canvas Created"))
-		NodeWidget->AddToViewport();
+		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
+		if (!NodeCanvasWidget) return;
+		NodeCanvasWidget->AddToViewport();
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Adding sub nodes"))
-	AddWidgetsForSubNodes(TestNode);
-}
-
-void AMagicSystemCharacter::AddWidgetsForSubNodes(UXMSNode* Node)
-{
-	if (!Node) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s]"), *Node->GetName())
 	
-	FXMSNodeQueryResult NodeQueryResult;
-	Node->GetAllSubNodes(NodeQueryResult);
-
-	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s] -> got subnodes (%i)"), *Node->GetName(), NodeQueryResult.Nodes.Num())
-	
-	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
-	{
-		if (NodeResult.Value)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
-			UXMSNode* ParentNode = NodeResult.Value->GetParentNode();
-			UXMSSubNodeWidget* SubNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), ParentNode);
-			if (SubNodeWidget)
-			{
-				SubNodeWidget->SetOwningNode(ParentNode, NodeResult.Value->GetPathFromParentNode());
-				NodeWidget->AddNodeWidget(SubNodeWidget);
-			}
-			AddWidgetsForSubNodes(NodeResult.Value);
-		}
-	}
+	SpellEditorComponent->FillNodeCanvas(GetController<APlayerController>(), NodeCanvasWidget, TestNode);
 }
 
 void AMagicSystemCharacter::CreateNode()

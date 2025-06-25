@@ -182,45 +182,45 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode)
+UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
-	if (!OwningNode || !PlayerController) return nullptr;
+	if (!ParentNode || !PlayerController) return nullptr;
 
 	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 	if (!MSS) return nullptr;
 	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
 	if (!NodesData) return nullptr;
-	FXMSNodeData* Data = NodesData->GetNodeData(OwningNode->GetClass());
+	FXMSNodeData* Data = NodesData->GetNodeData(ParentNode->GetClass());
 	if (!Data) return nullptr;
 
 	// Node with map
-	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(OwningNode))
+	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
 	{
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
 		UXMSMapSubNodeWidget* Widget = CreateWidget<UXMSMapSubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetMapNode(NodeWithMap);
+			Widget->SetOwningNode(ParentNode, PathFromParentNode);
 		}
 		return Widget;
 	}
 
 	// Node with array
-	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(OwningNode))
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
 		UXMSArraySubNodeWidget* Widget = CreateWidget<UXMSArraySubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetArrayNode(NodeWithArray);
+			Widget->SetOwningNode(ParentNode, PathFromParentNode);
 		}
 		return Widget;
 	}
 
 	// Node with value
-	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(OwningNode))
+	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
 	{
 		if (!Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
@@ -229,12 +229,36 @@ UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController*
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetValueNode(NodeWithValue);
+			Widget->SetOwningNode(ParentNode, PathFromParentNode);
 		}
 		return Widget;
 	}
 	
 	return nullptr;
+}
+
+void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, UXMSNode* Node)
+{
+	if (!Node) return;
+
+	FXMSNodeQueryResult NodeQueryResult;
+	Node->GetAllSubNodes(NodeQueryResult);
+
+	// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s] -> got subnodes (%i)"), *Node->GetName(), NodeQueryResult.Nodes.Num())
+	
+	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
+	{
+		if (NodeResult.Value)
+		{
+			// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
+			UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(PlayerController, Node, NodeResult.Key);
+			if (SubNodeWidget)
+			{
+				NodeCanvas->AddNodeWidget(SubNodeWidget);
+			}
+			FillNodeCanvas(PlayerController, NodeCanvas, NodeResult.Value);
+		}
+	}
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
