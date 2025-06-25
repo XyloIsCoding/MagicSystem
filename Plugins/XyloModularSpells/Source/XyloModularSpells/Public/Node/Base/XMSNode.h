@@ -13,6 +13,8 @@ struct FXMSMultiNodeContainer;
 struct FXMSNodeQueryResult;
 struct FXMSNodePathElement;
 
+DECLARE_MULTICAST_DELEGATE(FXMSRemovedFromParentSignature)
+
 /**
  * 
  */
@@ -41,8 +43,9 @@ public:
 	/** Init this node from a Json object, also instantiating all sub-nodes recursively using the passed in outer */
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>);
 	
-	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) { return nullptr; }
-	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) {}
+	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) const { return nullptr; }
+	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const {}
+	virtual void GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const {}
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
 
 	/** @return: the Identifiers of all sub-nodes */
@@ -62,6 +65,8 @@ public:
 	bool IsInScopeOf(UXMSNode* Other) const;
 	bool IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHierarchy) const;
 
+public:
+	FXMSRemovedFromParentSignature RemovedFromParentDelegate;
 protected:
 	/** Called when this node is set in a container */
 	virtual void OnParentSet() {}

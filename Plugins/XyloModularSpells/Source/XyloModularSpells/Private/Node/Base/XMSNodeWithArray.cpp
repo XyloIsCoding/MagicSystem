@@ -86,13 +86,13 @@ void UXMSNodeWithArray::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 	}
 }
 
-UXMSNode* UXMSNodeWithArray::GetSubNode(const FXMSNodePathElement& PathElement)
+UXMSNode* UXMSNodeWithArray::GetSubNode(const FXMSNodePathElement& PathElement) const
 {
 	if (PathElement.Identifier != SubNodes.Key) return nullptr;
 	return GetSubNode(PathElement.Index);
 }
 
-void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes)
+void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 {
 	if (!SubNodes.Value)
 	{
@@ -103,6 +103,11 @@ void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes)
 	{
 		OutNodes.Nodes.Emplace(FXMSNodePathElement(SubNodes.Key, It.GetIndex()), *It);
 	}
+}
+
+void UXMSNodeWithArray::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
+{
+	OutNodes.Append(SubNodes.Value->GetAllGeneric());
 }
 
 void UXMSNodeWithArray::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode)
@@ -122,7 +127,7 @@ void UXMSNodeWithArray::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) co
  * UXMSNodeWithArray
  */
 
-UXMSNode* UXMSNodeWithArray::GetSubNode(int32 Index)
+UXMSNode* UXMSNodeWithArray::GetSubNode(int32 Index) const
 {
 	FXMSMultiNodeContainer* ContainerPtr = SubNodes.Value;
 	if (!ContainerPtr) return nullptr;

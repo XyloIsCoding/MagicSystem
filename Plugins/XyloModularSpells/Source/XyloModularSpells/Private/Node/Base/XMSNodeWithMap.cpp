@@ -84,14 +84,14 @@ void UXMSNodeWithMap::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 	}
 }
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePathElement& PathElement)
+UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePathElement& PathElement) const
 {
 	return GetSubNode(PathElement.Identifier);
 }
 
-void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes)
+void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 {
-	for (TPair<FName, FXMSNodeContainer*>& SubNode : SubNodes)
+	for (const TPair<FName, FXMSNodeContainer*>& SubNode : SubNodes)
 	{
 		if (!SubNode.Value)
 		{
@@ -99,6 +99,19 @@ void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes)
 			continue;
 		}
 		OutNodes.Nodes.Emplace(FXMSNodePathElement(SubNode.Key), SubNode.Value->GetGeneric());
+	}
+}
+
+void UXMSNodeWithMap::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
+{
+	for (const TPair<FName, FXMSNodeContainer*>& SubNode : SubNodes)
+	{
+		if (!SubNode.Value)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			continue;
+		}
+		OutNodes.Emplace(SubNode.Value->GetGeneric());
 	}
 }
 
@@ -118,9 +131,9 @@ void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) cons
  * UXMSNodeWithMap
  */
 
-UXMSNode* UXMSNodeWithMap::GetSubNode(FName Identifier)
+UXMSNode* UXMSNodeWithMap::GetSubNode(FName Identifier) const
 {
-	FXMSNodeContainer** ContainerPtrPtr = SubNodes.Find(Identifier);
+	FXMSNodeContainer* const* ContainerPtrPtr = SubNodes.Find(Identifier);
 	if (!ContainerPtrPtr) return nullptr;
 
 	return (*ContainerPtrPtr)->GetGeneric();

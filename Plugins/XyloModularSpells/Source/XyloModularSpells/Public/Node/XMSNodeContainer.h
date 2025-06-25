@@ -55,9 +55,9 @@ struct FXMSNodeContainer
 
 public:
 	/** Checks if a class is compatible with this container */
-	virtual bool IsCompatible(UClass* NodeClass) { return false; }
+	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
 protected:
-	virtual UXMSNode* GetGeneric() { return nullptr; }
+	virtual UXMSNode* GetGeneric() const { return nullptr; }
 	virtual void SetGeneric(UXMSNode* InNode) {}
 
 	virtual void NodeSet(UXMSNode* InNode, UXMSNode* OldNode)
@@ -109,12 +109,12 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
-	BaseInterface* GetInterface()
+	BaseInterface* GetInterface() const
 	{
 		return Cast<BaseInterface>(Node.Get());
 	}
 
-	BaseClass* Get()
+	BaseClass* Get() const
 	{
 		return Node.Get();
 	}
@@ -134,7 +134,7 @@ public:
 
 public:
 	/** Checks if a class is compatible with this container */
-	virtual bool IsCompatible(UClass* NodeClass) override
+	virtual bool IsCompatible(UClass* NodeClass) const override
 	{
 		if (!NodeClass) return false;
 		
@@ -159,7 +159,7 @@ public:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 protected:
-	virtual UXMSNode* GetGeneric() override
+	virtual UXMSNode* GetGeneric() const override
 	{
 		return Node.Get();
 	}
@@ -223,11 +223,11 @@ struct FXMSMultiNodeContainer
 
 public:
 	/** Checks if a class is compatible with this container */
-	virtual bool IsCompatible(UClass* NodeClass) { return false; }
+	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
 protected:
-	virtual UXMSNode* GetGeneric(int32 Index) { return nullptr; }
+	virtual UXMSNode* GetGeneric(int32 Index) const { return nullptr; }
 	/** @return All stored nodes, even if nullptr */
-	virtual TArray<UXMSNode*> GetAllGeneric() { return TArray<UXMSNode*>(); }
+	virtual TArray<UXMSNode*> GetAllGeneric() const { return TArray<UXMSNode*>(); }
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void AddGeneric(UXMSNode* InNode) {}
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) {}
@@ -282,24 +282,24 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
-	BaseInterface* GetInterface(int32 Index)
+	BaseInterface* GetInterface(int32 Index) const
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Cast<BaseInterface>(Nodes[Index].Get());
 	}
 
-	BaseClass* Get(int32 Index)
+	BaseClass* Get(int32 Index) const
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Nodes[Index].Get();
 	}
 
 	/** @return All stored nodes, even if nullptr */
-	TArray<BaseInterface*> GetAll()
+	TArray<BaseInterface*> GetAll() const
 	{
 		TArray<BaseInterface*> Result;
 		Result.Reserve(Nodes.Num());
-		for (TStrongObjectPtr<BaseClass>& Node : Nodes)
+		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
 			Result.Add(Cast<BaseInterface>(Node.Get()));
 		}
@@ -349,7 +349,7 @@ public:
 	}
 
 	/** Checks if a class is compatible with this container */
-	virtual bool IsCompatible(UClass* NodeClass) override
+	virtual bool IsCompatible(UClass* NodeClass) const override
 	{
 		if (!NodeClass) return false;
 		
@@ -374,17 +374,17 @@ public:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 protected:
-	virtual UXMSNode* GetGeneric(int32 Index) override
+	virtual UXMSNode* GetGeneric(int32 Index) const override
 	{
 		if (!Nodes.IsValidIndex(Index)) return nullptr;
 		return Nodes[Index].Get();
 	}
 
-	virtual TArray<UXMSNode*> GetAllGeneric() override
+	virtual TArray<UXMSNode*> GetAllGeneric() const override
 	{
 		TArray<UXMSNode*> Result;
 		Result.Reserve(Nodes.Num());
-		for (TStrongObjectPtr<BaseClass>& Node : Nodes)
+		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
 			Result.Add(Node.Get());
 		}

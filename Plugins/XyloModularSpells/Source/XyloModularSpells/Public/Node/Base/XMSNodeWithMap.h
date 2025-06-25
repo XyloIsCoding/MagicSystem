@@ -28,8 +28,9 @@ public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
 	
-	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) override;
-	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) override;
+	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) const override;
+	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const override;
+	virtual void GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const override;
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
 
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
@@ -41,7 +42,7 @@ public:
 	 */
 	
 public:
-	virtual UXMSNode* GetSubNode(FName Identifier);
+	virtual UXMSNode* GetSubNode(FName Identifier) const;
 	virtual void SetSubNode(FName Identifier, UXMSNode* InNode);
 protected:
 	virtual void OnSubNodeChanged(FName Identifier);

@@ -102,12 +102,22 @@ bool UXMSNode::IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHie
 
 void UXMSNode::RemoveFromParent()
 {
+	// Clean up sub-nodes before this node
+	TArray<UXMSNode*> SubNodes;
+	GetAllSubNodes(SubNodes);
+	for (UXMSNode* SubNode : SubNodes)
+	{
+		if (SubNode) SubNode->RemoveFromParent();
+	}
+
+	// Clean up this node
 	PreRemovedFromParent();
 	
 	ParentNode = nullptr;
 	PathFromParent.Reset();
 
 	PostRemovedFromParent();
+	RemovedFromParentDelegate.Broadcast();
 }
 
 void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
