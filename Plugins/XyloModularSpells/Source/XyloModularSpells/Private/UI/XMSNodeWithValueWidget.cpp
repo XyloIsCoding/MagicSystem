@@ -25,5 +25,4 @@ void UXMSNodeWithValueWidget::OnSpellEditorComponentSet()
 void UXMSNodeWithValueWidget::SetValueNode(UXMSNodeWithValue* OwningNode)
 {
 	ValueNode = OwningNode;
-	SetNode(OwningNode);
 }

@@ -82,28 +82,46 @@ void AMagicSystemCharacter::BeginPlay()
 
 void AMagicSystemCharacter::CreateWidget()
 {
-	if (!SpellEditorComponent) return;
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Called"))
+	if (!TestNode || !SpellEditorComponent) return;
 	
 	if (!NodeWidget)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Creating canvass"))
 		NodeWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
 		if (!NodeWidget) return;
+		UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Canvas Created"))
 		NodeWidget->AddToViewport();
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::CreateWidget >> Adding sub nodes"))
+	AddWidgetsForSubNodes(TestNode);
+}
+
+void AMagicSystemCharacter::AddWidgetsForSubNodes(UXMSNode* Node)
+{
+	if (!Node) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s]"), *Node->GetName())
 	
-	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
-	Variable1Name->SetString("Pippo");
+	FXMSNodeQueryResult NodeQueryResult;
+	Node->GetAllSubNodes(NodeQueryResult);
+
+	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s] -> got subnodes (%i)"), *Node->GetName(), NodeQueryResult.Nodes.Num())
 	
-	if (Variable1Name)
+	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
 	{
-		UXMSNodeWidget* VarNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), Variable1Name);
-		if (VarNodeWidget)
+		if (NodeResult.Value)
 		{
-			NodeWidget->AddNodeWidget(VarNodeWidget);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("No widget for node"))
+			UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
+			UXMSNode* ParentNode = NodeResult.Value->GetParentNode();
+			UXMSNodeWidget* SubNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), ParentNode);
+			if (SubNodeWidget)
+			{
+				SubNodeWidget->SetOwningNode(ParentNode, NodeResult.Value->GetPathFromParentNode());
+				NodeWidget->AddNodeWidget(SubNodeWidget);
+			}
+			AddWidgetsForSubNodes(NodeResult.Value);
 		}
 	}
 }

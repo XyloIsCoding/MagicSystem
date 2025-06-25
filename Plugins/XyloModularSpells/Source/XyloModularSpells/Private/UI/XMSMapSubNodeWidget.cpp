@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/XMSNodeWithMapWidget.h"
+#include "UI/XMSMapSubNodeWidget.h"
 #include "Node/Base/XMSNodeWithMap.h"
 
 
@@ -11,7 +11,7 @@
  * UXMSNodeWidget
  */
 
-void UXMSNodeWithMapWidget::OnSpellEditorComponentSet()
+void UXMSMapSubNodeWidget::OnSpellEditorComponentSet()
 {
 	Super::OnSpellEditorComponentSet();
 }
@@ -22,8 +22,7 @@ void UXMSNodeWithMapWidget::OnSpellEditorComponentSet()
  * UXMSNodeWithArrayWidget
  */
 
-void UXMSNodeWithMapWidget::SetMapNode(UXMSNodeWithMap* OwningNode)
+void UXMSMapSubNodeWidget::SetMapNode(UXMSNodeWithMap* OwningNode)
 {
 	MapNode = OwningNode;
-	SetNode(OwningNode);
 }

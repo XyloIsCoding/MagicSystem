@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/XMSNodeWithArrayWidget.h"
+#include "UI/XMSArraySubNodeWidget.h"
 #include "Node/Base/XMSNodeWithArray.h"
 
 
@@ -11,7 +11,7 @@
  * UXMSNodeWidget
  */
 
-void UXMSNodeWithArrayWidget::OnSpellEditorComponentSet()
+void UXMSArraySubNodeWidget::OnSpellEditorComponentSet()
 {
 	Super::OnSpellEditorComponentSet();
 }
@@ -19,11 +19,10 @@ void UXMSNodeWithArrayWidget::OnSpellEditorComponentSet()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSNodeWithArrayWidget
+ * UXMSArraySubNodeWidget
  */
 
-void UXMSNodeWithArrayWidget::SetArrayNode(UXMSNodeWithArray* OwningNode)
+void UXMSArraySubNodeWidget::SetArrayNode(UXMSNodeWithArray* OwningNode)
 {
 	ArrayNode = OwningNode;
-	SetNode(OwningNode);
 }

@@ -7,8 +7,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Node/XMSNodeDataOverride.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/XMSNodeWithArrayWidget.h"
-#include "UI/XMSNodeWithMapWidget.h"
+#include "UI/XMSArraySubNodeWidget.h"
+#include "UI/XMSMapSubNodeWidget.h"
 #include "UI/XMSNodeWithValueWidget.h"
 
 
@@ -169,7 +169,7 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 	if (!MSS) return nullptr;
 	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
 	if (!NodesData) return nullptr;
-
+	
 	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
 	if (Widget)
 	{
@@ -182,22 +182,22 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* Node)
+UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode)
 {
-	if (!Node || !PlayerController) return nullptr;
+	if (!OwningNode || !PlayerController) return nullptr;
 
 	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 	if (!MSS) return nullptr;
 	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
 	if (!NodesData) return nullptr;
-	FXMSNodeData* Data = NodesData->GetNodeData(Node->GetClass());
+	FXMSNodeData* Data = NodesData->GetNodeData(OwningNode->GetClass());
 	if (!Data) return nullptr;
 
 	// Node with map
-	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(Node))
+	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(OwningNode))
 	{
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeWithMapWidget::StaticClass());
-		UXMSNodeWithMapWidget* Widget = CreateWidget<UXMSNodeWithMapWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
+		UXMSMapSubNodeWidget* Widget = CreateWidget<UXMSMapSubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
@@ -207,10 +207,10 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 	}
 
 	// Node with array
-	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(Node))
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(OwningNode))
 	{
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeWithArrayWidget::StaticClass());
-		UXMSNodeWithArrayWidget* Widget = CreateWidget<UXMSNodeWithArrayWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
+		UXMSArraySubNodeWidget* Widget = CreateWidget<UXMSArraySubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
@@ -220,7 +220,7 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 	}
 
 	// Node with value
-	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(Node))
+	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(OwningNode))
 	{
 		if (!Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeWithValueWidget::StaticClass())) return nullptr;

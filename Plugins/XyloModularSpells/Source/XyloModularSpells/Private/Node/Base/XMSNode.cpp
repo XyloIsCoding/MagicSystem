@@ -97,7 +97,7 @@ bool UXMSNode::IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHie
 	const UXMSNode* ChildOfMatchingParent = ThisNodeHierarchy.IsValidIndex(IndexOfMatchingParent - 1)
 		? ThisNodeHierarchy[IndexOfMatchingParent - 1] : this;
 	
-	return ChildOfMatchingParent && ChildOfMatchingParent->PathFromParent.Index >= Other->PathFromParent.Index;
+	return ChildOfMatchingParent && ChildOfMatchingParent->PathFromParentNode.Index >= Other->PathFromParentNode.Index;
 }
 
 void UXMSNode::RemoveFromParent()
@@ -114,7 +114,7 @@ void UXMSNode::RemoveFromParent()
 	PreRemovedFromParent();
 	
 	ParentNode = nullptr;
-	PathFromParent.Reset();
+	PathFromParentNode.Reset();
 
 	PostRemovedFromParent();
 	RemovedFromParentDelegate.Broadcast();
@@ -122,8 +122,9 @@ void UXMSNode::RemoveFromParent()
 
 void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
 {
+	// UE_LOG(LogTemp, Warning, TEXT("UXMSNode::ReparentNode >> [%s] now has parent [%s]"), *GetName(), InParentNode ? *InParentNode->GetName() : *FString())
 	ParentNode = InParentNode;
-	PathFromParent = InPathFromParent;
+	PathFromParentNode = InPathFromParent;
 	OnParentSet();
 }
 

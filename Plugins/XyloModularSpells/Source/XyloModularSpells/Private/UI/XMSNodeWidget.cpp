@@ -17,21 +17,33 @@ UXMSNodeWidget::UXMSNodeWidget(const FObjectInitializer& ObjectInitializer)
  * UXMSNodeWidget
  */
 
-void UXMSNodeWidget::SetNode(UXMSNode* OwningNode)
+FString UXMSNodeWidget::GetCurrentNodeSelectionName() const
 {
-	Node = OwningNode;
-	if (OwningNode)
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{
-		OwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnNodeRemovedFromParent);
+		UXMSNode* ThisNode = OwningNodePtr->GetSubNode(ThisNodePath);
+		if (ThisNode) return ThisNode->GetName();
 	}
-	OnNodeSet();
+	return FString(TEXT("[-]"));
 }
 
-void UXMSNodeWidget::OnNodeSet()
+void UXMSNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
+{
+	OwningNode = InOwningNode;
+	ThisNodePath = PathFromOwningNode;
+	if (InOwningNode)
+	{
+		InOwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnOwningNodeRemovedFromParent);
+	}
+	OnOwningNodeSet();
+	BP_OnOwningNodeSet();
+}
+
+void UXMSNodeWidget::OnOwningNodeSet()
 {
 }
 
-void UXMSNodeWidget::OnNodeRemovedFromParent()
+void UXMSNodeWidget::OnOwningNodeRemovedFromParent()
 {
 	// Remove widget from the widget container
 	RemoveFromParent();

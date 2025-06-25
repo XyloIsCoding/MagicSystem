@@ -67,6 +67,8 @@ public:
 
 public:
 	FXMSRemovedFromParentSignature RemovedFromParentDelegate;
+	UXMSNode* GetParentNode() const { return ParentNode.Get(); }
+	const FXMSNodePathElement& GetPathFromParentNode() const { return PathFromParentNode; }
 protected:
 	/** Called when this node is set in a container */
 	virtual void OnParentSet() {}
@@ -83,5 +85,5 @@ protected:
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNode> ParentNode;
 	UPROPERTY()
-	FXMSNodePathElement PathFromParent;
+	FXMSNodePathElement PathFromParentNode;
 };

@@ -8,9 +8,9 @@
 
 
 class UXMSNodeCanvasWidget;
-class UXMSNodeWithArrayWidget;
+class UXMSArraySubNodeWidget;
 class UXMSNodeWidget;
-class UXMSNodeWithMapWidget;
+class UXMSMapSubNodeWidget;
 class UXMSNode;
 
 USTRUCT(BlueprintType)
@@ -97,9 +97,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSNodeCanvasWidget> NodeCanvasWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSNodeWithMapWidget> NodeWithMapWidgetClass;
+	TSubclassOf<UXMSMapSubNodeWidget> NodeWithMapWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSNodeWithArrayWidget> NodeWithArrayWidgetClass;
+	TSubclassOf<UXMSArraySubNodeWidget> NodeWithArrayWidgetClass;
 
 public:
 	UFUNCTION(BlueprintCallable)

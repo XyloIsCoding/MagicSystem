@@ -98,7 +98,7 @@ void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
-		OutNodes.Nodes.Emplace(FXMSNodePathElement(SubNode.Key), SubNode.Value->GetGeneric());
+		OutNodes.Nodes.Add(FXMSNodePathElement(SubNode.Key), SubNode.Value->GetGeneric());
 	}
 }
 
@@ -111,7 +111,7 @@ void UXMSNodeWithMap::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
 			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
-		OutNodes.Emplace(SubNode.Value->GetGeneric());
+		OutNodes.Add(SubNode.Value->GetGeneric());
 	}
 }
 

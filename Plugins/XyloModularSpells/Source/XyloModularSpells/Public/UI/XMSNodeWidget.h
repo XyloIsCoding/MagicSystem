@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "XMSTypes.h"
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeWidget.generated.h"
 
+struct FXMSNodePathElement;
 class UXMSNode;
 class UXMSSpellEditorComponent;
 
@@ -33,12 +35,19 @@ public:
 	 */
 
 public:
-	void SetNode(UXMSNode* OwningNode);
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetCurrentNodeSelectionName() const;
+
+public:
+	void SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
 protected:
-	virtual void OnNodeSet();
-	virtual void OnNodeRemovedFromParent();
+	virtual void OnOwningNodeSet();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OnOwningNodeSet();
+	virtual void OnOwningNodeRemovedFromParent();
 	UPROPERTY()
-	TWeakObjectPtr<UXMSNode> Node;
+	TWeakObjectPtr<UXMSNode> OwningNode;
+	FXMSNodePathElement ThisNodePath;
 
 public:
 	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);

@@ -88,7 +88,7 @@ protected:
 
 public:
 	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController);
-	UXMSNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* Node);
+	UXMSNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	

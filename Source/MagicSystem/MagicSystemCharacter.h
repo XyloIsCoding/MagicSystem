@@ -92,6 +92,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateWidget();
+
+	void AddWidgetsForSubNodes(UXMSNode* Node);
 	
 	UFUNCTION(BlueprintCallable)
 	void CreateNode();

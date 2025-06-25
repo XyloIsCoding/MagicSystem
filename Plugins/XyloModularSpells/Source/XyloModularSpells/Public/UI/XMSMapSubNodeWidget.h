@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSNodeWidget.h"
-#include "XMSNodeWithMapWidget.generated.h"
+#include "XMSMapSubNodeWidget.generated.h"
 
 class UXMSNodeWithMap;
 
@@ -12,7 +12,7 @@ class UXMSNodeWithMap;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeWithMapWidget : public UXMSNodeWidget
+class XYLOMODULARSPELLS_API UXMSMapSubNodeWidget : public UXMSNodeWidget
 {
 	GENERATED_BODY()
 
@@ -34,7 +34,7 @@ protected:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeWithArrayWidget
+	 * UXMSArraySubNodeWidget
 	 */
 
 public:
