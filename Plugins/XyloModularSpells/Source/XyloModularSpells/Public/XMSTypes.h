@@ -25,23 +25,20 @@ struct FXMSNodePathElement
 
 	bool operator==(const FXMSNodePathElement& Other) const
 	{
-		return Equals(Other);
+		return Identifier.IsEqual(Other.Identifier) && Index == Other.Index;
 	}
 
 	bool operator!=(const FXMSNodePathElement& Other) const
 	{
-		return !Equals(Other);
+		return !(*this == Other);
 	}
 
-	bool Equals(const FXMSNodePathElement& Other) const
+	friend inline uint32 GetTypeHash( const FXMSNodePathElement& Key )
 	{
-		return Identifier.IsEqual(Other.Identifier) && Index == Other.Index;
-	}
-
-	// TODO: check that this actually works in maps!
-	friend FORCEINLINE uint32 GetTypeHash(const FXMSNodePathElement& This)
-	{
-		return HashCombine(FCrc::MemCrc32(&This.Identifier, sizeof(This.Identifier)), FCrc::MemCrc32(&This.Index, sizeof(This.Index)));
+		uint32 Hash = 0;
+		Hash = HashCombine(Hash, GetTypeHash(Key.Identifier));
+		Hash = HashCombine(Hash, GetTypeHash(Key.Index));
+		return Hash;
 	}
 
 	void Reset()
