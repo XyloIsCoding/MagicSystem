@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/XMSNodeWidget.h"
+#include "UI/XMSSubNodeWidget.h"
 
 #include "Node/Base/XMSNode.h"
 
 
-UXMSNodeWidget::UXMSNodeWidget(const FObjectInitializer& ObjectInitializer)
+UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 }
@@ -14,10 +14,10 @@ UXMSNodeWidget::UXMSNodeWidget(const FObjectInitializer& ObjectInitializer)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSNodeWidget
+ * UXMSSubNodeWidget
  */
 
-FString UXMSNodeWidget::GetCurrentNodeSelectionName() const
+FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
 {
 	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{
@@ -27,7 +27,7 @@ FString UXMSNodeWidget::GetCurrentNodeSelectionName() const
 	return FString(TEXT("[-]"));
 }
 
-void UXMSNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
+void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
 {
 	OwningNode = InOwningNode;
 	ThisNodePath = PathFromOwningNode;
@@ -39,22 +39,22 @@ void UXMSNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathEle
 	BP_OnOwningNodeSet();
 }
 
-void UXMSNodeWidget::OnOwningNodeSet()
+void UXMSSubNodeWidget::OnOwningNodeSet()
 {
 }
 
-void UXMSNodeWidget::OnOwningNodeRemovedFromParent()
+void UXMSSubNodeWidget::OnOwningNodeRemovedFromParent()
 {
 	// Remove widget from the widget container
 	RemoveFromParent();
 }
 
-void UXMSNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
+void UXMSSubNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
 {
 	SpellEditorComponent = InSpellEditorComponent;
 	OnSpellEditorComponentSet();
 }
 
-void UXMSNodeWidget::OnSpellEditorComponentSet()
+void UXMSSubNodeWidget::OnSpellEditorComponentSet()
 {
 }

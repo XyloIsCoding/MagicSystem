@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeCanvasWidget.generated.h"
 
-class UXMSNodeWidget;
+class UXMSSubNodeWidget;
 class UXMSSpellEditorComponent;
 
 /**
@@ -31,7 +31,7 @@ class XYLOMODULARSPELLS_API UXMSNodeCanvasWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void AddNodeWidget(UXMSNodeWidget* NodeWidget);
+	void AddNodeWidget(UXMSSubNodeWidget* NodeWidget);
 
 public:
 	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);

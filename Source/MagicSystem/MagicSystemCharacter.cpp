@@ -24,7 +24,7 @@
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/XMSNodeWidget.h"
+#include "UI/XMSSubNodeWidget.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -115,7 +115,7 @@ void AMagicSystemCharacter::AddWidgetsForSubNodes(UXMSNode* Node)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
 			UXMSNode* ParentNode = NodeResult.Value->GetParentNode();
-			UXMSNodeWidget* SubNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), ParentNode);
+			UXMSSubNodeWidget* SubNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), ParentNode);
 			if (SubNodeWidget)
 			{
 				SubNodeWidget->SetOwningNode(ParentNode, NodeResult.Value->GetPathFromParentNode());

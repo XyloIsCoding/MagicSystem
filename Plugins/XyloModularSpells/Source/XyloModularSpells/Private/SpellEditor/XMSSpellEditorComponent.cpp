@@ -182,7 +182,7 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode)
+UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode)
 {
 	if (!OwningNode || !PlayerController) return nullptr;
 

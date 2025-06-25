@@ -9,7 +9,7 @@
 #include "XMSSpellEditorComponent.generated.h"
 
 class UXMSNodeCanvasWidget;
-class UXMSNodeWidget;
+class UXMSSubNodeWidget;
 
 USTRUCT()
 struct FXMSScopedVariable
@@ -88,7 +88,7 @@ protected:
 
 public:
 	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController);
-	UXMSNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode);
+	UXMSSubNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* OwningNode);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	

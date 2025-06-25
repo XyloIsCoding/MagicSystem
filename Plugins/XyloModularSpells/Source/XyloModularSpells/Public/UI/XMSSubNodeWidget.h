@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "XMSTypes.h"
 #include "Blueprint/UserWidget.h"
-#include "XMSNodeWidget.generated.h"
+#include "XMSSubNodeWidget.generated.h"
 
 struct FXMSNodePathElement;
 class UXMSNode;
@@ -15,12 +15,12 @@ class UXMSSpellEditorComponent;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	UXMSNodeWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeWidget
+	 * UXMSSubNodeWidget
 	 */
 
 public:

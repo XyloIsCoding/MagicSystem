@@ -9,7 +9,7 @@
 
 class UXMSNodeCanvasWidget;
 class UXMSArraySubNodeWidget;
-class UXMSNodeWidget;
+class UXMSSubNodeWidget;
 class UXMSMapSubNodeWidget;
 class UXMSNode;
 
@@ -70,7 +70,7 @@ struct FXMSNodeData
 	TObjectPtr<UTexture2D> Glyph;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UXMSNodeWidget> WidgetClassOverride;
+	TSubclassOf<UXMSSubNodeWidget> WidgetClassOverride;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;
