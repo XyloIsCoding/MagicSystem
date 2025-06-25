@@ -7,6 +7,9 @@
 #include "XMSNodeDataOverride.generated.h"
 
 
+class UXMSNodeWithArrayWidget;
+class UXMSNodeWidget;
+class UXMSNodeWithMapWidget;
 class UXMSNode;
 
 USTRUCT(BlueprintType)
@@ -65,6 +68,9 @@ struct FXMSNodeData
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> Glyph;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UXMSNodeWidget> WidgetClassOverride;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;
 };
@@ -84,11 +90,18 @@ public:
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
-	
-	
+
+
+public:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UXMSNodeWithMapWidget> NodeWithMapWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UXMSNodeWithArrayWidget> NodeWithArrayWidgetClass;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	bool GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData);
+	FXMSNodeData* GetNodeData(UClass* NodeClass);
 private:
 	void UpdateNodeDataArray();
 	UPROPERTY(EditAnywhere, EditFixedSize, meta=(TitleProperty="NodeClass"))

@@ -38,6 +38,7 @@ public:
 
 public:
 	void RegisterNodeDataOverride(UXMSNodeDataOverride* InNodeDataOverride);
+	UXMSNodeDataOverride* GetNodeDataOverride() const { return NodeDataOverride; }
 private:
 	UPROPERTY()
 	TObjectPtr<UXMSNodeDataOverride> NodeDataOverride;

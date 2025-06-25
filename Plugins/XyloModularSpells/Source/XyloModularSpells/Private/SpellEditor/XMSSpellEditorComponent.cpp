@@ -3,6 +3,13 @@
 
 #include "SpellEditor/XMSSpellEditorComponent.h"
 
+#include "XMSModularSpellsSubsystem.h"
+#include "Blueprint/UserWidget.h"
+#include "Node/XMSNodeDataOverride.h"
+#include "UI/XMSNodeWithArrayWidget.h"
+#include "UI/XMSNodeWithMapWidget.h"
+#include "UI/XMSNodeWithValueWidget.h"
+
 
 UXMSSpellEditorComponent::UXMSSpellEditorComponent()
 {
@@ -154,3 +161,60 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* Node)
+{
+	if (!Node || !PlayerController) return nullptr;
+
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+	if (!NodesData) return nullptr;
+
+	// Node with map
+	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(Node))
+	{
+		UXMSNodeWithMapWidget* Widget = CreateWidget<UXMSNodeWithMapWidget>(PlayerController, NodesData->NodeWithMapWidgetClass);
+		if (Widget)
+		{
+			Widget->SetSpellEditorComponent(this);
+			Widget->SetNode(NodeWithMap);
+		}
+		return Widget;
+	}
+
+	// Node with array
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(Node))
+	{
+		UXMSNodeWithArrayWidget* Widget = CreateWidget<UXMSNodeWithArrayWidget>(PlayerController, NodesData->NodeWithArrayWidgetClass);
+		if (Widget)
+		{
+			Widget->SetSpellEditorComponent(this);
+			Widget->SetNode(NodeWithArray);
+		}
+		return Widget;
+	}
+
+	// Node with value
+	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(Node))
+	{
+		FXMSNodeData* Data = NodesData->GetNodeData(Node->GetClass());
+		if (!Data || !Data->WidgetClassOverride) return nullptr;
+		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeWithValueWidget::StaticClass())) return nullptr;
+		
+		UXMSNodeWithValueWidget* Widget = CreateWidget<UXMSNodeWithValueWidget>(PlayerController, Data->WidgetClassOverride);
+		if (Widget)
+		{
+			Widget->SetSpellEditorComponent(this);
+			Widget->SetNode(NodeWithValue);
+		}
+		return Widget;
+	}
+	
+	return nullptr;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+

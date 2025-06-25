@@ -22,6 +22,8 @@
 #include "Node/Variable/Setter/XMSIntegerVarSetterNode.h"
 #include "Spell/XMSSpellActor.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "UI/XMSNodeWidget.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -75,6 +77,25 @@ void AMagicSystemCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CreateNode();
+}
+
+void AMagicSystemCharacter::CreateWidget()
+{
+	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
+	Variable1Name->SetString("Pippo");
+	
+	if (Variable1Name && SpellEditorComponent)
+	{
+		UXMSNodeWidget* NodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), Variable1Name);
+		if (NodeWidget)
+		{
+			NodeWidget->AddToViewport();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No widget for node"))
+		}
+	}
 }
 
 void AMagicSystemCharacter::CreateNode()

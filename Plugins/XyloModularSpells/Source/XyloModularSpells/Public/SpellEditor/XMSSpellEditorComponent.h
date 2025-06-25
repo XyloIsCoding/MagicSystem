@@ -8,6 +8,8 @@
 #include "Node/Runnable/Instruction/XMSVariableDeclarationNode.h"
 #include "XMSSpellEditorComponent.generated.h"
 
+class UXMSNodeWidget;
+
 USTRUCT()
 struct FXMSScopedVariable
 {
@@ -81,6 +83,12 @@ protected:
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
+	UXMSNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* Node);
+	
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 private:
 	UPROPERTY()

@@ -9,6 +9,6 @@ public class MagicSystem : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { "StructUtils", "XyloModularSpells" });
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Slate", "UMG" });
 	}
 }

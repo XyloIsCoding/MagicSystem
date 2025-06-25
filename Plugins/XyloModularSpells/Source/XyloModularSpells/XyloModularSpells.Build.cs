@@ -40,6 +40,7 @@ public class XyloModularSpells : ModuleRules
 				"SlateCore",
 				"Json",
 				"JsonUtilities",
+				"UMG",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

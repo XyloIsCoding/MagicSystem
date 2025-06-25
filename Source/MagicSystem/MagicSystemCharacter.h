@@ -90,6 +90,9 @@ public:
 	TObjectPtr<UXMSProgramNode> TestNodeDeserialized;
 
 	UFUNCTION(BlueprintCallable)
+	void CreateWidget();
+	
+	UFUNCTION(BlueprintCallable)
 	void CreateNode();
 	
 	UFUNCTION(BlueprintCallable)

@@ -74,6 +74,11 @@ bool UXMSNodeDataOverride::GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeD
 	return true;
 }
 
+FXMSNodeData* UXMSNodeDataOverride::GetNodeData(UClass* NodeClass)
+{
+	return NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData){ return NodeData.NodeClass == NodeClass; });
+}
+
 void UXMSNodeDataOverride::UpdateNodeDataArray()
 {
 	UXMSModularSpellsSubsystem* NodesSubsystem = UXMSModularSpellsSubsystem::Get();
