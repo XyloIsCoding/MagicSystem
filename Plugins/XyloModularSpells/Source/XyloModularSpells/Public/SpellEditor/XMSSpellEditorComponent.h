@@ -8,6 +8,7 @@
 #include "Node/Runnable/Instruction/XMSVariableDeclarationNode.h"
 #include "XMSSpellEditorComponent.generated.h"
 
+class UXMSNodeCanvasWidget;
 class UXMSNodeWidget;
 
 USTRUCT()
@@ -86,6 +87,7 @@ protected:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
+	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController);
 	UXMSNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* Node);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/

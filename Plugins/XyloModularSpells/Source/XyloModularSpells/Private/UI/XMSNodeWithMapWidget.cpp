@@ -22,7 +22,8 @@ void UXMSNodeWithMapWidget::OnSpellEditorComponentSet()
  * UXMSNodeWithArrayWidget
  */
 
-void UXMSNodeWithMapWidget::SetNode(UXMSNodeWithMap* OwningNode)
+void UXMSNodeWithMapWidget::SetMapNode(UXMSNodeWithMap* OwningNode)
 {
-	Node = OwningNode;
+	MapNode = OwningNode;
+	SetNode(OwningNode);
 }

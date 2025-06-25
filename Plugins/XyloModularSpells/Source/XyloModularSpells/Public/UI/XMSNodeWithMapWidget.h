@@ -38,8 +38,8 @@ protected:
 	 */
 
 public:
-	void SetNode(UXMSNodeWithMap* OwningNode);
+	void SetMapNode(UXMSNodeWithMap* OwningNode);
 protected:
 	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeWithMap> Node;
+	TWeakObjectPtr<UXMSNodeWithMap> MapNode;
 };

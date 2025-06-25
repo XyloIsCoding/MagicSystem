@@ -23,6 +23,7 @@
 #include "Spell/XMSSpellActor.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/XMSNodeCanvasWidget.h"
 #include "UI/XMSNodeWidget.h"
 
 
@@ -81,15 +82,24 @@ void AMagicSystemCharacter::BeginPlay()
 
 void AMagicSystemCharacter::CreateWidget()
 {
+	if (!SpellEditorComponent) return;
+	
+	if (!NodeWidget)
+	{
+		NodeWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
+		if (!NodeWidget) return;
+		NodeWidget->AddToViewport();
+	}
+	
 	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
 	Variable1Name->SetString("Pippo");
 	
-	if (Variable1Name && SpellEditorComponent)
+	if (Variable1Name)
 	{
-		UXMSNodeWidget* NodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), Variable1Name);
-		if (NodeWidget)
+		UXMSNodeWidget* VarNodeWidget = SpellEditorComponent->CreateNodeWidget(GetController<APlayerController>(), Variable1Name);
+		if (VarNodeWidget)
 		{
-			NodeWidget->AddToViewport();
+			NodeWidget->AddNodeWidget(VarNodeWidget);
 		}
 		else
 		{
@@ -162,7 +172,6 @@ void AMagicSystemCharacter::CreateNode()
 	UXMSVariableNameNode* Variable2NameGetterP2 = NewObject<UXMSVariableNameNode>(this);
 	Variable2IntegerGetter->VariableName.Set(Variable2NameGetterP2);
 	Variable2NameGetterP2->SelectByIndex(1); // 1 is Pluto because it is the second int variable declared
-	
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()

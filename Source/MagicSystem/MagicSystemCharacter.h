@@ -10,6 +10,7 @@
 #include "SpellEditor/XMSSpellEditorInterface.h"
 #include "MagicSystemCharacter.generated.h"
 
+class UXMSNodeCanvasWidget;
 class UXMSProgramNode;
 class UXMSStringProviderNode;
 class IXMSIntegerProviderNodeInterface;
@@ -103,6 +104,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CollectGarbage();
+
+	UPROPERTY()
+	TObjectPtr<UXMSNodeCanvasWidget> NodeWidget;
 
 public:
 	virtual UXMSSpellEditorComponent* GetSpellEditorComponent() override { return SpellEditorComponent; }

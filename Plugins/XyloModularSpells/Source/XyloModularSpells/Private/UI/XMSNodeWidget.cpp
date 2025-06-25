@@ -3,6 +3,8 @@
 
 #include "UI/XMSNodeWidget.h"
 
+#include "Node/Base/XMSNode.h"
+
 
 UXMSNodeWidget::UXMSNodeWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -14,6 +16,26 @@ UXMSNodeWidget::UXMSNodeWidget(const FObjectInitializer& ObjectInitializer)
 /*
  * UXMSNodeWidget
  */
+
+void UXMSNodeWidget::SetNode(UXMSNode* OwningNode)
+{
+	Node = OwningNode;
+	if (OwningNode)
+	{
+		OwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnNodeRemovedFromParent);
+	}
+	OnNodeSet();
+}
+
+void UXMSNodeWidget::OnNodeSet()
+{
+}
+
+void UXMSNodeWidget::OnNodeRemovedFromParent()
+{
+	// Remove widget from the widget container
+	RemoveFromParent();
+}
 
 void UXMSNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
 {

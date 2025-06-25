@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "XMSNodeWidget.generated.h"
+#include "XMSNodeCanvasWidget.generated.h"
 
-class UXMSNode;
+class UXMSNodeWidget;
 class UXMSSpellEditorComponent;
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSNodeCanvasWidget : public UUserWidget
 {
 	GENERATED_BODY()
-
-public:
-	UXMSNodeWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,16 +26,12 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeWidget
+	 * UXMSNodeCanvasWidget
 	 */
 
 public:
-	void SetNode(UXMSNode* OwningNode);
-protected:
-	virtual void OnNodeSet();
-	virtual void OnNodeRemovedFromParent();
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNode> Node;
+	UFUNCTION(BlueprintImplementableEvent)
+	void AddNodeWidget(UXMSNodeWidget* NodeWidget);
 
 public:
 	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);
@@ -46,5 +39,4 @@ protected:
 	virtual void OnSpellEditorComponentSet();
 	UPROPERTY()
 	TObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
-	
 };

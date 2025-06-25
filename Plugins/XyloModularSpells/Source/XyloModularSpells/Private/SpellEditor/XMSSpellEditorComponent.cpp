@@ -6,6 +6,7 @@
 #include "XMSModularSpellsSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "Node/XMSNodeDataOverride.h"
+#include "UI/XMSNodeCanvasWidget.h"
 #include "UI/XMSNodeWithArrayWidget.h"
 #include "UI/XMSNodeWithMapWidget.h"
 #include "UI/XMSNodeWithValueWidget.h"
@@ -160,6 +161,23 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 			});
 }
 
+UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
+{
+	if (!PlayerController) return nullptr;
+
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+	if (!NodesData) return nullptr;
+
+	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
+	if (Widget)
+	{
+		Widget->SetSpellEditorComponent(this);
+	}
+	return Widget;
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -183,7 +201,7 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetNode(NodeWithMap);
+			Widget->SetMapNode(NodeWithMap);
 		}
 		return Widget;
 	}
@@ -196,7 +214,7 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetNode(NodeWithArray);
+			Widget->SetArrayNode(NodeWithArray);
 		}
 		return Widget;
 	}
@@ -211,7 +229,7 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
-			Widget->SetNode(NodeWithValue);
+			Widget->SetValueNode(NodeWithValue);
 		}
 		return Widget;
 	}

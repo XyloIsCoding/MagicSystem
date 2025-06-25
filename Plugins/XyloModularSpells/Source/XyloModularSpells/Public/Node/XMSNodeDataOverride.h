@@ -7,6 +7,7 @@
 #include "XMSNodeDataOverride.generated.h"
 
 
+class UXMSNodeCanvasWidget;
 class UXMSNodeWithArrayWidget;
 class UXMSNodeWidget;
 class UXMSNodeWithMapWidget;
@@ -93,6 +94,8 @@ public:
 
 
 public:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UXMSNodeCanvasWidget> NodeCanvasWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSNodeWithMapWidget> NodeWithMapWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")

@@ -38,8 +38,8 @@ protected:
 	 */
 
 public:
-	void SetNode(UXMSNodeWithArray* OwningNode);
+	void SetArrayNode(UXMSNodeWithArray* OwningNode);
 protected:
 	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeWithArray> Node;
+	TWeakObjectPtr<UXMSNodeWithArray> ArrayNode;
 };
