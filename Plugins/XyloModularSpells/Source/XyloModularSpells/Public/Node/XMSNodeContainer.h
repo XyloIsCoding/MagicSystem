@@ -298,7 +298,6 @@ public:
 	TArray<BaseInterface*> GetAll() const
 	{
 		TArray<BaseInterface*> Result;
-		Result.Reserve(Nodes.Num());
 		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
 			Result.Add(Cast<BaseInterface>(Node.Get()));
@@ -383,7 +382,6 @@ protected:
 	virtual TArray<UXMSNode*> GetAllGeneric() const override
 	{
 		TArray<UXMSNode*> Result;
-		Result.Reserve(Nodes.Num());
 		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
 		{
 			Result.Add(Node.Get());
