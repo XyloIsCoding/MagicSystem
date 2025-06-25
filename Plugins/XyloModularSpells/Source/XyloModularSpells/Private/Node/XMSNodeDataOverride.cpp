@@ -45,6 +45,11 @@ UXMSNodeDataOverride::UXMSNodeDataOverride(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer)
 {
 	UpdateNodeDataArray();
+
+	if (UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get())
+	{
+		MSS->RegisterNodeDataOverride(this);
+	}
 }
 
 
