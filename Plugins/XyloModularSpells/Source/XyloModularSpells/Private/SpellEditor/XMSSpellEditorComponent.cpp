@@ -172,11 +172,14 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 	if (!MSS) return nullptr;
 	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
 	if (!NodesData) return nullptr;
+	FXMSNodeData* Data = NodesData->GetNodeData(Node->GetClass());
+	if (!Data) return nullptr;
 
 	// Node with map
 	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(Node))
 	{
-		UXMSNodeWithMapWidget* Widget = CreateWidget<UXMSNodeWithMapWidget>(PlayerController, NodesData->NodeWithMapWidgetClass);
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeWithMapWidget::StaticClass());
+		UXMSNodeWithMapWidget* Widget = CreateWidget<UXMSNodeWithMapWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
@@ -188,7 +191,8 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 	// Node with array
 	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(Node))
 	{
-		UXMSNodeWithArrayWidget* Widget = CreateWidget<UXMSNodeWithArrayWidget>(PlayerController, NodesData->NodeWithArrayWidgetClass);
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeWithArrayWidget::StaticClass());
+		UXMSNodeWithArrayWidget* Widget = CreateWidget<UXMSNodeWithArrayWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
 		if (Widget)
 		{
 			Widget->SetSpellEditorComponent(this);
@@ -200,8 +204,7 @@ UXMSNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* Pl
 	// Node with value
 	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(Node))
 	{
-		FXMSNodeData* Data = NodesData->GetNodeData(Node->GetClass());
-		if (!Data || !Data->WidgetClassOverride) return nullptr;
+		if (!Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeWithValueWidget::StaticClass())) return nullptr;
 		
 		UXMSNodeWithValueWidget* Widget = CreateWidget<UXMSNodeWithValueWidget>(PlayerController, Data->WidgetClassOverride);
