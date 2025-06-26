@@ -39,15 +39,10 @@ struct FXMSNodeContainer
 		, Owner(InOwner)
 	{
 		// Register node container to SubNodes map of the owning node
-		if (InOwner)
-		{
-			InOwner->SubNodes.Add(Identifier, this);
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(InOwner, &UXMSNodeWithMap::OnSubNodeChanged);
-		}
+		if (InOwner) InOwner->SubNodes.Add(Identifier, this);
 	}
 	virtual ~FXMSNodeContainer()
 	{
-		NodeChangedDelegate.Remove(NodeChangedDelegateHandle);
 	}
 
 	FXMSNodeContainer& operator=(const FXMSNodeContainer& Other) = delete;
@@ -64,13 +59,15 @@ protected:
 	{
 		if (OldNode) OldNode->RemoveFromParent();
 		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, 0));
-		NodeChangedDelegate.Broadcast(Identifier);
+		if (UXMSNodeWithMap* OwnerPtr = Owner.Get())
+		{
+			OwnerPtr->OnSubNodeChanged(Identifier);
+			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, 0));
+		}
 	}
 
 	FName Identifier;
-	TWeakObjectPtr<UXMSNode> Owner;
-	FXMSNodeChangedSignature NodeChangedDelegate;
-	FDelegateHandle NodeChangedDelegateHandle;
+	TWeakObjectPtr<UXMSNodeWithMap> Owner;
 };
 
 // ~FXMSNodeContainer
@@ -207,15 +204,10 @@ struct FXMSMultiNodeContainer
 		, Owner(InOwner)
 	{
 		// Register node container to SubNodes map of the owning node
-		if (InOwner)
-		{
-			InOwner->SubNodes = { Identifier, this };
-			NodeChangedDelegateHandle = NodeChangedDelegate.AddUObject(InOwner, &UXMSNodeWithArray::OnSubNodeChanged);
-		}
+		if (InOwner) InOwner->SubNodes = { Identifier, this };
 	}
 	virtual ~FXMSMultiNodeContainer()
 	{
-		NodeChangedDelegate.Remove(NodeChangedDelegateHandle);
 	}
 
 	FXMSMultiNodeContainer& operator=(const FXMSMultiNodeContainer& Other) = delete;
@@ -237,13 +229,15 @@ protected:
 	{
 		if (OldNode) OldNode->RemoveFromParent();
 		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
-		NodeChangedDelegate.Broadcast(Identifier, Index);
+		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
+		{
+			OwnerPtr->OnSubNodeChanged(Identifier, Index);
+			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
 	}
 
 	FName Identifier;
-	TWeakObjectPtr<UXMSNode> Owner;
-	FXMSArrayNodeChangedSignature NodeChangedDelegate;
-	FDelegateHandle NodeChangedDelegateHandle;
+	TWeakObjectPtr<UXMSNodeWithArray> Owner;
 };
 
 // ~FXMSMultiNodeContainer

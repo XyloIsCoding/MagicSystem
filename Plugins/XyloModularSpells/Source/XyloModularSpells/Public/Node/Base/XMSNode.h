@@ -14,6 +14,7 @@ struct FXMSNodeQueryResult;
 struct FXMSNodePathElement;
 
 DECLARE_MULTICAST_DELEGATE(FXMSRemovedFromParentSignature)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeChangedSignature, FXMSNodePathElement)
 
 /**
  * 
@@ -48,6 +49,9 @@ public:
 	virtual void GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const {}
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
 
+	FXMSSubNodeChangedSignature SubNodeChangedDelegate;
+
+public:
 	/** @return: the Identifiers of all sub-nodes */
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
 	
@@ -57,6 +61,7 @@ public:
 	/** Calls GetNodeFlags on all nodes higher in hierarchy */
 	void GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const;
 
+public:
 	/**
 	 * @param OutHierarchy: Ordered array with all the parents hierarchy of this node, ordered from the closest
 	 *						relative to the further one (parent, grandparent, grand grandparent, ...)
