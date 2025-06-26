@@ -21,8 +21,3 @@ void UXMSMapSubNodeWidget::OnSpellEditorComponentSet()
 /*
  * UXMSNodeWithArrayWidget
  */
-
-void UXMSMapSubNodeWidget::SetMapNode(UXMSNodeWithMap* OwningNode)
-{
-	MapNode = OwningNode;
-}

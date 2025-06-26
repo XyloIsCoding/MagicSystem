@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeCanvasWidget.generated.h"
 
+class UXMSWrapBox;
 class UXMSSubNodeWidget;
 class UXMSSpellEditorComponent;
 
@@ -30,8 +31,8 @@ class XYLOMODULARSPELLS_API UXMSNodeCanvasWidget : public UUserWidget
 	 */
 
 public:
-	UFUNCTION(BlueprintImplementableEvent)
-	void AddNodeWidget(UXMSSubNodeWidget* NodeWidget);
+	int32 GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget);
+	int32 AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* NodeWidget);
 
 public:
 	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);
@@ -39,4 +40,8 @@ protected:
 	virtual void OnSpellEditorComponentSet();
 	UPROPERTY()
 	TObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
+
+protected:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UXMSWrapBox> NodesWrapBox;
 };

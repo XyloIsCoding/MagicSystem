@@ -34,12 +34,7 @@ protected:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSArraySubNodeWidget
+	 * UXMSMapSubNodeWidget
 	 */
 
-public:
-	void SetMapNode(UXMSNodeWithMap* OwningNode);
-protected:
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeWithMap> MapNode;
 };

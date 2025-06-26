@@ -36,10 +36,5 @@ protected:
 	/*
 	 * UXMSNodeValueWidget
 	 */
-
-public:
-	void SetValueNode(UXMSNodeWithValue* OwningNode);
-protected:
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeWithValue> ValueNode;
+	
 };

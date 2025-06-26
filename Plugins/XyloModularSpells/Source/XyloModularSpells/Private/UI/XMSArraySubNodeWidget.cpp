@@ -21,8 +21,3 @@ void UXMSArraySubNodeWidget::OnSpellEditorComponentSet()
 /*
  * UXMSArraySubNodeWidget
  */
-
-void UXMSArraySubNodeWidget::SetArrayNode(UXMSNodeWithArray* OwningNode)
-{
-	ArrayNode = OwningNode;
-}

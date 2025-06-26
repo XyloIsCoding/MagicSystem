@@ -237,10 +237,10 @@ UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController*
 	return nullptr;
 }
 
-void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, UXMSNode* Node)
+void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, int32& Index, UXMSNode* Node)
 {
 	if (!Node) return;
-
+	
 	FXMSNodeQueryResult NodeQueryResult;
 	Node->GetAllSubNodes(NodeQueryResult);
 
@@ -254,9 +254,10 @@ void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerControlle
 			UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(PlayerController, Node, NodeResult.Key);
 			if (SubNodeWidget)
 			{
-				NodeCanvas->AddNodeWidget(SubNodeWidget);
+				Index = NodeCanvas->AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
+				++Index;
 			}
-			FillNodeCanvas(PlayerController, NodeCanvas, NodeResult.Value);
+			FillNodeCanvas(PlayerController, NodeCanvas, Index, NodeResult.Value);
 		}
 	}
 }

@@ -90,8 +90,9 @@ void AMagicSystemCharacter::CreateWidget()
 		if (!NodeCanvasWidget) return;
 		NodeCanvasWidget->AddToViewport();
 	}
-	
-	SpellEditorComponent->FillNodeCanvas(GetController<APlayerController>(), NodeCanvasWidget, TestNode);
+
+	int32 InitialIndex = 0;
+	SpellEditorComponent->FillNodeCanvas(GetController<APlayerController>(), NodeCanvasWidget, InitialIndex, TestNode);
 }
 
 void AMagicSystemCharacter::CreateNode()

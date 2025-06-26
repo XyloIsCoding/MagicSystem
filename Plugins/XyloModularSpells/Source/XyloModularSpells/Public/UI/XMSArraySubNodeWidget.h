@@ -36,10 +36,5 @@ protected:
 	/*
 	 * UXMSArraySubNodeWidget
 	 */
-
-public:
-	void SetArrayNode(UXMSNodeWithArray* OwningNode);
-protected:
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeWithArray> ArrayNode;
+	
 };
