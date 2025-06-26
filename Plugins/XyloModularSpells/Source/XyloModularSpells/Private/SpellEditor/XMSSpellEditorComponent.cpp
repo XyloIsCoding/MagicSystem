@@ -161,23 +161,6 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 			});
 }
 
-UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
-{
-	if (!PlayerController) return nullptr;
-
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
-	
-	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
-	if (Widget)
-	{
-		Widget->SetSpellEditorComponent(this);
-	}
-	return Widget;
-}
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -260,6 +243,32 @@ void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerControlle
 			FillNodeCanvas(PlayerController, NodeCanvas, Index, NodeResult.Value);
 		}
 	}
+}
+
+UXMSNodeCanvasWidget* UXMSSpellEditorComponent::GetOrCreateNodeCanvas(APlayerController* PlayerController)
+{
+	if (!NodeCanvasWidget)
+	{
+		NodeCanvasWidget = CreateNodeCanvas(PlayerController);
+	}
+	return NodeCanvasWidget;
+}
+
+UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
+{
+	if (!PlayerController) return nullptr;
+
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+	if (!NodesData) return nullptr;
+	
+	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
+	if (Widget)
+	{
+		Widget->SetSpellEditorComponent(this);
+	}
+	return Widget;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/

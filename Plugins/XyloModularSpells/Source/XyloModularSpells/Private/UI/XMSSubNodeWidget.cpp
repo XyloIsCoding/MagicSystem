@@ -4,6 +4,8 @@
 #include "UI/XMSSubNodeWidget.h"
 
 #include "Node/Base/XMSNode.h"
+#include "SpellEditor/XMSSpellEditorComponent.h"
+#include "UI/XMSNodeCanvasWidget.h"
 
 
 UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer)
@@ -27,6 +29,55 @@ FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
 	return FString(TEXT("[-]"));
 }
 
+void UXMSSubNodeWidget::ResetSubNodeIcon()
+{
+}
+
+void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode& SubNode)
+{
+	
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Events
+
+void UXMSSubNodeWidget::OnOwningNodeRemovedFromParent()
+{
+	// Remove widget from the widget container
+	RemoveFromParent();
+}
+
+void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
+{
+	if (PathElement != ThisNodePath) return;
+
+	UXMSNode* OwningNodePtr = OwningNode.Get();
+	if (!OwningNodePtr) return;
+
+	UXMSNode* NewSubNode = OwningNodePtr->GetSubNode(PathElement);
+	if (!NewSubNode)
+	{
+		ResetSubNodeIcon();
+		return;
+	}
+	UpdateSubNodeIcon(*NewSubNode);
+	
+	UXMSSpellEditorComponent* SpellEditor = SpellEditorComponent.Get();
+	if (!SpellEditor) return;
+
+	UXMSNodeCanvasWidget* Canvas = SpellEditor->GetOrCreateNodeCanvas(GetOwningPlayer());
+	if (!Canvas) return;
+
+	int32 IndexInCanvas = Canvas->GetNodeWidgetIndex(this);
+	SpellEditor->FillNodeCanvas(GetOwningPlayer(), Canvas, ++IndexInCanvas, NewSubNode);
+}
+
+// ~Events
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// OwningNode
+
 void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
 {
 	OwningNode = InOwningNode;
@@ -34,6 +85,7 @@ void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePath
 	if (InOwningNode)
 	{
 		InOwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnOwningNodeRemovedFromParent);
+		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnSubNodeChanged);
 	}
 	OnOwningNodeSet();
 	BP_OnOwningNodeSet();
@@ -43,11 +95,11 @@ void UXMSSubNodeWidget::OnOwningNodeSet()
 {
 }
 
-void UXMSSubNodeWidget::OnOwningNodeRemovedFromParent()
-{
-	// Remove widget from the widget container
-	RemoveFromParent();
-}
+// ~OwningNode
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// SpellEditorComponent
 
 void UXMSSubNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
 {
@@ -58,3 +110,7 @@ void UXMSSubNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpel
 void UXMSSubNodeWidget::OnSpellEditorComponentSet()
 {
 }
+
+// ~SpellEditorComponent
+/*--------------------------------------------------------------------------------------------------------------------*/
+

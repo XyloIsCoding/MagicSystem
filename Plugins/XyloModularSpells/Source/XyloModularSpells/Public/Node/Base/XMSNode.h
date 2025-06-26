@@ -14,7 +14,7 @@ struct FXMSNodeQueryResult;
 struct FXMSNodePathElement;
 
 DECLARE_MULTICAST_DELEGATE(FXMSRemovedFromParentSignature)
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeChangedSignature, FXMSNodePathElement)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeChangedSignature, const FXMSNodePathElement&)
 
 /**
  * 

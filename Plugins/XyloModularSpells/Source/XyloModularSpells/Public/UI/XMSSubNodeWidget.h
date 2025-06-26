@@ -37,23 +37,47 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
+protected:
+	virtual void ResetSubNodeIcon();
+	virtual void UpdateSubNodeIcon(UXMSNode& SubNode);
+	
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Events
+	
+protected:
+	virtual void OnOwningNodeRemovedFromParent();
+	virtual void OnSubNodeChanged(const FXMSNodePathElement& PathElement);
 
+	// ~Events
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// OwningNode
+	
 public:
 	void SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
 protected:
 	virtual void OnOwningNodeSet();
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnOwningNodeSet();
-	virtual void OnOwningNodeRemovedFromParent();
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNode> OwningNode;
 	FXMSNodePathElement ThisNodePath;
 
+	// ~OwningNode
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// SpellEditorComponent
+	
 public:
 	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);
 protected:
 	virtual void OnSpellEditorComponentSet();
 	UPROPERTY()
-	TObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
+	TWeakObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
+
+	// ~SpellEditorComponent
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 };
