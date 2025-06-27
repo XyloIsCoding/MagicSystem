@@ -4,6 +4,7 @@
 #include "UI/XMSNodeCanvasWidget.h"
 
 #include "XMSModularSpellsSubsystem.h"
+#include "Blueprint/SlateBlueprintLibrary.h"
 #include "Node/XMSNodeDataOverride.h"
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
@@ -55,7 +56,11 @@ void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidg
 	if (UXMSNodeClassOptionsWidget* OptionsWidget = CreateOptionsWidgetForNode(SubNodeWidget))
 	{
 		OptionsWidget->AddToViewport();
-		OptionsWidget->SetPositionInViewport(SubNodeWidget->GetCachedGeometry().GetAbsolutePosition());
+		OptionsWidget->SetAlignmentInViewport(FVector2D(0.5f, 0.5f));
+		FVector2D PixelPos;
+		FVector2D ViewportPos;
+		USlateBlueprintLibrary::LocalToViewport(this, SubNodeWidget->GetCachedGeometry(), FVector2D(0.5f, 0.5f), PixelPos, ViewportPos);
+		OptionsWidget->SetPositionInViewport(ViewportPos);
 	}
 }
 
