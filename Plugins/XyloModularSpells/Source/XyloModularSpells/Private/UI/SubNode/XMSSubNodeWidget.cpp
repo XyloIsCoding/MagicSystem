@@ -16,16 +16,6 @@ UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSNodeEditorWidget Interface
- */
-
-void UXMSSubNodeWidget::OnSpellEditorComponentSet()
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSSubNodeWidget
  */
 
@@ -79,16 +69,9 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 		return;
 	}
 	UpdateSubNodeIcon(*NewSubNode);
-	
-	UXMSSpellEditorComponent* SpellEditor = SpellEditorComponent.Get();
-	if (!SpellEditor) return;
 
-	UXMSNodeCanvasWidget* Canvas = SpellEditor->GetOrCreateNodeCanvas(GetOwningPlayer());
-	if (!Canvas) return;
-
-	// Add widgets for all the sub-nodes of this sub-node
-	int32 IndexInCanvas = Canvas->GetNodeWidgetIndex(this);
-	SpellEditor->FillNodeCanvas(GetOwningPlayer(), Canvas, ++IndexInCanvas, NewSubNode);
+	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
+	SubNodeChangedDelegate.Broadcast(this, NewSubNode);
 }
 
 // ~Events

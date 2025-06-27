@@ -166,80 +166,21 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
+UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
 {
-	if (!ParentNode || !PlayerController) return nullptr;
+	if (!PlayerController) return nullptr;
 
 	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 	if (!MSS) return nullptr;
 	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
 	if (!NodesData) return nullptr;
-	FXMSNodeData* Data = NodesData->GetNodeData(ParentNode->GetClass());
-	if (!Data) return nullptr;
-
-	// Node with map
-	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
-	{
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
-		UXMSMapSubNodeWidget* Widget = CreateWidget<UXMSMapSubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
-		if (Widget)
-		{
-			Widget->SetSpellEditorComponent(this);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
-	}
-
-	// Node with array
-	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
-	{
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
-		UXMSArraySubNodeWidget* Widget = CreateWidget<UXMSArraySubNodeWidget>(PlayerController, bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
-		if (Widget)
-		{
-			Widget->SetSpellEditorComponent(this);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
-	}
-
-	// Node with value
-	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
-	{
-		if (!Data->WidgetClassOverride) return nullptr;
-		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
-		
-		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(PlayerController, Data->WidgetClassOverride);
-		if (Widget)
-		{
-			Widget->SetSpellEditorComponent(this);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
-	}
 	
-	return nullptr;
-}
-
-UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::GetOrCreateOptionsWidget(APlayerController* PlayerController)
-{
-	if (!NodeClassOptionsWidget.Get())
+	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
+	if (Widget)
 	{
-		NodeClassOptionsWidget = CreateOptionsWidget(PlayerController);
+		Widget->SetSpellEditorComponent(this);
 	}
-	return NodeClassOptionsWidget.Get();
-}
-
-void UXMSSpellEditorComponent::InitializeOptionsWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
-{
-	if (!ParentNode) return;
-	
-	UXMSNodeClassOptionsWidget* OptionsWidget = GetOrCreateOptionsWidget(PlayerController);
-	if (!OptionsWidget) return;
-
-	TArray<UClass*> Options;
-	ParentNode->GetSubNodeClassOptions(PathFromParentNode, Options);
-	OptionsWidget->SetOptions(Options);
+	return Widget;
 }
 
 UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::CreateOptionsWidget(APlayerController* PlayerController)
@@ -252,57 +193,6 @@ UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::CreateOptionsWidget(APlaye
 	if (!NodesData) return nullptr;
 	
 	UXMSNodeClassOptionsWidget* Widget = CreateWidget<UXMSNodeClassOptionsWidget>(PlayerController, NodesData->NodeOptionsWidgetClass);
-	if (Widget)
-	{
-		Widget->SetSpellEditorComponent(this);
-	}
-	return Widget;
-}
-
-void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, int32& Index, UXMSNode* Node)
-{
-	if (!Node) return;
-	
-	FXMSNodeQueryResult NodeQueryResult;
-	Node->GetAllSubNodes(NodeQueryResult);
-
-	// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s] -> got subnodes (%i)"), *Node->GetName(), NodeQueryResult.Nodes.Num())
-	
-	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
-	{
-		if (NodeResult.Value)
-		{
-			// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
-			UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(PlayerController, Node, NodeResult.Key);
-			if (SubNodeWidget)
-			{
-				Index = NodeCanvas->AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
-				++Index;
-			}
-			FillNodeCanvas(PlayerController, NodeCanvas, Index, NodeResult.Value);
-		}
-	}
-}
-
-UXMSNodeCanvasWidget* UXMSSpellEditorComponent::GetOrCreateNodeCanvas(APlayerController* PlayerController)
-{
-	if (!NodeCanvasWidget)
-	{
-		NodeCanvasWidget = CreateNodeCanvas(PlayerController);
-	}
-	return NodeCanvasWidget;
-}
-
-UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
-{
-	if (!PlayerController) return nullptr;
-
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
-	
-	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
 	if (Widget)
 	{
 		Widget->SetSpellEditorComponent(this);

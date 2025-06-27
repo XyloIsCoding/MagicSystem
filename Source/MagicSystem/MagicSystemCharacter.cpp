@@ -86,13 +86,12 @@ void AMagicSystemCharacter::CreateWidget()
 	
 	if (!NodeCanvasWidget)
 	{
-		NodeCanvasWidget = SpellEditorComponent->GetOrCreateNodeCanvas(GetController<APlayerController>());
+		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
 		if (!NodeCanvasWidget) return;
 		NodeCanvasWidget->AddToViewport();
 	}
 
-	int32 InitialIndex = 0;
-	SpellEditorComponent->FillNodeCanvas(GetController<APlayerController>(), NodeCanvasWidget, InitialIndex, TestNode);
+	NodeCanvasWidget->InitializeNodeCanvas(TestNode);
 }
 
 void AMagicSystemCharacter::CreateNode()

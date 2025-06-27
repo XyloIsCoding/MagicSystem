@@ -88,23 +88,8 @@ protected:
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
-	UXMSSubNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
-
-public:
-	UXMSNodeClassOptionsWidget* GetOrCreateOptionsWidget(APlayerController* PlayerController);
-	void InitializeOptionsWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
-protected:
-	UXMSNodeClassOptionsWidget* CreateOptionsWidget(APlayerController* PlayerController);
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeClassOptionsWidget> NodeClassOptionsWidget;
-	
-public:
-	void FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, int32& Index, UXMSNode* Node);
-	UXMSNodeCanvasWidget* GetOrCreateNodeCanvas(APlayerController* PlayerController);
-protected:
 	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController);
-	UPROPERTY()
-	TObjectPtr<UXMSNodeCanvasWidget> NodeCanvasWidget;
+	UXMSNodeClassOptionsWidget* CreateOptionsWidget(APlayerController* PlayerController);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	

@@ -4,32 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "XMSTypes.h"
-#include "UI/XMSNodeEditorWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "XMSSubNodeWidget.generated.h"
 
+class UXMSNodeCanvasWidget;
 struct FXMSNodePathElement;
 class UXMSNode;
-class UXMSSpellEditorComponent;
+class UXMSSubNodeWidget;
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSSubNodeWidgetUpdatedSignature, UXMSSubNodeWidget*, UXMSNode*)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UXMSNodeEditorWidget
+class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
 	UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * UXMSNodeEditorWidget Interface
-	 */
-
-protected:
-	virtual void OnSpellEditorComponentSet() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +41,9 @@ protected:
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events
-	
+
+public:
+	FXMSSubNodeWidgetUpdatedSignature SubNodeChangedDelegate;
 protected:
 	virtual void OnOwningNodeRemovedFromParent();
 	virtual void OnSubNodeChanged(const FXMSNodePathElement& PathElement);
