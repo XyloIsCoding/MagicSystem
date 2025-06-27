@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSNodeEditorWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "XMSNodeClassOptionsWidget.generated.h"
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSClassOptionChosenSignature, UClass*)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeClassOptionsWidget : public UXMSNodeEditorWidget
+class XYLOMODULARSPELLS_API UXMSNodeClassOptionsWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
@@ -19,6 +21,15 @@ class XYLOMODULARSPELLS_API UXMSNodeClassOptionsWidget : public UXMSNodeEditorWi
 	/*
 	 * UXMSNodeClassOptionsWidget
 	 */
+
+public:
+	FXMSClassOptionChosenSignature ClassOptionChosenDelegate;
+	UFUNCTION(BlueprintCallable)
+	void SelectOption(int32 Index);
+protected:
+	virtual void OptionSelected();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OptionSelected();
 
 public:
 	void SetOptions(const TArray<UClass*>& InOptions);

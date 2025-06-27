@@ -183,22 +183,5 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 	return Widget;
 }
 
-UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::CreateOptionsWidget(APlayerController* PlayerController)
-{
-	if (!PlayerController) return nullptr;
-
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
-	
-	UXMSNodeClassOptionsWidget* Widget = CreateWidget<UXMSNodeClassOptionsWidget>(PlayerController, NodesData->NodeOptionsWidgetClass);
-	if (Widget)
-	{
-		Widget->SetSpellEditorComponent(this);
-	}
-	return Widget;
-}
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 

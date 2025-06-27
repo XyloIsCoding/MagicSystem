@@ -16,18 +16,6 @@ UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget
- */
-
-FReply UXMSSubNodeWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-	SubNodeClickedDelegate.Broadcast(this, InGeometry, InMouseEvent, GetSubNode());
-	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSSubNodeWidget
  */
 
@@ -68,6 +56,11 @@ void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode& SubNode)
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Events
 
+void UXMSSubNodeWidget::BroadcastSubNodeClicked()
+{
+	SubNodeClickedDelegate.Broadcast(this);
+}
+
 void UXMSSubNodeWidget::OnOwningNodeRemovedFromParent()
 {
 	// Remove widget from the widget container
@@ -107,6 +100,16 @@ void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePath
 	}
 	OnOwningNodeSet();
 	BP_OnOwningNodeSet();
+}
+
+UXMSNode* UXMSSubNodeWidget::GetParentNode() const
+{
+	return OwningNode.Get();
+}
+
+const FXMSNodePathElement& UXMSSubNodeWidget::GetPathFromParent() const
+{
+	return ThisNodePath;
 }
 
 void UXMSSubNodeWidget::OnOwningNodeSet()

@@ -10,6 +10,7 @@
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
+#include "UI/XMSNodeClassOptionsWidget.h"
 #include "UI/SubNode/XMSSubNodeWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
@@ -32,6 +33,45 @@ void UXMSNodeCanvasWidget::OnSpellEditorComponentSet()
 /*
  * UXMSNodeCanvasWidget
  */
+
+int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const
+{
+	return NodesWrapBox->GetChildIndex(NodeWidget);
+}
+
+int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* NodeWidget)
+{
+	return  NodesWrapBox->AddChildAt(Index, NodeWidget);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Events
+
+void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidget)
+{
+	SelectedSubNodeWidget = SubNodeWidget;
+	if (!SubNodeWidget) return;
+	
+	if (UXMSNodeClassOptionsWidget* OptionsWidget = CreateOptionsWidgetForNode(SubNodeWidget))
+	{
+		OptionsWidget->AddToViewport();
+		OptionsWidget->SetPositionInViewport(SubNodeWidget->GetCachedGeometry().GetAbsolutePosition());
+	}
+}
+
+void UXMSNodeCanvasWidget::OnSubNodeClassSelected(UClass* NewClass)
+{
+	if (UXMSSubNodeWidget* SubNodeWidget = SelectedSubNodeWidget.Get())
+	{
+		if (UXMSNode* ParentNode = SubNodeWidget->GetParentNode())
+		{
+			ParentNode->SetSubNode(SubNodeWidget->GetPathFromParent(), NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
+		}
+	}
+}
+
+// ~Events
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Canvas Filling
@@ -121,18 +161,37 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 // ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* NodeWidget, const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UXMSNode* NewSubNode)
-{
-	// SpellEditorComponent->CreateOptionsWidget(GetOwningPlayer());
-}
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Class Options
 
-int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const
+UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXMSSubNodeWidget* NodeWidget)
 {
-	return NodesWrapBox->GetChildIndex(NodeWidget);
-}
+	if (!NodeWidget) return nullptr;
+	
+	UXMSNodeClassOptionsWidget* OptionsWidget = ClassOptionsWidget.Get();
+	if (!OptionsWidget)
+	{
+		UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+		if (!MSS) return nullptr;
+		UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+		if (!NodesData) return nullptr;
+	
+		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeClassOptionsWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
+		if (!OptionsWidget) return nullptr;
+		
+		OptionsWidget->ClassOptionChosenDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeClassSelected);
+	}
 
-int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* NodeWidget)
-{
-	return  NodesWrapBox->AddChildAt(Index, NodeWidget);
+	OptionsWidget->SetVisibility(ESlateVisibility::Visible);
+	
+	TArray<UClass*> Options;
+	NodeWidget->GetSubNodeClassOptions(Options);
+	OptionsWidget->SetOptions(Options);
+	
+	return OptionsWidget;
 }
+	
+// ~Class Options
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 

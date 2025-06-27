@@ -13,7 +13,7 @@ class UXMSNode;
 class UXMSSubNodeWidget;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSSubNodeWidgetUpdatedSignature, UXMSSubNodeWidget*, UXMSNode*)
-DECLARE_MULTICAST_DELEGATE_FourParams(FXMSSubNodeWidgetClickedSignature, UXMSSubNodeWidget*, const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UXMSNode*)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeWidgetClickedSignature, UXMSSubNodeWidget*)
 
 /**
  * 
@@ -25,15 +25,6 @@ class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UUserWidget
 
 public:
 	UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * UUserWidget
-	 */
-
-public:
-	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +35,8 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
+
+public:
 	UXMSNode* GetSubNode() const;
 	virtual void GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions);
 protected:
@@ -56,6 +49,8 @@ protected:
 public:
 	FXMSSubNodeWidgetClickedSignature SubNodeClickedDelegate;
 	FXMSSubNodeWidgetUpdatedSignature SubNodeChangedDelegate;
+	UFUNCTION(BlueprintCallable)
+	void BroadcastSubNodeClicked();
 protected:
 	virtual void OnOwningNodeRemovedFromParent();
 	virtual void OnSubNodeChanged(const FXMSNodePathElement& PathElement);
@@ -68,6 +63,8 @@ protected:
 	
 public:
 	void SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
+	UXMSNode* GetParentNode() const;
+	const FXMSNodePathElement& GetPathFromParent() const;
 protected:
 	virtual void OnOwningNodeSet();
 	UFUNCTION(BlueprintImplementableEvent)
