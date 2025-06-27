@@ -27,5 +27,5 @@ public:
 protected:
 	virtual void OnSpellEditorComponentSet();
 	UPROPERTY()
-	TObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
+	TWeakObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
 };
