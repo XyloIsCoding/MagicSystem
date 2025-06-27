@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSSubNodeWidget.h"
 
 #include "Node/Base/XMSNode.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
@@ -10,6 +10,16 @@
 
 UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeEditorWidget Interface
+ */
+
+void UXMSSubNodeWidget::OnSpellEditorComponentSet()
 {
 }
 
@@ -68,6 +78,7 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 	UXMSNodeCanvasWidget* Canvas = SpellEditor->GetOrCreateNodeCanvas(GetOwningPlayer());
 	if (!Canvas) return;
 
+	// Add widgets for all the sub-nodes of this sub-node
 	int32 IndexInCanvas = Canvas->GetNodeWidgetIndex(this);
 	SpellEditor->FillNodeCanvas(GetOwningPlayer(), Canvas, ++IndexInCanvas, NewSubNode);
 }
@@ -96,21 +107,5 @@ void UXMSSubNodeWidget::OnOwningNodeSet()
 }
 
 // ~OwningNode
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-// SpellEditorComponent
-
-void UXMSSubNodeWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
-{
-	SpellEditorComponent = InSpellEditorComponent;
-	OnSpellEditorComponentSet();
-}
-
-void UXMSSubNodeWidget::OnSpellEditorComponentSet()
-{
-}
-
-// ~SpellEditorComponent
 /*--------------------------------------------------------------------------------------------------------------------*/
 

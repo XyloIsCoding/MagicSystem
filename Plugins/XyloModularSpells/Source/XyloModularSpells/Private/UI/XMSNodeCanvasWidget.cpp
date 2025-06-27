@@ -3,9 +3,19 @@
 
 #include "UI/XMSNodeCanvasWidget.h"
 
-#include "UI/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSSubNodeWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeEditorWidget Interface
+ */
+
+void UXMSNodeCanvasWidget::OnSpellEditorComponentSet()
+{
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,12 +33,3 @@ int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* Node
 	return NodesWrapBox->AddChildAt(Index, NodeWidget);
 }
 
-void UXMSNodeCanvasWidget::SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent)
-{
-	SpellEditorComponent = InSpellEditorComponent;
-	OnSpellEditorComponentSet();
-}
-
-void UXMSNodeCanvasWidget::OnSpellEditorComponentSet()
-{
-}

@@ -7,9 +7,9 @@
 #include "Blueprint/UserWidget.h"
 #include "Node/XMSNodeDataOverride.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/XMSArraySubNodeWidget.h"
-#include "UI/XMSMapSubNodeWidget.h"
-#include "UI/XMSNodeValueWidget.h"
+#include "UI/SubNode/XMSArraySubNodeWidget.h"
+#include "UI/SubNode/XMSMapSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeValueWidget.h"
 
 
 UXMSSpellEditorComponent::UXMSSpellEditorComponent()

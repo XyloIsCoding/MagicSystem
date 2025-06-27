@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSTypes.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/XMSNodeEditorWidget.h"
 #include "XMSSubNodeWidget.generated.h"
 
 struct FXMSNodePathElement;
@@ -15,7 +15,7 @@ class UXMSSpellEditorComponent;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UXMSNodeEditorWidget
 {
 	GENERATED_BODY()
 
@@ -25,8 +25,11 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UUserWidget Interface
+	 * UXMSNodeEditorWidget Interface
 	 */
+
+protected:
+	virtual void OnSpellEditorComponentSet() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,19 +68,6 @@ protected:
 	FXMSNodePathElement ThisNodePath;
 
 	// ~OwningNode
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-	// SpellEditorComponent
-	
-public:
-	void SetSpellEditorComponent(UXMSSpellEditorComponent* InSpellEditorComponent);
-protected:
-	virtual void OnSpellEditorComponentSet();
-	UPROPERTY()
-	TWeakObjectPtr<UXMSSpellEditorComponent> SpellEditorComponent;
-
-	// ~SpellEditorComponent
 /*--------------------------------------------------------------------------------------------------------------------*/
 	
 };
