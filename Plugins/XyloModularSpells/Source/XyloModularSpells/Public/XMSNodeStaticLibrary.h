@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+struct FXMSNodeData;
 class UXMSSpellEditorComponent;
 class UXMSNode;
 
@@ -25,6 +26,7 @@ public:
 	static void WriteJson(FString JsonFilePath, TSharedPtr<FJsonObject> JsonObject, bool& bOutSuccess, FString& OutInfoMessage);
 
 	static UClass* GetNodeClassByName(const FString& ClassName);
+	static FXMSNodeData* GetNodeClassData(UClass* NodeClass);
 
 	/** Get a deep copy of this node reparented to the chosen outer
 	 * @param Outer: Outer for the returned node

@@ -4,6 +4,7 @@
 #include "XMSNodeStaticLibrary.h"
 
 #include "XMSModularSpellsSubsystem.h"
+#include "Node/XMSNodeDataOverride.h"
 #include "Node/Base/XMSNode.h"
 #include "Spell/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
@@ -104,6 +105,16 @@ UClass* UXMSNodeStaticLibrary::GetNodeClassByName(const FString& ClassName)
 		}
 	}
 	return nullptr;
+}
+
+FXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
+{
+	if (!NodeClass) return nullptr;
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+	if (!NodesData) return nullptr;
+	return NodesData->GetNodeData(NodeClass);
 }
 
 UXMSNode* UXMSNodeStaticLibrary::CopyNode(UObject* Outer, UXMSNode* InNode)

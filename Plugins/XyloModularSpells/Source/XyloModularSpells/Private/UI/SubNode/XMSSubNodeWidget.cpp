@@ -16,17 +16,36 @@ UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UUserWidget
+ */
+
+FReply UXMSSubNodeWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	SubNodeClickedDelegate.Broadcast(this, InGeometry, InMouseEvent, GetSubNode());
+	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * UXMSSubNodeWidget
  */
 
 FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
 {
-	if (UXMSNode* OwningNodePtr = OwningNode.Get())
+	if (UXMSNode* ThisNode = GetSubNode())
 	{
-		UXMSNode* ThisNode = OwningNodePtr->GetSubNode(ThisNodePath);
-		if (ThisNode) return ThisNode->GetName();
+		return ThisNode->GetName();
 	}
 	return FString(TEXT("[-]"));
+}
+
+UXMSNode* UXMSSubNodeWidget::GetSubNode() const
+{
+	UXMSNode* OwningNodePtr = OwningNode.Get();
+	if (!OwningNodePtr) return nullptr;
+
+	return OwningNodePtr->GetSubNode(ThisNodePath);
 }
 
 void UXMSSubNodeWidget::GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions)
@@ -59,10 +78,7 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 {
 	if (PathElement != ThisNodePath) return;
 
-	UXMSNode* OwningNodePtr = OwningNode.Get();
-	if (!OwningNodePtr) return;
-
-	UXMSNode* NewSubNode = OwningNodePtr->GetSubNode(PathElement);
+	UXMSNode* NewSubNode = GetSubNode();
 	if (!NewSubNode)
 	{
 		ResetSubNodeIcon();

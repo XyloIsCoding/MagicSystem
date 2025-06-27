@@ -13,6 +13,7 @@ class UXMSNode;
 class UXMSSubNodeWidget;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSSubNodeWidgetUpdatedSignature, UXMSSubNodeWidget*, UXMSNode*)
+DECLARE_MULTICAST_DELEGATE_FourParams(FXMSSubNodeWidgetClickedSignature, UXMSSubNodeWidget*, const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UXMSNode*)
 
 /**
  * 
@@ -28,12 +29,22 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UUserWidget
+	 */
+
+public:
+	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * UXMSSubNodeWidget
 	 */
 
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
+	UXMSNode* GetSubNode() const;
 	virtual void GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions);
 protected:
 	virtual void ResetSubNodeIcon();
@@ -43,6 +54,7 @@ protected:
 	// Events
 
 public:
+	FXMSSubNodeWidgetClickedSignature SubNodeClickedDelegate;
 	FXMSSubNodeWidgetUpdatedSignature SubNodeChangedDelegate;
 protected:
 	virtual void OnOwningNodeRemovedFromParent();

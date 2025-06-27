@@ -48,6 +48,9 @@ protected:
 	// ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+protected:
+	void OnSubNodeWidgetClicked(UXMSSubNodeWidget* NodeWidget, const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UXMSNode* NewSubNode);
+	
 public:
 	int32 GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const;
 protected:

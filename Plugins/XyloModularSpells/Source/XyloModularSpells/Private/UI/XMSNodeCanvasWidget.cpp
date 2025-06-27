@@ -9,6 +9,7 @@
 #include "Node/Base/XMSNodeWithArray.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
+#include "SpellEditor/XMSSpellEditorComponent.h"
 #include "UI/SubNode/XMSSubNodeWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
@@ -88,52 +89,42 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 	FXMSNodeData* Data = NodesData->GetNodeData(ParentNode->GetClass());
 	if (!Data) return nullptr;
 
-	// Node with map
+	UXMSSubNodeWidget* Widget = nullptr;
 	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
 	{
+		// Node with map
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
-		UXMSMapSubNodeWidget* Widget = CreateWidget<UXMSMapSubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
-		if (Widget)
-		{
-			Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
+		Widget = CreateWidget<UXMSMapSubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
 	}
-
-	// Node with array
-	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
+	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
+		// Node with array
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
-		UXMSArraySubNodeWidget* Widget = CreateWidget<UXMSArraySubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
-		if (Widget)
-		{
-			Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
+		Widget = CreateWidget<UXMSArraySubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
 	}
-
-	// Node with value
-	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
+	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
 	{
+		// Node with value
 		if (!Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
-		
-		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
-		if (Widget)
-		{
-			Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
-			Widget->SetOwningNode(ParentNode, PathFromParentNode);
-		}
-		return Widget;
+		Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
 	}
+	if (!Widget) return nullptr;
+
+	Widget->SubNodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetClicked);
+	Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
+	Widget->SetOwningNode(ParentNode, PathFromParentNode);
 	
-	return nullptr;
+	return Widget;
 }
 
 // ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* NodeWidget, const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UXMSNode* NewSubNode)
+{
+	// SpellEditorComponent->CreateOptionsWidget(GetOwningPlayer());
+}
 
 int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const
 {
