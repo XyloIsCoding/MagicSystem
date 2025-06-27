@@ -18,6 +18,21 @@ UXMSNode::UXMSNode(const FObjectInitializer& ObjectInitializer)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UObject
+ */
+
+void UXMSNode::BeginDestroy()
+{
+	UObject::BeginDestroy();
+
+	// We want to make sure this node is removed from parent before destruction.
+	// (usually RemovedFromParentDelegate is used to clean up node data from other classes)
+	RemoveFromParent();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * UXMSNode
  */
 
@@ -100,14 +115,33 @@ bool UXMSNode::IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHie
 	return ChildOfMatchingParent && ChildOfMatchingParent->PathFromParentNode.Index >= Other->PathFromParentNode.Index;
 }
 
+void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
+{
+	// UE_LOG(LogTemp, Warning, TEXT("UXMSNode::ReparentNode >> [%s] now has parent [%s]"), *GetName(), InParentNode ? *InParentNode->GetName() : *FString())
+	ParentNode = InParentNode;
+	PathFromParentNode = InPathFromParent;
+	OnParentSet();
+}
+
 void UXMSNode::RemoveFromParent()
+{
+	UXMSNode* ParentNodePtr = ParentNode.Get();
+	if (!ParentNodePtr) return;
+
+	// If ParentNode is not nullptr, it means that this node is still set as sub-node of ParentNode
+	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node)
+	// This means that we can safely use SetSubNode without worrying about overriding nodes
+	ParentNodePtr->SetSubNode(PathFromParentNode, nullptr);
+}
+
+void UXMSNode::RemovedFromParent_Internal()
 {
 	// Clean up sub-nodes before this node
 	TArray<UXMSNode*> SubNodes;
 	GetAllSubNodes(SubNodes);
 	for (UXMSNode* SubNode : SubNodes)
 	{
-		if (SubNode) SubNode->RemoveFromParent();
+		if (SubNode) SubNode->RemovedFromParent_Internal();
 	}
 
 	// Clean up this node
@@ -119,13 +153,4 @@ void UXMSNode::RemoveFromParent()
 	PostRemovedFromParent();
 	RemovedFromParentDelegate.Broadcast();
 }
-
-void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
-{
-	// UE_LOG(LogTemp, Warning, TEXT("UXMSNode::ReparentNode >> [%s] now has parent [%s]"), *GetName(), InParentNode ? *InParentNode->GetName() : *FString())
-	ParentNode = InParentNode;
-	PathFromParentNode = InPathFromParent;
-	OnParentSet();
-}
-
 

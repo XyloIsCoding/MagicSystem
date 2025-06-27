@@ -33,6 +33,15 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UObject
+	 */
+
+public:
+	virtual void BeginDestroy() override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * UXMSNode
 	 */
 	
@@ -86,6 +95,7 @@ protected:
 private:
 	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);
 	void RemoveFromParent();
+	void RemovedFromParent_Internal();
 	
 protected:
 	static const FString NodeClassJsonKey;

@@ -57,7 +57,7 @@ protected:
 
 	virtual void NodeSet(UXMSNode* InNode, UXMSNode* OldNode)
 	{
-		if (OldNode) OldNode->RemoveFromParent();
+		if (OldNode) OldNode->RemovedFromParent_Internal();
 		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, 0));
 		if (UXMSNodeWithMap* OwnerPtr = Owner.Get())
 		{
@@ -227,7 +227,7 @@ protected:
 
 	virtual void NodeSet(UXMSNode* InNode, int32 Index, UXMSNode* OldNode)
 	{
-		if (OldNode) OldNode->RemoveFromParent();
+		if (OldNode) OldNode->RemovedFromParent_Internal();
 		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
 		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 		{
