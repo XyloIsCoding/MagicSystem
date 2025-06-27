@@ -33,6 +33,8 @@ public:
 	virtual void GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const override;
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
 
+	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions) override;
+
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

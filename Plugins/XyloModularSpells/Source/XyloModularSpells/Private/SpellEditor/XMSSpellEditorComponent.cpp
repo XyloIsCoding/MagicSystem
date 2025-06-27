@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Node/XMSNodeDataOverride.h"
 #include "UI/XMSNodeCanvasWidget.h"
+#include "UI/XMSNodeClassOptionsWidget.h"
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
 #include "UI/SubNode/XMSMapSubNodeWidget.h"
 #include "UI/SubNode/XMSNodeValueWidget.h"
@@ -218,6 +219,44 @@ UXMSSubNodeWidget* UXMSSpellEditorComponent::CreateNodeWidget(APlayerController*
 	}
 	
 	return nullptr;
+}
+
+UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::GetOrCreateOptionsWidget(APlayerController* PlayerController)
+{
+	if (!NodeClassOptionsWidget.Get())
+	{
+		NodeClassOptionsWidget = CreateOptionsWidget(PlayerController);
+	}
+	return NodeClassOptionsWidget.Get();
+}
+
+void UXMSSpellEditorComponent::InitializeOptionsWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
+{
+	if (!ParentNode) return;
+	
+	UXMSNodeClassOptionsWidget* OptionsWidget = GetOrCreateOptionsWidget(PlayerController);
+	if (!OptionsWidget) return;
+
+	TArray<UClass*> Options;
+	ParentNode->GetSubNodeClassOptions(PathFromParentNode, Options);
+	OptionsWidget->SetOptions(Options);
+}
+
+UXMSNodeClassOptionsWidget* UXMSSpellEditorComponent::CreateOptionsWidget(APlayerController* PlayerController)
+{
+	if (!PlayerController) return nullptr;
+
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+	if (!NodesData) return nullptr;
+	
+	UXMSNodeClassOptionsWidget* Widget = CreateWidget<UXMSNodeClassOptionsWidget>(PlayerController, NodesData->NodeOptionsWidgetClass);
+	if (Widget)
+	{
+		Widget->SetSpellEditorComponent(this);
+	}
+	return Widget;
 }
 
 void UXMSSpellEditorComponent::FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, int32& Index, UXMSNode* Node)

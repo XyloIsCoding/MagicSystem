@@ -24,7 +24,7 @@
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSSubNodeWidget.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -86,7 +86,7 @@ void AMagicSystemCharacter::CreateWidget()
 	
 	if (!NodeCanvasWidget)
 	{
-		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
+		NodeCanvasWidget = SpellEditorComponent->GetOrCreateNodeCanvas(GetController<APlayerController>());
 		if (!NodeCanvasWidget) return;
 		NodeCanvasWidget->AddToViewport();
 	}

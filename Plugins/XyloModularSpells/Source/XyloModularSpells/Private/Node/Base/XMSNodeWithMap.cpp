@@ -3,6 +3,7 @@
 
 #include "Node/Base/XMSNodeWithMap.h"
 
+#include "XMSModularSpellsSubsystem.h"
 #include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
 #include "Node/XMSNodeContainer.h"
@@ -118,6 +119,25 @@ void UXMSNodeWithMap::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
 void UXMSNodeWithMap::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode)
 {
 	SetSubNode(PathElement.Identifier, InNode);
+}
+
+void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions)
+{
+	FXMSNodeContainer** NodeContainerFound = SubNodes.Find(PathElement.Identifier);
+	if (!NodeContainerFound)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *PathElement.Identifier.ToString())
+		return;
+	}
+	
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return;
+
+	FXMSNodeContainer* NodeContainer = *NodeContainerFound;
+	OutClassOptions = MSS->GetNodeClasses().FilterByPredicate([NodeContainer](UClass* NodeClass)
+	{
+		return NodeContainer->IsCompatible(NodeClass);
+	});
 }
 
 void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const

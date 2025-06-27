@@ -51,6 +51,8 @@ public:
 
 	FXMSSubNodeChangedSignature SubNodeChangedDelegate;
 
+	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions) {}
+
 public:
 	/** @return: the Identifiers of all sub-nodes */
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}

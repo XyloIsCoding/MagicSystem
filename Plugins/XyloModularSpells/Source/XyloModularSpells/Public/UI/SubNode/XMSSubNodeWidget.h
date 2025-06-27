@@ -40,6 +40,7 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
+	virtual void GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions);
 protected:
 	virtual void ResetSubNodeIcon();
 	virtual void UpdateSubNodeIcon(UXMSNode& SubNode);

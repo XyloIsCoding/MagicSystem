@@ -39,6 +39,14 @@ FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
 	return FString(TEXT("[-]"));
 }
 
+void UXMSSubNodeWidget::GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions)
+{
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
+	{
+		OwningNodePtr->GetSubNodeClassOptions(ThisNodePath, OutClassOptions);
+	}
+}
+
 void UXMSSubNodeWidget::ResetSubNodeIcon()
 {
 }

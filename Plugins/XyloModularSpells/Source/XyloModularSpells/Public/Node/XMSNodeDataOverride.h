@@ -97,6 +97,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSNodeCanvasWidget> NodeCanvasWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UXMSNodeCanvasWidget> NodeOptionsWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSMapSubNodeWidget> NodeWithMapWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSArraySubNodeWidget> NodeWithArrayWidgetClass;

@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "XMSNodeEditorWidget.h"
-#include "XMSNodeClassOptions.generated.h"
+#include "XMSNodeClassOptionsWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeClassOptions : public UXMSNodeEditorWidget
+class XYLOMODULARSPELLS_API UXMSNodeClassOptionsWidget : public UXMSNodeEditorWidget
 {
 	GENERATED_BODY()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeClassOptions
+	 * UXMSNodeClassOptionsWidget
 	 */
 
 public:

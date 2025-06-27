@@ -8,6 +8,7 @@
 #include "Node/Runnable/Instruction/XMSVariableDeclarationNode.h"
 #include "XMSSpellEditorComponent.generated.h"
 
+class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
 class UXMSSubNodeWidget;
 
@@ -88,6 +89,14 @@ protected:
 
 public:
 	UXMSSubNodeWidget* CreateNodeWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
+
+public:
+	UXMSNodeClassOptionsWidget* GetOrCreateOptionsWidget(APlayerController* PlayerController);
+	void InitializeOptionsWidget(APlayerController* PlayerController, UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
+protected:
+	UXMSNodeClassOptionsWidget* CreateOptionsWidget(APlayerController* PlayerController);
+	UPROPERTY()
+	TWeakObjectPtr<UXMSNodeClassOptionsWidget> NodeClassOptionsWidget;
 	
 public:
 	void FillNodeCanvas(APlayerController* PlayerController, UXMSNodeCanvasWidget* NodeCanvas, int32& Index, UXMSNode* Node);
