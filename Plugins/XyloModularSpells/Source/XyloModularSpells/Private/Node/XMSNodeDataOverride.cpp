@@ -41,6 +41,14 @@ void FXMSNodeData::UpdateSubNodes()
 	}
 }
 
+FXMSSubNodeData* FXMSNodeData::GetSubNodeData(FName SubNodeIdentifier)
+{
+	return SubNodes.FindByPredicate([SubNodeIdentifier](const FXMSSubNodeData& SubNodeData)
+	{
+		return SubNodeData.Identifier.IsEqual(SubNodeIdentifier);
+	});
+}
+
 UXMSNodeDataOverride::UXMSNodeDataOverride(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {

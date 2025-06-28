@@ -57,6 +57,7 @@ struct FXMSNodeData
 	}
 
 	void UpdateSubNodes();
+	FXMSSubNodeData* GetSubNodeData(FName SubNodeIdentifier);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UClass> NodeClass;

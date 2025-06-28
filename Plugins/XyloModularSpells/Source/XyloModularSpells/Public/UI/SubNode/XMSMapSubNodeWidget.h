@@ -22,4 +22,8 @@ class XYLOMODULARSPELLS_API UXMSMapSubNodeWidget : public UXMSSubNodeWidget
 	 * UXMSMapSubNodeWidget
 	 */
 
+public:
+	UFUNCTION(BlueprintCallable)
+	virtual bool GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
+
 };

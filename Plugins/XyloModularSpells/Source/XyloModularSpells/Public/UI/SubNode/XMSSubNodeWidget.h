@@ -35,6 +35,8 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
+	UFUNCTION(BlueprintCallable)
+	virtual bool GetSubNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
 
 public:
 	UXMSNode* GetSubNode() const;

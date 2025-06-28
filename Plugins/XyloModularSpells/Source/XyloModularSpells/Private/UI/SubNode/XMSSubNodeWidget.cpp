@@ -3,6 +3,8 @@
 
 #include "UI/SubNode/XMSSubNodeWidget.h"
 
+#include "XMSNodeStaticLibrary.h"
+#include "Node/XMSNodeDataOverride.h"
 #include "Node/Base/XMSNode.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "UI/XMSNodeCanvasWidget.h"
@@ -26,6 +28,20 @@ FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
 		return ThisNode->GetName();
 	}
 	return FString(TEXT("[-]"));
+}
+
+bool UXMSSubNodeWidget::GetSubNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
+{
+	UXMSNode* ThisNode = GetSubNode();
+	if (!ThisNode) return false;
+	
+	FXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(ThisNode->GetClass());
+	if (!NodeData) return false;
+
+	OutGlyph = NodeData->Glyph;
+	OutDisplayName = NodeData->Name;
+	OutDescription = NodeData->Description;
+	return true;
 }
 
 UXMSNode* UXMSSubNodeWidget::GetSubNode() const
