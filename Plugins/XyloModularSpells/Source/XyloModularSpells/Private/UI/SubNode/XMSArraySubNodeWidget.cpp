@@ -10,3 +10,20 @@
 /*
  * UXMSArraySubNodeWidget
  */
+
+void UXMSArraySubNodeWidget::RemoveSubNode()
+{
+	if (UXMSNodeWithArray* ParentNode = Cast<UXMSNodeWithArray>(OwningNode.Get()))
+	{
+		ParentNode->RemoveSubNode(ThisNodePath.Index);
+	}
+}
+
+void UXMSArraySubNodeWidget::InsertSubNode()
+{
+	if (UXMSNodeWithArray* ParentNode = Cast<UXMSNodeWithArray>(OwningNode.Get()))
+	{
+		ParentNode->InsertSubNode(ThisNodePath.Index, nullptr);
+	}
+}
+

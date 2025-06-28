@@ -312,7 +312,7 @@ public:
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Add(NodeType* InNode)
 	{
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(InNode));
 			NodeSet(static_cast<UXMSNode*>(InNode), Index, nullptr);
@@ -323,7 +323,7 @@ public:
 	void Insert(int32 Index, NodeType* InNode)
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(InNode), Index);
 			NodeSet(static_cast<UXMSNode*>(InNode), Index, nullptr);
@@ -392,7 +392,7 @@ protected:
 
 	virtual void AddGeneric(UXMSNode* InNode) override
 	{
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
 			NodeSet(InNode, Index, nullptr);
@@ -402,7 +402,7 @@ protected:
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) override
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
 			NodeSet(InNode, Index, nullptr);

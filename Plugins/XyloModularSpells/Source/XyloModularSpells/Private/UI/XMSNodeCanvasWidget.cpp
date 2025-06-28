@@ -86,11 +86,15 @@ void UXMSNodeCanvasWidget::InitializeNodeCanvas(UXMSNode* Node)
 
 void UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode)
 {
-	// Add widgets for all the sub-nodes of this sub-node
-	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
-	if (IndexInCanvas == INDEX_NONE) return;
+	// Only fill canvas for this node if not nullptr
+	if (NewSubNode)
+	{
+		// Add widgets for all the sub-nodes of this sub-node
+		int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
+		if (IndexInCanvas == INDEX_NONE) return;
 	
-	FillNodeCanvas(++IndexInCanvas, NewSubNode);
+		FillNodeCanvas(++IndexInCanvas, NewSubNode);
+	}
 }
 
 

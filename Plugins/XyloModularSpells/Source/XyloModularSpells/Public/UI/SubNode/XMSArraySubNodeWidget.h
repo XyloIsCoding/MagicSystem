@@ -21,5 +21,11 @@ class XYLOMODULARSPELLS_API UXMSArraySubNodeWidget : public UXMSSubNodeWidget
 	/*
 	 * UXMSArraySubNodeWidget
 	 */
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void RemoveSubNode();
+	UFUNCTION(BlueprintCallable)
+	void InsertSubNode();
 	
 };
