@@ -42,7 +42,7 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 		if (UXMSVariableTypeValueNode* VariableTypeNode = VariableType.Get())
 		{
 			// Bind delegate
-			VariableTypeChangedHandle = VariableTypeNode->VariableTypeChangedDelegate.AddUObject(this, &ThisClass::OnVariableTypeChanged);
+			VariableTypeNode->VariableTypeChangedDelegate.AddUObject(this, &ThisClass::OnVariableTypeChanged);
 
 			// Set initial value
 			OnVariableTypeChanged(VariableTypeNode->GetVariableType(), XMSVariableType::EVT_None);
@@ -54,7 +54,7 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 		if (UXMSStringValueNode* StringValueNode = VariableName.Get())
 		{
 			// Bind delegate
-			VariableNameChangedHandle = StringValueNode->StringValueChangedDelegate.AddUObject(this, &ThisClass::OnVariableNameChanged);
+			StringValueNode->StringValueChangedDelegate.AddUObject(this, &ThisClass::OnVariableNameChanged);
 
 			// Set initial value
 			FString StringValue;

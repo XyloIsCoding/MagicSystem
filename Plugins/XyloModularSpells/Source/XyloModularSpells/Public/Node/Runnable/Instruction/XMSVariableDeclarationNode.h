@@ -48,8 +48,6 @@ public:
 	 */
 
 public:
-	FDelegateHandle VariableTypeChangedHandle;
-	FDelegateHandle VariableNameChangedHandle;
 	virtual void OnVariableTypeChanged(int32 NewType, int32 OldType);
 	virtual void OnVariableNameChanged(const FString& NewName, const FString& OldName);
 	

@@ -132,15 +132,6 @@ void UXMSNode::RemoveFromParent()
 	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node).
 	// This means that we can safely use SetSubNode without worrying about overriding nodes
 	ParentNodePtr->SetSubNode(PathFromParentNode, nullptr);
-
-	TArray<UXMSNode*> SubNodes;
-	GetAllSubNodes(SubNodes);
-	for (UXMSNode* SubNode : SubNodes)
-	{
-		// Call RemoveFromParent from sub-nodes after removing this node from parent
-		// This allows to disassemble the hierarchy from this node to the branches of the hierarchy tree
-		if (SubNode) SubNode->RemoveFromParent();
-	}
 }
 
 void UXMSNode::RemovedFromParent_Internal()
