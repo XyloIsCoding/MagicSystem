@@ -44,7 +44,7 @@ void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationN
 	FXMSScopedVariable* ScopedVariable = GetVariable(DeclarationNode);
 	if (!ScopedVariable)
 	{
-		if (!HasVariable(Name))
+		if (!HasVariableInScope(DeclarationNode, Name))
 		{
 			int32 Index = ScopedVariables.Add(FXMSScopedVariable(Name, Type, DeclarationNode));
 			
@@ -58,13 +58,15 @@ void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationN
 	bool bUpdated = false;
 	FString OldName = ScopedVariable->Name;
 	int32 OldType = ScopedVariable->Type;
-	
-	if (ScopedVariable->Name != Name && !HasVariable(Name))
+
+	// We can only change name if there is not another variable of this name in scope
+	if (ScopedVariable->Name != Name && !HasVariableInScope(DeclarationNode, Name))
 	{
 		ScopedVariable->Name = Name;
 		bUpdated = true;
 	}
 
+	// We can change type freely because name uniqueness is checked across types
 	if (ScopedVariable->Type != Type)
 	{
 		ScopedVariable->Type = Type;
@@ -112,15 +114,15 @@ void UXMSSpellEditorComponent::GetVariablesNamesByType(int32 Type, const UXMSNod
 {
 	if (!RequestingNode) return;
 	
-	TArray<UXMSNode*> Parents;
-	RequestingNode->GetHierarchy(Parents);
+	TArray<UXMSNode*> RequestingNodeHierarchy;
+	RequestingNode->GetHierarchy(RequestingNodeHierarchy);
 	
 	for (const FXMSScopedVariable& ScopedVariable : ScopedVariables)
 	{
 		if (ScopedVariable.Type == Type)
 		{
 			// We only want to add the variable if Node is in scope of the node that created the variable
-			if (RequestingNode->IsInScopeOf(ScopedVariable.DeclarationNode.Get(), Parents))
+			if (RequestingNode->IsInScopeOf(ScopedVariable.DeclarationNode.Get(), RequestingNodeHierarchy))
 			{
 				OutVariableNames.Add(ScopedVariable.Name);
 			}
@@ -128,21 +130,27 @@ void UXMSSpellEditorComponent::GetVariablesNamesByType(int32 Type, const UXMSNod
 	}
 }
 
-bool UXMSSpellEditorComponent::HasVariable(const FString& Name, int32 Type) const
+bool UXMSSpellEditorComponent::HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, int32 Type) const
 {
+	if (!RequestingNode) return false;
+
+	// Get Hierarchy of RequestingNode
+	TArray<UXMSNode*> RequestingNodeHierarchy;
+	RequestingNode->GetHierarchy(RequestingNodeHierarchy);
+	
 	if (Type != XMSVariableType::EVT_None)
 	{
 		// Check by type first to decrease string comparison
-		return ScopedVariables.ContainsByPredicate([Name, Type](const FXMSScopedVariable& Variable)
+		return ScopedVariables.ContainsByPredicate([RequestingNode, RequestingNodeHierarchy, Name, Type](const FXMSScopedVariable& Variable)
 			{
-				return Type == Variable.Type && Name.Equals(Variable.Name);
+				return Type == Variable.Type && Name.Equals(Variable.Name) && RequestingNode->IsInScopeOf(Variable.DeclarationNode.Get(), RequestingNodeHierarchy);
 			});
 	}
 
 	// No type check
-	return ScopedVariables.ContainsByPredicate([Name, Type](const FXMSScopedVariable& Variable)
+	return ScopedVariables.ContainsByPredicate([RequestingNode, RequestingNodeHierarchy, Name](const FXMSScopedVariable& Variable)
 		{
-			return Name.Equals(Variable.Name);
+			return Name.Equals(Variable.Name) && RequestingNode->IsInScopeOf(Variable.DeclarationNode.Get(), RequestingNodeHierarchy);
 		});
 }
 
