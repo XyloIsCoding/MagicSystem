@@ -7,7 +7,7 @@
 
 class UXMSNode;
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FXMSNodePathElement
 {
 	GENERATED_BODY()
@@ -47,9 +47,9 @@ struct FXMSNodePathElement
 		Index = INDEX_NONE;
 	}
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FName Identifier = NAME_None;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	int32 Index = INDEX_NONE;
 };
 

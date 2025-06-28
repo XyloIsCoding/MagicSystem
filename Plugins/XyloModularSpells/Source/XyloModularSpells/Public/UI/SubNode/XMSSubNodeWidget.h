@@ -35,7 +35,7 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetCurrentNodeSelectionName() const;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual bool GetSubNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
 
 public:
@@ -76,6 +76,7 @@ protected:
 	void BP_OnOwningNodeSet();
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNode> OwningNode;
+	UPROPERTY(BlueprintReadOnly)
 	FXMSNodePathElement ThisNodePath;
 
 	// ~OwningNode
