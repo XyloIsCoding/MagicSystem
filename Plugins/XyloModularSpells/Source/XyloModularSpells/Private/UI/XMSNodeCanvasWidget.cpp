@@ -10,7 +10,6 @@
 #include "Node/Base/XMSNodeWithArray.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
-#include "SpellEditor/XMSSpellEditorComponent.h"
 #include "UI/XMSNodeClassOptionsWidget.h"
 #include "UI/SubNode/XMSSubNodeWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
@@ -68,10 +67,7 @@ void UXMSNodeCanvasWidget::OnSubNodeClassSelected(UClass* NewClass)
 {
 	if (UXMSSubNodeWidget* SubNodeWidget = SelectedSubNodeWidget.Get())
 	{
-		if (UXMSNode* ParentNode = SubNodeWidget->GetParentNode())
-		{
-			ParentNode->SetSubNode(SubNodeWidget->GetPathFromParent(), NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
-		}
+		SubNodeWidget->ChangeSubNodeClass(NewClass);
 	}
 }
 
@@ -105,19 +101,18 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 	FXMSNodeQueryResult NodeQueryResult;
 	Node->GetAllSubNodes(NodeQueryResult);
 
-	// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> for [%s] -> got subnodes (%i)"), *Node->GetName(), NodeQueryResult.Nodes.Num())
-	
 	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
 	{
+		UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(Node, NodeResult.Key);
+		if (SubNodeWidget)
+		{
+			Index = AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
+			++Index;
+		}
+
+		// Recursive fill if sub-node is set
 		if (NodeResult.Value)
 		{
-			// UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::AddWidgetsForSubNodes >> SubNode [%s], from path (%s | %i)"), *NodeResult.Value->GetName(), *NodeResult.Key.Identifier.ToString(), NodeResult.Key.Index)
-			UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(Node, NodeResult.Key);
-			if (SubNodeWidget)
-			{
-				Index = AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
-				++Index;
-			}
 			FillNodeCanvas(Index, NodeResult.Value);
 		}
 	}

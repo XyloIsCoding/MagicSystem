@@ -23,11 +23,11 @@ UXMSNode::UXMSNode(const FObjectInitializer& ObjectInitializer)
 
 void UXMSNode::BeginDestroy()
 {
-	UObject::BeginDestroy();
-
 	// We want to make sure this node is removed from parent before destruction.
 	// (usually RemovedFromParentDelegate is used to clean up node data from other classes)
 	RemoveFromParent();
+	
+	UObject::BeginDestroy();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,21 +129,22 @@ void UXMSNode::RemoveFromParent()
 	if (!ParentNodePtr) return;
 
 	// If ParentNode is not nullptr, it means that this node is still set as sub-node of ParentNode
-	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node)
+	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node).
 	// This means that we can safely use SetSubNode without worrying about overriding nodes
 	ParentNodePtr->SetSubNode(PathFromParentNode, nullptr);
-}
 
-void UXMSNode::RemovedFromParent_Internal()
-{
-	// Clean up sub-nodes before this node
 	TArray<UXMSNode*> SubNodes;
 	GetAllSubNodes(SubNodes);
 	for (UXMSNode* SubNode : SubNodes)
 	{
-		if (SubNode) SubNode->RemovedFromParent_Internal();
+		// Call RemoveFromParent from sub-nodes after removing this node from parent
+		// This allows to disassemble the hierarchy from this node to the branches of the hierarchy tree
+		if (SubNode) SubNode->RemoveFromParent();
 	}
+}
 
+void UXMSNode::RemovedFromParent_Internal()
+{
 	// Clean up this node
 	PreRemovedFromParent();
 	
@@ -152,5 +153,14 @@ void UXMSNode::RemovedFromParent_Internal()
 
 	PostRemovedFromParent();
 	RemovedFromParentDelegate.Broadcast();
+
+	TArray<UXMSNode*> SubNodes;
+	GetAllSubNodes(SubNodes);
+	for (UXMSNode* SubNode : SubNodes)
+	{
+		// Call RemoveFromParent from sub-nodes after removing this node from parent
+		// This allows to disassemble the hierarchy from this node to the branches of the hierarchy tree
+		if (SubNode) SubNode->RemoveFromParent();
+	}
 }
 

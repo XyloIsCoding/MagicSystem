@@ -95,6 +95,7 @@ protected:
 private:
 	void ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent);
 	void RemoveFromParent();
+	/**  Called exclusively by node containers after removing reference to this node */
 	void RemovedFromParent_Internal();
 	
 protected:

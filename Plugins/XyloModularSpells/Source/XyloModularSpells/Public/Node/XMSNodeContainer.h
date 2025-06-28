@@ -119,7 +119,7 @@ public:
 	template <DerivedNode<BaseClass, BaseInterface> NodeType>
 	void Set(NodeType* InNode)
 	{
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			UXMSNode* OldNode = Node.Get();
 			Node.Reset(InNode);
@@ -163,7 +163,7 @@ protected:
 	
 	virtual void SetGeneric(UXMSNode* InNode) override
 	{
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			UXMSNode* OldNode = Node.Get();
 			Node.Reset(Cast<BaseClass>(InNode));
@@ -301,7 +301,7 @@ public:
 	void Set(int32 Index, NodeType* InNode)
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			UXMSNode* OldNode = Nodes[Index].Get();
 			Nodes[Index].Reset(InNode);
@@ -382,7 +382,7 @@ protected:
 	virtual void SetGeneric(int32 Index, UXMSNode* InNode) override
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
-		if (InNode && IsCompatible(InNode->GetClass()))
+		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			UXMSNode* OldNode = Nodes[Index].Get();
 			Nodes[Index].Reset(Cast<BaseClass>(InNode));

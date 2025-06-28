@@ -44,11 +44,19 @@ void UXMSSubNodeWidget::GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions)
 	}
 }
 
+void UXMSSubNodeWidget::ChangeSubNodeClass(UClass* NewClass)
+{
+	if (UXMSNode* ParentNode = OwningNode.Get())
+	{
+		ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
+	}
+}
+
 void UXMSSubNodeWidget::ResetSubNodeIcon()
 {
 }
 
-void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode& SubNode)
+void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode* SubNode)
 {
 	
 }
@@ -75,10 +83,12 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 	if (!NewSubNode)
 	{
 		ResetSubNodeIcon();
+		BP_ResetSubNodeIcon();
 		return;
 	}
-	UpdateSubNodeIcon(*NewSubNode);
-
+	UpdateSubNodeIcon(NewSubNode);
+	BP_UpdateSubNodeIcon(NewSubNode);
+	
 	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
 	SubNodeChangedDelegate.Broadcast(this, NewSubNode);
 }

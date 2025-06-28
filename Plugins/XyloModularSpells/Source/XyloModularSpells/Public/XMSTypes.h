@@ -17,7 +17,7 @@ struct FXMSNodePathElement
 		
 	}
 	
-	FXMSNodePathElement(FName InIdentifier, int32 InIndex = INDEX_NONE)
+	FXMSNodePathElement(FName InIdentifier, int32 InIndex = 0)
 		: Identifier(InIdentifier)
 		, Index(InIndex)
 	{

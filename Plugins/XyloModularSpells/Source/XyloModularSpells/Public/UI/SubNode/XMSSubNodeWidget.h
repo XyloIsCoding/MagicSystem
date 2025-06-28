@@ -39,9 +39,14 @@ public:
 public:
 	UXMSNode* GetSubNode() const;
 	virtual void GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions);
+	void ChangeSubNodeClass(UClass* NewClass);
 protected:
 	virtual void ResetSubNodeIcon();
-	virtual void UpdateSubNodeIcon(UXMSNode& SubNode);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_ResetSubNodeIcon();
+	virtual void UpdateSubNodeIcon(UXMSNode* SubNode);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_UpdateSubNodeIcon(UXMSNode* SubNode);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events
