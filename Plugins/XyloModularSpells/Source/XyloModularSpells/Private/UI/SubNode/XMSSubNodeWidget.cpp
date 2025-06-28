@@ -112,16 +112,6 @@ void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePath
 	BP_OnOwningNodeSet();
 }
 
-UXMSNode* UXMSSubNodeWidget::GetParentNode() const
-{
-	return OwningNode.Get();
-}
-
-const FXMSNodePathElement& UXMSSubNodeWidget::GetPathFromParent() const
-{
-	return ThisNodePath;
-}
-
 void UXMSSubNodeWidget::OnOwningNodeSet()
 {
 }

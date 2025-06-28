@@ -68,8 +68,6 @@ protected:
 	
 public:
 	void SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
-	UXMSNode* GetParentNode() const;
-	const FXMSNodePathElement& GetPathFromParent() const;
 protected:
 	virtual void OnOwningNodeSet();
 	UFUNCTION(BlueprintImplementableEvent)
