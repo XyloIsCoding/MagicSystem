@@ -368,7 +368,7 @@ protected:
 			// Important: We use '>' (look at comment on top)
 			if (It.GetIndex() > From)
 			{
-				if (UXMSNode* Node = *It)
+				if (UXMSNode* Node = It->Get())
 				{
 					ShiftPathIndex(Node, 1);
 				}
@@ -394,7 +394,7 @@ protected:
 			// Important: We use '>=' (look at comment on top)
 			if (It.GetIndex() >= From)
 			{
-				if (UXMSNode* Node = *It)
+				if (UXMSNode* Node = It->Get())
 				{
 					ShiftPathIndex(Node, -1);
 				}
