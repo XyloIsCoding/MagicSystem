@@ -271,7 +271,11 @@ protected:
 	virtual void ShiftDownPathIndexes(int32 From) {}
 	void ShiftPathIndex(UXMSNode* Node, int32 Amount)
 	{
-		if (Node) Node->PathFromParentNode.Index += Amount;
+		if (Node)
+		{
+			Node->PathFromParentNode.Index += Amount;
+			Node->PathIndexChangedDelegate.Broadcast(Node->PathFromParentNode.Index);
+		}
 	}
 
 	FName Identifier;

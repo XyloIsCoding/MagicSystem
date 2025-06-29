@@ -15,6 +15,7 @@ struct FXMSNodePathElement;
 
 DECLARE_MULTICAST_DELEGATE(FXMSRemovedFromParentSignature)
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeChangedSignature, const FXMSNodePathElement&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSPathIndexChangedSignature, int32)
 
 /**
  * 
@@ -97,11 +98,15 @@ private:
 	void RemoveFromParent();
 	/**  Called exclusively by node containers after removing reference to this node */
 	void RemovedFromParent_Internal();
-	
+
+public:
+	FXMSPathIndexChangedSignature PathIndexChangedDelegate; 
 protected:
 	static const FString NodeClassJsonKey;
+	/** Fixed for the lifetime of the node */
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNode> ParentNode;
+	/** While identifier is fixed for the lifetime of the node, index might change if owned by a NodeWithArray */
 	UPROPERTY()
 	FXMSNodePathElement PathFromParentNode;
 };
