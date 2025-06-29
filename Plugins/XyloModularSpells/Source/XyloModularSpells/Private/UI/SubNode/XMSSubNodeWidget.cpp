@@ -63,7 +63,6 @@ void UXMSSubNodeWidget::ChangeSubNodeClass(UClass* NewClass)
 	if (UXMSNode* ParentNode = OwningNode.Get())
 	{
 		ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
-		// TODO: if it is array node, listen to new element added and redraw
 	}
 }
 
@@ -97,6 +96,8 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 	}
 	UpdateSubNodeIcon(NewSubNode);
 	BP_UpdateSubNodeIcon(NewSubNode);
+
+	// TODO: if this is an NodeWithArray, register OnSubNodeAdded event
 	
 	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
 	SubNodeChangedDelegate.Broadcast(this, NewSubNode);
