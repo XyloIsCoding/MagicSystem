@@ -104,14 +104,16 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	{
 		ResetNodeIcon();
 		BP_NodeIcon();
-		return;
 	}
-	UpdateNodeIcon(NewNode);
-	BP_UpdateNodeIcon(NewNode);
-
-	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
+	else
 	{
-		NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeAdded);
+		UpdateNodeIcon(NewNode);
+		BP_UpdateNodeIcon(NewNode);
+
+		if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
+		{
+			NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeAdded);
+		}	
 	}
 	
 	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
@@ -120,10 +122,13 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 
 void UXMSNodeContainerWidget::OnSubNodeAdded(const FXMSNodePathElement& PathElement)
 {
-	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
-	NodeChangedDelegate.Broadcast(this, GetNode());
-
-	// TODO: this is actually awful. i should just add the new element at the right index
+	UXMSNode* OwningNodePtr = OwningNode.Get();
+	if (!OwningNodePtr) return;
+	
+	UXMSNode* AddedSubNode = OwningNodePtr->GetSubNode(PathElement);
+	
+	// Broadcast addition (in particular to inform canvas that it should redraw the sub-nodes chain)
+	SubNodeAddedDelegate.Broadcast(this, AddedSubNode, PathElement);
 }
 
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)

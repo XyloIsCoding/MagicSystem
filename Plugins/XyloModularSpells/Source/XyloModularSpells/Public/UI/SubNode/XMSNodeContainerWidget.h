@@ -14,6 +14,7 @@ class UXMSNode;
 class UXMSNodeContainerWidget;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSNodeWidgetUpdatedSignature, UXMSNodeContainerWidget*, UXMSNode*)
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FXMSNodeWidgetSubNodeAddedSignature, UXMSNodeContainerWidget*, UXMSNode* /* Added SubNode */ , const FXMSNodePathElement& /* Path to Added SubNode */)
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeWidgetClickedSignature, UXMSNodeContainerWidget*)
 
 /**
@@ -64,6 +65,7 @@ protected:
 public:
 	FXMSNodeWidgetClickedSignature NodeClickedDelegate;
 	FXMSNodeWidgetUpdatedSignature NodeChangedDelegate;
+	FXMSNodeWidgetSubNodeAddedSignature SubNodeAddedDelegate;
 	UFUNCTION(BlueprintCallable)
 	void BroadcastNodeClicked();
 protected:

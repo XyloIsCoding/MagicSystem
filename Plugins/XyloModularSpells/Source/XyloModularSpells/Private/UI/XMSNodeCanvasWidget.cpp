@@ -86,6 +86,23 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* 
 	FillNodeCanvas(++IndexInCanvas, NewSubNode);
 }
 
+void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNode, const FXMSNodePathElement& AddedSubNodePathFromParent)
+{
+	// TODO: find index to add the new node at
+	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
+
+	// Add a widget for the new sub-node
+	UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(AddedSubNode, AddedSubNodePathFromParent);
+	if (SubNodeWidget)
+	{
+		IndexInCanvas = AddNodeWidgetAt(IndexInCanvas, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
+		++IndexInCanvas;
+	}
+
+	// Fill canvas for the just added widget
+	FillNodeCanvas(IndexInCanvas, AddedSubNode);
+}
+
 // ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -180,6 +197,7 @@ UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Pare
 
 	Widget->NodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked);
 	Widget->NodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate);
+	Widget->SubNodeAddedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded);
 	Widget->SetOwningNodeAndPath(ParentNode, PathFromParentNode);
 	
 	return Widget;

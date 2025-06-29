@@ -33,6 +33,4 @@ public:
 protected:
 	static const FString ValueJsonKey;
 	
-	// TODO: Do some trick to store a void ptr to the value and cast it to right class or something
-	
 };
