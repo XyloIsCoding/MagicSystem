@@ -3,6 +3,23 @@
 
 #include "UI/XMSNodeClassOptionsWidget.h"
 
+#include "XMSNodeStaticLibrary.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
+
+
+void UXMSNodeClassOptionsWidget::UpdateClassIcon(UXMSNodeIconWidget* IconWidget, UClass* NodeClass)
+{
+	if (!IconWidget || !NodeClass) return;
+
+	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIcon(NodeClass))
+	{
+		IconWidget->SetDisplayIcon(Icon);
+	}
+	else
+	{
+		IconWidget->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
+	}
+}
 
 void UXMSNodeClassOptionsWidget::SelectOption(int32 Index)
 {

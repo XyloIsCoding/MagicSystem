@@ -6,6 +6,7 @@
 #include "XMSSubNodeWidget.h"
 #include "XMSMapSubNodeWidget.generated.h"
 
+class UXMSNodeIconWidget;
 class UXMSNodeWithMap;
 
 /**
@@ -23,7 +24,23 @@ class XYLOMODULARSPELLS_API UXMSMapSubNodeWidget : public UXMSSubNodeWidget
 	 */
 
 public:
+	UFUNCTION(BlueprintCallable)
+	virtual void UpdateSubNodeClassIcon();
+protected:
+	UPROPERTY(meta = (BindWidget))
+	UXMSNodeIconWidget* NodeClassIcon;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	virtual void UpdateSubNodeTypeIcon();
+protected:
+	UPROPERTY(meta = (BindWidget))
+	UXMSNodeIconWidget* NodeTypeIcon;
+	
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual bool GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
+	UFUNCTION(BlueprintCallable, BlueprintPure=false)
+	virtual UTexture2D* GetSubNodeTypeIcon() const;
 
 };

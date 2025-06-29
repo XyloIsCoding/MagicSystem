@@ -6,6 +6,7 @@
 #include "XMSSubNodeWidget.h"
 #include "XMSArraySubNodeWidget.generated.h"
 
+class UXMSNodeIconWidget;
 class UXMSNodeWithArray;
 
 /**
@@ -21,6 +22,13 @@ class XYLOMODULARSPELLS_API UXMSArraySubNodeWidget : public UXMSSubNodeWidget
 	/*
 	 * UXMSArraySubNodeWidget
 	 */
+
+public:
+	UFUNCTION(BlueprintCallable)
+	virtual void UpdateSubNodeClassIcon();
+protected:
+	UPROPERTY(meta = (BindWidget))
+	UXMSNodeIconWidget* NodeClassIcon;
 
 protected:
 	UFUNCTION(BlueprintCallable)

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "XMSNodeDataOverride.generated.h"
+#include "XMSNodeDataRegistry.generated.h"
 
 
 class UXMSNodeClassOptionsWidget;
@@ -83,12 +83,12 @@ struct FXMSNodeData
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeDataOverride : public UDataAsset
+class XYLOMODULARSPELLS_API UXMSNodeDataRegistry : public UDataAsset
 {
 	GENERATED_BODY()
 
 public:
-	UXMSNodeDataOverride(const FObjectInitializer& ObjectInitializer);
+	UXMSNodeDataRegistry(const FObjectInitializer& ObjectInitializer);
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -104,6 +104,8 @@ public:
 	TSubclassOf<UXMSMapSubNodeWidget> NodeWithMapWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSArraySubNodeWidget> NodeWithArrayWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	UTexture2D* EmptyNodeTexture;
 
 public:
 	UFUNCTION(BlueprintCallable)

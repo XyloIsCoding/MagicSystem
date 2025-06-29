@@ -7,7 +7,7 @@
 #include "XMSModularSpellsSubsystem.generated.h"
 
 class UGameEngine;
-class UXMSNodeDataOverride;
+class UXMSNodeDataRegistry;
 
 /**
  * Collects all node classes (same concept as FNetSerializeScriptStructCache)
@@ -37,11 +37,11 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 public:
-	void RegisterNodeDataOverride(UXMSNodeDataOverride* InNodeDataOverride);
-	UXMSNodeDataOverride* GetNodeDataOverride() const { return NodeDataOverride; }
+	void RegisterNodeDataRegistry(UXMSNodeDataRegistry* InNodeDataRegistry);
+	UXMSNodeDataRegistry* GetNodeDataRegistry() const { return NodeDataRegistry; }
 private:
 	UPROPERTY()
-	TObjectPtr<UXMSNodeDataOverride> NodeDataOverride;
+	TObjectPtr<UXMSNodeDataRegistry> NodeDataRegistry;
 
 public:
 	const TArray<UClass*>& GetNodeClasses();

@@ -5,7 +5,7 @@
 
 #include "XMSModularSpellsSubsystem.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
-#include "Node/XMSNodeDataOverride.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
 #include "Node/Base/XMSNodeWithMap.h"
@@ -128,9 +128,9 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 
 	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
-	FXMSNodeData* Data = NodesData->GetNodeData(ParentNode->GetClass());
+	UXMSNodeDataRegistry* NodeDataRegistry = MSS->GetNodeDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
+	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
 	if (!Data) return nullptr;
 
 	UXMSSubNodeWidget* Widget = nullptr;
@@ -138,13 +138,13 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 	{
 		// Node with map
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
-		Widget = CreateWidget<UXMSMapSubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithMapWidgetClass);
+		Widget = CreateWidget<UXMSMapSubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithMapWidgetClass);
 	}
 	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
 		// Node with array
 		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
-		Widget = CreateWidget<UXMSArraySubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodesData->NodeWithArrayWidgetClass);
+		Widget = CreateWidget<UXMSArraySubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
 	}
 	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
 	{
@@ -177,7 +177,7 @@ UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXM
 	{
 		UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 		if (!MSS) return nullptr;
-		UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
+		UXMSNodeDataRegistry* NodesData = MSS->GetNodeDataRegistry();
 		if (!NodesData) return nullptr;
 	
 		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeClassOptionsWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);

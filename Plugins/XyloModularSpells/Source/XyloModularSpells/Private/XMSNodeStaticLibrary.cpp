@@ -4,7 +4,7 @@
 #include "XMSNodeStaticLibrary.h"
 
 #include "XMSModularSpellsSubsystem.h"
-#include "Node/XMSNodeDataOverride.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
 #include "Spell/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
@@ -107,14 +107,52 @@ UClass* UXMSNodeStaticLibrary::GetNodeClassByName(const FString& ClassName)
 	return nullptr;
 }
 
+UXMSNodeDataRegistry* UXMSNodeStaticLibrary::GetNodeClassDataRegistry()
+{
+	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
+	if (!MSS) return nullptr;
+	return MSS->GetNodeDataRegistry();
+}
+
 FXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
 {
 	if (!NodeClass) return nullptr;
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
-	return NodesData->GetNodeData(NodeClass);
+	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
+	return NodeDataRegistry->GetNodeData(NodeClass);
+}
+
+UTexture2D* UXMSNodeStaticLibrary::GetNodeClassIconFromNode(UXMSNode* Node)
+{
+	if (Node)
+	{
+		FXMSNodeData* NodeData = GetNodeClassData(Node->GetClass());
+		return NodeData? NodeData->Glyph : nullptr;
+	}
+
+	UXMSNodeDataRegistry* NodesDataRegistry = GetNodeClassDataRegistry();
+	if (!NodesDataRegistry) return nullptr;
+	return NodesDataRegistry->EmptyNodeTexture;
+}
+
+FString UXMSNodeStaticLibrary::GetNodeClassNameFromNode(UXMSNode* Node)
+{
+	if (Node) return Node->GetClass()->GetName();
+	return FString(TEXT("NONE"));
+}
+
+UTexture2D* UXMSNodeStaticLibrary::GetNodeClassIcon(UClass* NodeClass)
+{
+	if (!NodeClass) return nullptr;
+	
+	FXMSNodeData* NodeData = GetNodeClassData(NodeClass);
+	return NodeData? NodeData->Glyph : nullptr;
+}
+
+FString UXMSNodeStaticLibrary::GetNodeClassName(UClass* NodeClass)
+{
+	if (NodeClass) return NodeClass->GetName();
+	return FString(TEXT("NONE"));
 }
 
 UXMSNode* UXMSNodeStaticLibrary::CopyNode(UObject* Outer, UXMSNode* InNode)

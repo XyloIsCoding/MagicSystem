@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeClassOptionsWidget.generated.h"
 
+class UXMSNodeIconWidget;
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSClassOptionChosenSignature, UClass*)
 
 /**
@@ -21,6 +22,10 @@ class XYLOMODULARSPELLS_API UXMSNodeClassOptionsWidget : public UUserWidget
 	/*
 	 * UXMSNodeClassOptionsWidget
 	 */
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void UpdateClassIcon(UXMSNodeIconWidget* IconWidget, UClass* NodeClass);
 
 public:
 	FXMSClassOptionChosenSignature ClassOptionChosenDelegate;

@@ -37,10 +37,10 @@ void UXMSModularSpellsSubsystem::Initialize(FSubsystemCollectionBase& Collection
 	NodeClassCache.InitForType(UXMSNode::StaticClass());
 }
 
-void UXMSModularSpellsSubsystem::RegisterNodeDataOverride(UXMSNodeDataOverride* InNodeDataOverride)
+void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry(UXMSNodeDataRegistry* InNodeDataRegistry)
 {
-	if (!InNodeDataOverride) return;
-	NodeDataOverride = InNodeDataOverride;
+	if (!InNodeDataRegistry) return;
+	NodeDataRegistry = InNodeDataRegistry;
 }
 
 const TArray<UClass*>& UXMSModularSpellsSubsystem::GetNodeClasses()

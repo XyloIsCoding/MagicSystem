@@ -5,7 +5,7 @@
 
 #include "XMSModularSpellsSubsystem.h"
 #include "Blueprint/UserWidget.h"
-#include "Node/XMSNodeDataOverride.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "UI/XMSNodeCanvasWidget.h"
 #include "UI/XMSNodeClassOptionsWidget.h"
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
@@ -180,10 +180,10 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 
 	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
 	if (!MSS) return nullptr;
-	UXMSNodeDataOverride* NodesData = MSS->GetNodeDataOverride();
-	if (!NodesData) return nullptr;
+	UXMSNodeDataRegistry* NodeDataRegistry = MSS->GetNodeDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
 	
-	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodesData->NodeCanvasWidgetClass);
+	UXMSNodeCanvasWidget* Widget = CreateWidget<UXMSNodeCanvasWidget>(PlayerController, NodeDataRegistry->NodeCanvasWidgetClass);
 	if (Widget)
 	{
 		Widget->SetSpellEditorComponent(this);

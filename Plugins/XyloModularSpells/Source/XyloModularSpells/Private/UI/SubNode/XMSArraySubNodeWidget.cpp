@@ -2,7 +2,10 @@
 
 
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
+
+#include "XMSNodeStaticLibrary.h"
 #include "Node/Base/XMSNodeWithArray.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,6 +13,18 @@
 /*
  * UXMSArraySubNodeWidget
  */
+
+void UXMSArraySubNodeWidget::UpdateSubNodeClassIcon()
+{
+	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIconFromNode(GetSubNode()))
+	{
+		NodeClassIcon->SetDisplayIcon(Icon);
+	}
+	else
+	{
+		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetSubNode()));
+	}
+}
 
 void UXMSArraySubNodeWidget::RemoveSubNode()
 {

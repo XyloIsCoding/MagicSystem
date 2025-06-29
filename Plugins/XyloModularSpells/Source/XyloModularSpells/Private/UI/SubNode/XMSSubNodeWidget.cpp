@@ -4,10 +4,8 @@
 #include "UI/SubNode/XMSSubNodeWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
-#include "Node/XMSNodeDataOverride.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
-#include "SpellEditor/XMSSpellEditorComponent.h"
-#include "UI/XMSNodeCanvasWidget.h"
 
 
 UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer)

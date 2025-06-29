@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/XMSNodeDataOverride.h"
+#include "Node/XMSNodeDataRegistry.h"
 
 #include "XMSModularSpellsSubsystem.h"
 #include "Node/Base/XMSNode.h"
@@ -49,14 +49,14 @@ FXMSSubNodeData* FXMSNodeData::GetSubNodeData(FName SubNodeIdentifier)
 	});
 }
 
-UXMSNodeDataOverride::UXMSNodeDataOverride(const FObjectInitializer& ObjectInitializer)
+UXMSNodeDataRegistry::UXMSNodeDataRegistry(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	UpdateNodeDataArray();
 
 	if (UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get())
 	{
-		MSS->RegisterNodeDataOverride(this);
+		MSS->RegisterNodeDataRegistry(this);
 	}
 }
 
@@ -64,7 +64,7 @@ UXMSNodeDataOverride::UXMSNodeDataOverride(const FObjectInitializer& ObjectIniti
 
 #if WITH_EDITOR
 
-void UXMSNodeDataOverride::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+void UXMSNodeDataRegistry::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
@@ -73,7 +73,7 @@ void UXMSNodeDataOverride::PostEditChangeProperty(struct FPropertyChangedEvent& 
 
 #endif
 
-bool UXMSNodeDataOverride::GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData)
+bool UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData)
 {
 	FXMSNodeData* FoundData = NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData){ return NodeData.NodeClass == NodeClass; });
 	if (!FoundData) return false;
@@ -82,21 +82,21 @@ bool UXMSNodeDataOverride::GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeD
 	return true;
 }
 
-FXMSNodeData* UXMSNodeDataOverride::GetNodeData(UClass* NodeClass)
+FXMSNodeData* UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass)
 {
 	return NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData){ return NodeData.NodeClass == NodeClass; });
 }
 
-void UXMSNodeDataOverride::UpdateNodeDataArray()
+void UXMSNodeDataRegistry::UpdateNodeDataArray()
 {
 	UXMSModularSpellsSubsystem* NodesSubsystem = UXMSModularSpellsSubsystem::Get();
 	if (!NodesSubsystem)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataOverride::UpdateNodeDataArray >> UXMSModularSpellsSubsystem not found"))
+		//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> UXMSModularSpellsSubsystem not found"))
 		return;
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataOverride::UpdateNodeDataArray >> Updating NodesData"))
+	//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Updating NodesData"))
 	
 	TArray<FXMSNodeData> TempArray;
 	for (UClass* NodeClass : NodesSubsystem->GetNodeClasses())
@@ -105,13 +105,13 @@ void UXMSNodeDataOverride::UpdateNodeDataArray()
 		FXMSNodeData* OldData = NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData ){ return NodeClass == NodeData.NodeClass; });
 		if (OldData)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataOverride::UpdateNodeDataArray >> Retriving %s"), *NodeClass->GetName())
+			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Retriving %s"), *NodeClass->GetName())
 			TempArray.Add(*OldData);
 			OldData->UpdateSubNodes();
 		}
 		else
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataOverride::UpdateNodeDataArray >> Adding %s"), *NodeClass->GetName())
+			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Adding %s"), *NodeClass->GetName())
 			TempArray.Add(FXMSNodeData(NodeClass));
 		}
 	}
