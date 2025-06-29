@@ -68,9 +68,12 @@ public:
 	void BroadcastNodeClicked();
 protected:
 	virtual void OnNodeChanged();
+	/** Called if the node in this container is a NodeWithArray, and an element is added to it */
 	virtual void OnSubNodeAdded(const FXMSNodePathElement& PathElement);
 private:
 	void OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement);
+	void OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement);
+	void OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement);
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/

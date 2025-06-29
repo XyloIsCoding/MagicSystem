@@ -132,6 +132,28 @@ void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathEleme
 	OnNodeChanged();
 }
 
+void UXMSNodeContainerWidget::OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement)
+{
+	// If a node got added before this one, then we want to shift up the index to account for that
+	// Look at TXMSMultiNodeContainer::ShiftUpPathIndexes
+	// We do not have to worry about risking increasing the index of the added NodeContainerWidget because
+	// that widget is created in OnSubNodeAdded (still bound to SubNodeAddedDelegate)
+	if (ThisNodePath.Index > PathElement.Index)
+	{
+		ThisNodePath.Index += 1;
+	}
+}
+
+void UXMSNodeContainerWidget::OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement)
+{
+	// If a node got removed before this one, then we want to shift down the index to account for that
+	// Look at TXMSMultiNodeContainer::ShiftDownPathIndexes
+	if (ThisNodePath.Index > PathElement.Index)
+	{
+		ThisNodePath.Index -= 1;
+	}
+}
+
 // ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -144,6 +166,11 @@ void UXMSNodeContainerWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const
 	if (InOwningNode)
 	{
 		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
+		if (UXMSNodeWithArray* OwningNodeWithArray = Cast<UXMSNodeWithArray>(InOwningNode))
+		{
+			OwningNodeWithArray->SubNodeAddedDelegate.AddUObject(this, &UXMSNodeContainerWidget::OnOwningNodeSubNodeAdded);
+			OwningNodeWithArray->SubNodeRemovedDelegate.AddUObject(this, &UXMSNodeContainerWidget::OnOwningNodeSubNodeRemoved);
+		}
 	}
 	SetOwningNode(InOwningNode);
 }
