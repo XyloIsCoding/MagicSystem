@@ -7,6 +7,7 @@
 #include "XMSNodeDataRegistry.generated.h"
 
 
+class UXMSArrayAddButtonWidget;
 class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
 class UXMSArraySubNodeWidget;
@@ -105,7 +106,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSArraySubNodeWidget> NodeWithArrayWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UXMSArrayAddButtonWidget> ArrayAddWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI")
 	UTexture2D* EmptyNodeTexture;
+	UPROPERTY(EditAnywhere, Category = "UI")
+    UTexture2D* ArrayAddTexture;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	UTexture2D* ArrayRemoveTexture;
 
 public:
 	UFUNCTION(BlueprintCallable)

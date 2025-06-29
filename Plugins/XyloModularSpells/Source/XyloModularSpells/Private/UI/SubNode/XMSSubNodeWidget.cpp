@@ -63,6 +63,7 @@ void UXMSSubNodeWidget::ChangeSubNodeClass(UClass* NewClass)
 	if (UXMSNode* ParentNode = OwningNode.Get())
 	{
 		ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
+		// TODO: if it is array node, listen to new element added and redraw
 	}
 }
 
@@ -81,12 +82,6 @@ void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode* SubNode)
 void UXMSSubNodeWidget::BroadcastSubNodeClicked()
 {
 	SubNodeClickedDelegate.Broadcast(this);
-}
-
-void UXMSSubNodeWidget::OnOwningNodeRemovedFromParent()
-{
-	// Remove widget from the widget container
-	RemoveFromParent();
 }
 
 void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
@@ -113,21 +108,14 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 /*--------------------------------------------------------------------------------------------------------------------*/
 // OwningNode
 
-void UXMSSubNodeWidget::SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
+void UXMSSubNodeWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
 {
-	OwningNode = InOwningNode;
 	ThisNodePath = PathFromOwningNode;
 	if (InOwningNode)
 	{
-		InOwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnOwningNodeRemovedFromParent);
 		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnSubNodeChanged);
 	}
-	OnOwningNodeSet();
-	BP_OnOwningNodeSet();
-}
-
-void UXMSSubNodeWidget::OnOwningNodeSet()
-{
+	SetOwningNode(InOwningNode);
 }
 
 // ~OwningNode

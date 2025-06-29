@@ -15,6 +15,7 @@ class XYLOMODULARSPELLS_API UXMSNodeIconWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void SetDisplayName(const FString& ClassName);
 protected:
 	virtual void DisplayNameSet(const FString& ClassName);
@@ -22,6 +23,7 @@ protected:
 	void BP_DisplayNameSet(const FString& ClassName);
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void SetDisplayIcon(UTexture2D* Icon);
 protected:
 	virtual void DisplayIconSet(UTexture2D* Icon);

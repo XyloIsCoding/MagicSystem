@@ -4,6 +4,7 @@
 #include "UI/XMSNodeCanvasWidget.h"
 
 #include "XMSModularSpellsSubsystem.h"
+#include "XMSNodeStaticLibrary.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
@@ -11,6 +12,8 @@
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
 #include "UI/XMSNodeClassOptionsWidget.h"
+#include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/SubNode/XMSSubNodeWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 #include "UI/SubNode/XMSArraySubNodeWidget.h"
@@ -34,12 +37,12 @@ void UXMSNodeCanvasWidget::OnSpellEditorComponentSet()
  * UXMSNodeCanvasWidget
  */
 
-int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const
+int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSNodeCanvasEntryWidget* NodeWidget) const
 {
 	return NodesWrapBox->GetChildIndex(NodeWidget);
 }
 
-int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* NodeWidget)
+int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidget* NodeWidget)
 {
 	return  NodesWrapBox->AddChildAt(Index, NodeWidget);
 }
@@ -71,6 +74,18 @@ void UXMSNodeCanvasWidget::OnSubNodeClassSelected(UClass* NewClass)
 	}
 }
 
+void UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode)
+{
+	// Only fill canvas for this node if not nullptr
+	if (!NewSubNode) return;
+	
+	// Add widgets for all the sub-nodes of this sub-node
+	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
+	if (IndexInCanvas == INDEX_NONE) return;
+	
+	FillNodeCanvas(++IndexInCanvas, NewSubNode);
+}
+
 // ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -83,20 +98,6 @@ void UXMSNodeCanvasWidget::InitializeNodeCanvas(UXMSNode* Node)
 	int32 Index = 0;
 	FillNodeCanvas(Index, Node);
 }
-
-void UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode)
-{
-	// Only fill canvas for this node if not nullptr
-	if (NewSubNode)
-	{
-		// Add widgets for all the sub-nodes of this sub-node
-		int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
-		if (IndexInCanvas == INDEX_NONE) return;
-	
-		FillNodeCanvas(++IndexInCanvas, NewSubNode);
-	}
-}
-
 
 void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 {
@@ -120,15 +121,27 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 			FillNodeCanvas(Index, NodeResult.Value);
 		}
 	}
+
+	AddArrayTerminationWidget(Index, Node);
+}
+
+void UXMSNodeCanvasWidget::AddArrayTerminationWidget(int32& Index, UXMSNode* Node)
+{
+	if (UXMSNodeWithArray* NewSubNodeWithArray = Cast<UXMSNodeWithArray>(Node))
+	{
+		UXMSArrayAddButtonWidget* ArrayTerminator = CreateArrayTerminationWidget(NewSubNodeWithArray);
+		if (ArrayTerminator)
+		{
+			AddNodeWidgetAt(Index, ArrayTerminator);
+		}
+	}
 }
 
 UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
 	if (!ParentNode) return nullptr;
-
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return nullptr;
-	UXMSNodeDataRegistry* NodeDataRegistry = MSS->GetNodeDataRegistry();
+	
+	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
 	if (!Data) return nullptr;
@@ -157,9 +170,27 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 
 	Widget->SubNodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetClicked);
 	Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
-	Widget->SetOwningNode(ParentNode, PathFromParentNode);
+	Widget->SetOwningNodeAndPath(ParentNode, PathFromParentNode);
 	
 	return Widget;
+}
+
+UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode)
+{
+	if (!ParentNode) return nullptr;
+	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
+		
+	UXMSArrayAddButtonWidget* SubNodeWidget = CreateWidget<UXMSArrayAddButtonWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayAddWidgetClass);
+	if (SubNodeWidget)
+	{
+		SubNodeWidget->SetOwningNode(ParentNode);
+		if (NodeDataRegistry->ArrayAddTexture)
+		{
+			SubNodeWidget->Icon->SetDisplayIcon(NodeDataRegistry->ArrayAddTexture);
+		}
+	}
+	return SubNodeWidget;
 }
 
 // ~Canvas Filling

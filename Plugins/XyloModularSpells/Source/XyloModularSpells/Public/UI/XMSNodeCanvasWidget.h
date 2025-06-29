@@ -8,6 +8,9 @@
 #include "XMSTypes.h"
 #include "XMSNodeCanvasWidget.generated.h"
 
+class UXMSArrayAddButtonWidget;
+class UXMSNodeWithArray;
+class UXMSNodeCanvasEntryWidget;
 class UXMSNode;
 class UXMSWrapBox;
 class UXMSSubNodeWidget;
@@ -37,9 +40,9 @@ protected:
 	 */
 
 public:
-	int32 GetNodeWidgetIndex(UXMSSubNodeWidget* NodeWidget) const;
+	int32 GetNodeWidgetIndex(UXMSNodeCanvasEntryWidget* NodeWidget) const;
 protected:
-	int32 AddNodeWidgetAt(int32 Index, UXMSSubNodeWidget* NodeWidget);
+	int32 AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidget* NodeWidget);
 protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UXMSWrapBox> NodesWrapBox;
@@ -52,6 +55,8 @@ protected:
 	virtual void OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidget);
 	/** Bound to ClassOptionsWidget */
 	virtual void OnSubNodeClassSelected(UClass* NewClass);
+	/** Bound to all SubNode Widgets */
+	virtual void OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode);
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -62,9 +67,10 @@ protected:
 public:
 	void InitializeNodeCanvas(UXMSNode* Node);
 protected:
-	virtual void OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode);
 	void FillNodeCanvas(int32& Index, UXMSNode* Node);
+	void AddArrayTerminationWidget(int32& Index, UXMSNode* Node);
 	UXMSSubNodeWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
+	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode);
 	
 	// ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/

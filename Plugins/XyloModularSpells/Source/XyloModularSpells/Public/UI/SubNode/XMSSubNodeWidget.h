@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSTypes.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/BaseWidget/XMSNodeCanvasEntryWidget.h"
 #include "XMSSubNodeWidget.generated.h"
 
 class UXMSNodeCanvasWidget;
@@ -19,7 +19,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSubNodeWidgetClickedSignature, UXMSSubNo
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSSubNodeWidget : public UXMSNodeCanvasEntryWidget
 {
 	GENERATED_BODY()
 
@@ -59,7 +59,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BroadcastSubNodeClicked();
 protected:
-	virtual void OnOwningNodeRemovedFromParent();
 	virtual void OnSubNodeChanged(const FXMSNodePathElement& PathElement);
 
 	// ~Events
@@ -69,13 +68,8 @@ protected:
 	// OwningNode
 	
 public:
-	void SetOwningNode(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
+	void SetOwningNodeAndPath(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode);
 protected:
-	virtual void OnOwningNodeSet();
-	UFUNCTION(BlueprintImplementableEvent)
-	void BP_OnOwningNodeSet();
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNode> OwningNode;
 	UPROPERTY(BlueprintReadOnly)
 	FXMSNodePathElement ThisNodePath;
 
