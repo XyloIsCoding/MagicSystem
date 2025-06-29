@@ -6,6 +6,7 @@
 #include "XMSNodeStaticLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
+#include "Node/Base/XMSNodeWithArray.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
@@ -83,7 +84,7 @@ void UXMSNodeContainerWidget::ResetNodeIcon()
 {
 }
 
-void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* SubNode)
+void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* Node)
 {
 	
 }
@@ -98,20 +99,31 @@ void UXMSNodeContainerWidget::BroadcastNodeClicked()
 
 void UXMSNodeContainerWidget::OnNodeChanged()
 {
-	UXMSNode* NewSubNode = GetNode();
-	if (!NewSubNode)
+	UXMSNode* NewNode = GetNode();
+	if (!NewNode)
 	{
 		ResetNodeIcon();
 		BP_NodeIcon();
 		return;
 	}
-	UpdateNodeIcon(NewSubNode);
-	BP_UpdateNodeIcon(NewSubNode);
+	UpdateNodeIcon(NewNode);
+	BP_UpdateNodeIcon(NewNode);
 
-	// TODO: if this is an NodeWithArray, register OnSubNodeAdded event
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
+	{
+		NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeAdded);
+	}
 	
 	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
-	NodeChangedDelegate.Broadcast(this, NewSubNode);
+	NodeChangedDelegate.Broadcast(this, NewNode);
+}
+
+void UXMSNodeContainerWidget::OnSubNodeAdded(const FXMSNodePathElement& PathElement)
+{
+	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
+	NodeChangedDelegate.Broadcast(this, GetNode());
+
+	// TODO: this is actually awful. i should just add the new element at the right index
 }
 
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)

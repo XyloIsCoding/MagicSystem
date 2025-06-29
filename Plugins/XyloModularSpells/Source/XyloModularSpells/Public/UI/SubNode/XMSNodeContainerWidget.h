@@ -54,9 +54,9 @@ protected:
 	virtual void ResetNodeIcon();
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_NodeIcon();
-	virtual void UpdateNodeIcon(UXMSNode* SubNode);
+	virtual void UpdateNodeIcon(UXMSNode* Node);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_UpdateNodeIcon(UXMSNode* SubNode);
+	void BP_UpdateNodeIcon(UXMSNode* Node);
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events
@@ -68,6 +68,7 @@ public:
 	void BroadcastNodeClicked();
 protected:
 	virtual void OnNodeChanged();
+	virtual void OnSubNodeAdded(const FXMSNodePathElement& PathElement);
 private:
 	void OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement);
 

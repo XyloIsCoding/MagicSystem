@@ -44,15 +44,19 @@ public:
 	 */
 	
 public:
+	FXMSSubNodeChangedSignature SubNodeAddedDelegate;
 	virtual UXMSNode* GetSubNode(int32 Index) const;
 	virtual void SetSubNode(int32 Index, UXMSNode* InNode);
 	virtual void AddSubNode(UXMSNode* InNode);
 	virtual void InsertSubNode(int32 Index, UXMSNode* InNode);
 	virtual void RemoveSubNode(int32 Index);
 protected:
-	/** Called when a sub-node is set in one of the container of this node
+	/** Called when an existing slot of FXMSMultiNodeContainer is changed
 	 * @note This is called AFTER parent is set on the sub-node */
 	virtual void OnSubNodeChanged(FName Identifier, int32 Index);
+	/** Called when a slot of FXMSMultiNodeContainer is added
+	 * @note This is called AFTER parent is set on the sub-node */
+	virtual void OnSubNodeAdded(FName Identifier, int32 Index);
 private:
 	/** contains array of sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
 	TPair<FName, FXMSMultiNodeContainer*> SubNodes;

@@ -193,3 +193,7 @@ void UXMSNodeWithArray::RemoveSubNode(int32 Index)
 void UXMSNodeWithArray::OnSubNodeChanged(FName Identifier, int32 Index)
 {
 }
+
+void UXMSNodeWithArray::OnSubNodeAdded(FName Identifier, int32 Index)
+{
+}

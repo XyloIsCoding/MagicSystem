@@ -236,6 +236,16 @@ protected:
 		}
 	}
 
+	virtual void NodeAdded(UXMSNode* InNode, int32 Index)
+	{
+		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
+		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
+		{
+			OwnerPtr->OnSubNodeAdded(Identifier, Index);
+			OwnerPtr->SubNodeAddedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
+	}
+
 	FName Identifier;
 	TWeakObjectPtr<UXMSNodeWithArray> Owner;
 };
@@ -315,7 +325,7 @@ public:
 		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(InNode));
-			NodeSet(static_cast<UXMSNode*>(InNode), Index, nullptr);
+			NodeAdded(static_cast<UXMSNode*>(InNode), Index);
 		}
 	}
 
@@ -326,7 +336,7 @@ public:
 		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(InNode), Index);
-			NodeSet(static_cast<UXMSNode*>(InNode), Index, nullptr);
+			NodeAdded(static_cast<UXMSNode*>(InNode), Index);
 		}
 	}
 
@@ -395,7 +405,7 @@ protected:
 		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
-			NodeSet(InNode, Index, nullptr);
+			NodeAdded(InNode, Index);
 		}
 	}
 	
@@ -405,7 +415,7 @@ protected:
 		if (!InNode || IsCompatible(InNode->GetClass()))
 		{
 			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
-			NodeSet(InNode, Index, nullptr);
+			NodeAdded(InNode, Index);
 		}
 	}
 

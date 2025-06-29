@@ -122,6 +122,7 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 		}
 	}
 
+	// TODO: find out why the order is not right
 	AddArrayTerminationWidget(Index, Node);
 }
 
@@ -133,6 +134,7 @@ void UXMSNodeCanvasWidget::AddArrayTerminationWidget(int32& Index, UXMSNode* Nod
 		if (ArrayTerminator)
 		{
 			AddNodeWidgetAt(Index, ArrayTerminator);
+			++Index; // TODO: chekc if this fixed the + icon ordering issue
 		}
 	}
 }
