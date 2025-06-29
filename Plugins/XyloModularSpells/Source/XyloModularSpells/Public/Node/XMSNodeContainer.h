@@ -246,6 +246,16 @@ protected:
 		}
 	}
 
+	virtual void NodeRemoved(int32 Index, UXMSNode* OldNode)
+	{
+		if (OldNode) OldNode->RemovedFromParent_Internal();
+		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
+		{
+			OwnerPtr->OnSubNodeRemoved(Identifier, Index);
+			OwnerPtr->SubNodeRemovedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
+	}
+
 	FName Identifier;
 	TWeakObjectPtr<UXMSNodeWithArray> Owner;
 };
@@ -346,7 +356,10 @@ public:
 	virtual void Remove(int32 Index) override
 	{
 		if (!Nodes.IsValidIndex(Index)) return;
+
+		UXMSNode* OldNode = Nodes[Index].Get();
 		Nodes.RemoveAt(Index);
+		NodeRemoved(Index, OldNode);
 	}
 
 	/** Checks if a class is compatible with this container */
