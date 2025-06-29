@@ -1,14 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/SubNode/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
-UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer)
+UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 }
@@ -16,21 +17,33 @@ UXMSSubNodeWidget::UXMSSubNodeWidget(const FObjectInitializer& ObjectInitializer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSSubNodeWidget
+ * UXMSNodeContainerWidget
  */
 
-FString UXMSSubNodeWidget::GetCurrentNodeSelectionName() const
+void UXMSNodeContainerWidget::UpdateNodeClassIcon()
 {
-	if (UXMSNode* ThisNode = GetSubNode())
+	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIconFromNode(GetNode()))
+	{
+		NodeClassIcon->SetDisplayIcon(Icon);
+	}
+	else
+	{
+		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetNode()));
+	}
+}
+
+FString UXMSNodeContainerWidget::GetNodeName() const
+{
+	if (UXMSNode* ThisNode = GetNode())
 	{
 		return ThisNode->GetName();
 	}
 	return FString(TEXT("[-]"));
 }
 
-bool UXMSSubNodeWidget::GetSubNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
+bool UXMSNodeContainerWidget::GetNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
 {
-	UXMSNode* ThisNode = GetSubNode();
+	UXMSNode* ThisNode = GetNode();
 	if (!ThisNode) return false;
 	
 	FXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(ThisNode->GetClass());
@@ -42,7 +55,7 @@ bool UXMSSubNodeWidget::GetSubNodeDisplayData(UTexture2D*& OutGlyph, FText& OutD
 	return true;
 }
 
-UXMSNode* UXMSSubNodeWidget::GetSubNode() const
+UXMSNode* UXMSNodeContainerWidget::GetNode() const
 {
 	UXMSNode* OwningNodePtr = OwningNode.Get();
 	if (!OwningNodePtr) return nullptr;
@@ -50,7 +63,7 @@ UXMSNode* UXMSSubNodeWidget::GetSubNode() const
 	return OwningNodePtr->GetSubNode(ThisNodePath);
 }
 
-void UXMSSubNodeWidget::GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions)
+void UXMSNodeContainerWidget::GetNodeClassOptions(TArray<UClass*>& OutClassOptions)
 {
 	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{
@@ -58,7 +71,7 @@ void UXMSSubNodeWidget::GetSubNodeClassOptions(TArray<UClass*>& OutClassOptions)
 	}
 }
 
-void UXMSSubNodeWidget::ChangeSubNodeClass(UClass* NewClass)
+void UXMSNodeContainerWidget::ChangeNodeClass(UClass* NewClass)
 {
 	if (UXMSNode* ParentNode = OwningNode.Get())
 	{
@@ -66,11 +79,11 @@ void UXMSSubNodeWidget::ChangeSubNodeClass(UClass* NewClass)
 	}
 }
 
-void UXMSSubNodeWidget::ResetSubNodeIcon()
+void UXMSNodeContainerWidget::ResetNodeIcon()
 {
 }
 
-void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode* SubNode)
+void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* SubNode)
 {
 	
 }
@@ -78,29 +91,33 @@ void UXMSSubNodeWidget::UpdateSubNodeIcon(UXMSNode* SubNode)
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Events
 
-void UXMSSubNodeWidget::BroadcastSubNodeClicked()
+void UXMSNodeContainerWidget::BroadcastNodeClicked()
 {
-	SubNodeClickedDelegate.Broadcast(this);
+	NodeClickedDelegate.Broadcast(this);
 }
 
-void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
+void UXMSNodeContainerWidget::OnNodeChanged()
 {
-	if (PathElement != ThisNodePath) return;
-
-	UXMSNode* NewSubNode = GetSubNode();
+	UXMSNode* NewSubNode = GetNode();
 	if (!NewSubNode)
 	{
-		ResetSubNodeIcon();
-		BP_ResetSubNodeIcon();
+		ResetNodeIcon();
+		BP_NodeIcon();
 		return;
 	}
-	UpdateSubNodeIcon(NewSubNode);
-	BP_UpdateSubNodeIcon(NewSubNode);
+	UpdateNodeIcon(NewSubNode);
+	BP_UpdateNodeIcon(NewSubNode);
 
 	// TODO: if this is an NodeWithArray, register OnSubNodeAdded event
 	
 	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
-	SubNodeChangedDelegate.Broadcast(this, NewSubNode);
+	NodeChangedDelegate.Broadcast(this, NewSubNode);
+}
+
+void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)
+{
+	if (PathElement != ThisNodePath) return;
+	OnNodeChanged();
 }
 
 // ~Events
@@ -109,12 +126,12 @@ void UXMSSubNodeWidget::OnSubNodeChanged(const FXMSNodePathElement& PathElement)
 /*--------------------------------------------------------------------------------------------------------------------*/
 // OwningNode
 
-void UXMSSubNodeWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
+void UXMSNodeContainerWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
 {
 	ThisNodePath = PathFromOwningNode;
 	if (InOwningNode)
 	{
-		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnSubNodeChanged);
+		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
 	}
 	SetOwningNode(InOwningNode);
 }

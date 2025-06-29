@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/SubNode/XMSArraySubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "Node/Base/XMSNodeWithArray.h"
@@ -11,22 +11,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSArraySubNodeWidget
+ * UXMSNodeContainerFromArrayWidget
  */
 
-void UXMSArraySubNodeWidget::UpdateSubNodeClassIcon()
-{
-	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIconFromNode(GetSubNode()))
-	{
-		NodeClassIcon->SetDisplayIcon(Icon);
-	}
-	else
-	{
-		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetSubNode()));
-	}
-}
-
-void UXMSArraySubNodeWidget::RemoveSubNode()
+void UXMSNodeContainerFromArrayWidget::RemoveSubNode()
 {
 	if (UXMSNodeWithArray* ParentNode = Cast<UXMSNodeWithArray>(OwningNode.Get()))
 	{
@@ -34,7 +22,7 @@ void UXMSArraySubNodeWidget::RemoveSubNode()
 	}
 }
 
-void UXMSArraySubNodeWidget::InsertSubNode()
+void UXMSNodeContainerFromArrayWidget::InsertSubNode()
 {
 	if (UXMSNodeWithArray* ParentNode = Cast<UXMSNodeWithArray>(OwningNode.Get()))
 	{

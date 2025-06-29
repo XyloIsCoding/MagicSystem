@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/SubNode/XMSMapSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
@@ -12,22 +12,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSMapSubNodeWidget
+ * UXMSNodeContainerFromMapWidget
  */
 
-void UXMSMapSubNodeWidget::UpdateSubNodeClassIcon()
-{
-	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIconFromNode(GetSubNode()))
-	{
-		NodeClassIcon->SetDisplayIcon(Icon);
-	}
-	else
-	{
-		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetSubNode()));
-	}
-}
-
-void UXMSMapSubNodeWidget::UpdateSubNodeTypeIcon()
+void UXMSNodeContainerFromMapWidget::UpdateSubNodeTypeIcon()
 {
 	if (UTexture2D* Icon = GetSubNodeTypeIcon())
 	{
@@ -40,7 +28,7 @@ void UXMSMapSubNodeWidget::UpdateSubNodeTypeIcon()
 	}
 }
 
-bool UXMSMapSubNodeWidget::GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
+bool UXMSNodeContainerFromMapWidget::GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
 {
 	UXMSNode* ParentNode = OwningNode.Get();
 	if (!ParentNode) return false;
@@ -57,7 +45,7 @@ bool UXMSMapSubNodeWidget::GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FTex
 	return true;
 }
 
-UTexture2D* UXMSMapSubNodeWidget::GetSubNodeTypeIcon() const
+UTexture2D* UXMSNodeContainerFromMapWidget::GetSubNodeTypeIcon() const
 {
 	UXMSNode* ParentNode = OwningNode.Get();
 	if (!ParentNode) return nullptr;

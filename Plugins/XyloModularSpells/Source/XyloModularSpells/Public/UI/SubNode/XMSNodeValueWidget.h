@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSSubNodeWidget.h"
+#include "XMSNodeContainerWidget.h"
 #include "XMSNodeValueWidget.generated.h"
 
 class UXMSNodeWithValue;
@@ -12,7 +12,7 @@ class UXMSNodeWithValue;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeValueWidget : public UXMSSubNodeWidget
+class XYLOMODULARSPELLS_API UXMSNodeValueWidget : public UXMSNodeCanvasEntryWidget
 {
 	GENERATED_BODY()
 

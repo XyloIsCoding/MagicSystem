@@ -13,7 +13,7 @@ class UXMSNodeWithArray;
 class UXMSNodeCanvasEntryWidget;
 class UXMSNode;
 class UXMSWrapBox;
-class UXMSSubNodeWidget;
+class UXMSNodeContainerWidget;
 class UXMSSpellEditorComponent;
 
 /**
@@ -52,11 +52,11 @@ protected:
 
 protected:
 	/** Bound to all SubNode Widgets */
-	virtual void OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidget);
+	virtual void OnNodeContainerWidgetClicked(UXMSNodeContainerWidget* SubNodeWidget);
 	/** Bound to ClassOptionsWidget */
-	virtual void OnSubNodeClassSelected(UClass* NewClass);
+	virtual void OnNodeClassSelected(UClass* NewClass);
 	/** Bound to all SubNode Widgets */
-	virtual void OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode);
+	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewSubNode);
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +69,7 @@ public:
 protected:
 	void FillNodeCanvas(int32& Index, UXMSNode* Node);
 	void AddArrayTerminationWidget(int32& Index, UXMSNode* Node);
-	UXMSSubNodeWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
+	UXMSNodeCanvasEntryWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
 	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode);
 	
 	// ~Canvas Filling
@@ -79,12 +79,12 @@ protected:
 	// Class Options
 
 public:
-	virtual UXMSNodeClassOptionsWidget* CreateOptionsWidgetForNode(UXMSSubNodeWidget* NodeWidget);
+	virtual UXMSNodeClassOptionsWidget* CreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget);
 protected:
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNodeClassOptionsWidget> ClassOptionsWidget;
 	UPROPERTY()
-	TWeakObjectPtr<UXMSSubNodeWidget> SelectedSubNodeWidget;
+	TWeakObjectPtr<UXMSNodeContainerWidget> SelectedSubNodeWidget;
 	
 	// ~Class Options
 /*--------------------------------------------------------------------------------------------------------------------*/

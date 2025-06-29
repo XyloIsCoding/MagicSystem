@@ -24,7 +24,7 @@
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/SubNode/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerWidget.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);

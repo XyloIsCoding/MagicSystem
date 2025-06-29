@@ -8,8 +8,8 @@
 #include "Node/XMSNodeDataRegistry.h"
 #include "UI/XMSNodeCanvasWidget.h"
 #include "UI/XMSNodeClassOptionsWidget.h"
-#include "UI/SubNode/XMSArraySubNodeWidget.h"
-#include "UI/SubNode/XMSMapSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 #include "UI/SubNode/XMSNodeValueWidget.h"
 
 

@@ -10,7 +10,7 @@
 
 class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
-class UXMSSubNodeWidget;
+class UXMSNodeContainerWidget;
 
 USTRUCT()
 struct FXMSScopedVariable

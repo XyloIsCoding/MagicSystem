@@ -14,10 +14,10 @@
 #include "UI/XMSNodeClassOptionsWidget.h"
 #include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
-#include "UI/SubNode/XMSSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
-#include "UI/SubNode/XMSArraySubNodeWidget.h"
-#include "UI/SubNode/XMSMapSubNodeWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
+#include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 #include "UI/SubNode/XMSNodeValueWidget.h"
 
 
@@ -50,7 +50,7 @@ int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidg
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Events
 
-void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidget)
+void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget* SubNodeWidget)
 {
 	SelectedSubNodeWidget = SubNodeWidget;
 	if (!SubNodeWidget) return;
@@ -66,15 +66,15 @@ void UXMSNodeCanvasWidget::OnSubNodeWidgetClicked(UXMSSubNodeWidget* SubNodeWidg
 	}
 }
 
-void UXMSNodeCanvasWidget::OnSubNodeClassSelected(UClass* NewClass)
+void UXMSNodeCanvasWidget::OnNodeClassSelected(UClass* NewClass)
 {
-	if (UXMSSubNodeWidget* SubNodeWidget = SelectedSubNodeWidget.Get())
+	if (UXMSNodeContainerWidget* SubNodeWidget = SelectedSubNodeWidget.Get())
 	{
-		SubNodeWidget->ChangeSubNodeClass(NewClass);
+		SubNodeWidget->ChangeNodeClass(NewClass);
 	}
 }
 
-void UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate(UXMSSubNodeWidget* NodeWidget, UXMSNode* NewSubNode)
+void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewSubNode)
 {
 	// Only fill canvas for this node if not nullptr
 	if (!NewSubNode) return;
@@ -103,12 +103,12 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 {
 	if (!Node) return;
 	
-	FXMSNodeQueryResult NodeQueryResult;
-	Node->GetAllSubNodes(NodeQueryResult);
+	FXMSNodeQueryResult SubNodeContainers;
+	Node->GetAllSubNodes(SubNodeContainers);
 
-	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeResult : NodeQueryResult.Nodes)
+	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeContainer : SubNodeContainers.Nodes)
 	{
-		UXMSSubNodeWidget* SubNodeWidget = CreateNodeWidget(Node, NodeResult.Key);
+		UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(Node, NodeContainer.Key);
 		if (SubNodeWidget)
 		{
 			Index = AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
@@ -116,9 +116,9 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
 		}
 
 		// Recursive fill if sub-node is set
-		if (NodeResult.Value)
+		if (NodeContainer.Value)
 		{
-			FillNodeCanvas(Index, NodeResult.Value);
+			FillNodeCanvas(Index, NodeContainer.Value);
 		}
 	}
 
@@ -137,7 +137,7 @@ void UXMSNodeCanvasWidget::AddArrayTerminationWidget(int32& Index, UXMSNode* Nod
 	}
 }
 
-UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
+UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
 	if (!ParentNode) return nullptr;
 	
@@ -146,30 +146,38 @@ UXMSSubNodeWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, 
 	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
 	if (!Data) return nullptr;
 
-	UXMSSubNodeWidget* Widget = nullptr;
-	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
-	{
-		// Node with map
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSMapSubNodeWidget::StaticClass());
-		Widget = CreateWidget<UXMSMapSubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithMapWidgetClass);
-	}
-	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
-	{
-		// Node with array
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSArraySubNodeWidget::StaticClass());
-		Widget = CreateWidget<UXMSArraySubNodeWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
-	}
-	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
+	// Node with value
+	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
 	{
 		// Node with value
 		if (!Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
-		Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
+		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
+		if (Widget)
+		{
+			Widget->SetOwningNode(ParentNode);
+		}
+		return Widget;
+	}
+
+	// Node with sub-nodes
+	UXMSNodeContainerWidget* Widget = nullptr;
+	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
+	{
+		// Node with map
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromMapWidget::StaticClass());
+		Widget = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithMapWidgetClass);
+	}
+	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
+	{
+		// Node with array
+		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
+		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
 	}
 	if (!Widget) return nullptr;
 
-	Widget->SubNodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetClicked);
-	Widget->SubNodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeWidgetUpdate);
+	Widget->NodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked);
+	Widget->NodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate);
 	Widget->SetOwningNodeAndPath(ParentNode, PathFromParentNode);
 	
 	return Widget;
@@ -199,7 +207,7 @@ UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXM
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Class Options
 
-UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXMSSubNodeWidget* NodeWidget)
+UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget)
 {
 	if (!NodeWidget) return nullptr;
 	
@@ -214,13 +222,13 @@ UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXM
 		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeClassOptionsWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
 		if (!OptionsWidget) return nullptr;
 		
-		OptionsWidget->ClassOptionChosenDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnSubNodeClassSelected);
+		OptionsWidget->ClassOptionChosenDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeClassSelected);
 	}
 
 	OptionsWidget->SetVisibility(ESlateVisibility::Visible);
 	
 	TArray<UClass*> Options;
-	NodeWidget->GetSubNodeClassOptions(Options);
+	NodeWidget->GetNodeClassOptions(Options);
 	OptionsWidget->SetOptions(Options);
 	
 	return OptionsWidget;

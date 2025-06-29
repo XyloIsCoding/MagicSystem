@@ -10,9 +10,9 @@
 class UXMSArrayAddButtonWidget;
 class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
-class UXMSArraySubNodeWidget;
-class UXMSSubNodeWidget;
-class UXMSMapSubNodeWidget;
+class UXMSNodeContainerFromArrayWidget;
+class UXMSNodeContainerWidget;
+class UXMSNodeContainerFromMapWidget;
 class UXMSNode;
 
 USTRUCT(BlueprintType)
@@ -73,7 +73,7 @@ struct FXMSNodeData
 	TObjectPtr<UTexture2D> Glyph;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UXMSSubNodeWidget> WidgetClassOverride;
+	TSubclassOf<UXMSNodeContainerWidget> WidgetClassOverride;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;
@@ -102,9 +102,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSNodeClassOptionsWidget> NodeOptionsWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSMapSubNodeWidget> NodeWithMapWidgetClass;
+	TSubclassOf<UXMSNodeContainerFromMapWidget> NodeWithMapWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSArraySubNodeWidget> NodeWithArrayWidgetClass;
+	TSubclassOf<UXMSNodeContainerFromArrayWidget> NodeWithArrayWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UXMSArrayAddButtonWidget> ArrayAddWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI")

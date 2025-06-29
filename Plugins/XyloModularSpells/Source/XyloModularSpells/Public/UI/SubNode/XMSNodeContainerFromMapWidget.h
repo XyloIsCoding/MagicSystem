@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSSubNodeWidget.h"
-#include "XMSMapSubNodeWidget.generated.h"
+#include "XMSNodeContainerWidget.h"
+#include "XMSNodeContainerFromMapWidget.generated.h"
 
 class UXMSNodeIconWidget;
 class UXMSNodeWithMap;
@@ -13,22 +13,15 @@ class UXMSNodeWithMap;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSMapSubNodeWidget : public UXMSSubNodeWidget
+class XYLOMODULARSPELLS_API UXMSNodeContainerFromMapWidget : public UXMSNodeContainerWidget
 {
 	GENERATED_BODY()
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSMapSubNodeWidget
+	 * UXMSNodeContainerFromMapWidget
 	 */
-
-public:
-	UFUNCTION(BlueprintCallable)
-	virtual void UpdateSubNodeClassIcon();
-protected:
-	UPROPERTY(meta = (BindWidget))
-	UXMSNodeIconWidget* NodeClassIcon;
 
 public:
 	UFUNCTION(BlueprintCallable)
