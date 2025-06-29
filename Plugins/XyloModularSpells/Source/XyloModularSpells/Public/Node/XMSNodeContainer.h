@@ -238,6 +238,11 @@ protected:
 
 	virtual void NodeAdded(UXMSNode* InNode, int32 Index)
 	{
+		// We need to call this before we set parent on new node, else there will be an overlapping
+		// PathFromParentNode in the parent's node container (this function shift up path index to make
+		// space for new node)
+		ShiftUpPathIndexes(Index);
+		
 		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
 		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 		{
@@ -249,11 +254,24 @@ protected:
 	virtual void NodeRemoved(int32 Index, UXMSNode* OldNode)
 	{
 		if (OldNode) OldNode->RemovedFromParent_Internal();
+
+		// We need to call this after we removed old node from parent, else there will be an overlapping
+		// PathFromParentNode in the parent's node container (this function shift down path index so it would
+		// cover the index of the removed one)
+		ShiftDownPathIndexes(Index);
+		
 		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 		{
 			OwnerPtr->OnSubNodeRemoved(Identifier, Index);
 			OwnerPtr->SubNodeRemovedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
 		}
+	}
+
+	virtual void ShiftUpPathIndexes(int32 From) {}
+	virtual void ShiftDownPathIndexes(int32 From) {}
+	void ShiftPathIndex(UXMSNode* Node, int32 Amount)
+	{
+		if (Node) Node->PathFromParentNode.Index += Amount;
 	}
 
 	FName Identifier;
@@ -292,6 +310,93 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 
 	TXMSMultiNodeContainer& operator=(const TXMSMultiNodeContainer& Other) = delete;
 	TXMSMultiNodeContainer& operator=(TXMSMultiNodeContainer&& Other) = delete;
+
+	
+public:
+	virtual void Remove(int32 Index) override
+	{
+		if (!Nodes.IsValidIndex(Index)) return;
+
+		UXMSNode* OldNode = Nodes[Index].Get();
+		Nodes.RemoveAt(Index);
+		NodeRemoved(Index, OldNode);
+	}
+
+	/** Checks if a class is compatible with this container */
+	virtual bool IsCompatible(UClass* NodeClass) const override
+	{
+		if (!NodeClass) return false;
+		
+		if (!NodeClass->IsChildOf(BaseClass::StaticClass()))
+		{
+			return false;
+		}
+
+		if (!NodeClass->ImplementsInterface(BaseInterface::UClassType::StaticClass()))
+		{
+			return false;
+		}
+
+		if (!CompatibilityCheckFunction(NodeClass))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
+protected:
+	virtual void ShiftUpPathIndexes(int32 From) override
+	{
+		// A, B, C, D, E, F    <- Content
+		// 0, 1, 2, 3, 4, 5    <- Array index
+		// 0, 1, 2, 3, 4, 5	   <- Path.Index
+		
+		// A, B, C, X, D, E, F <- Inserted X in pos 3
+		// 0, 1, 2, 3, 4, 5, 6 <- Array index after adding
+		// 0, 1, 2, 3, 3, 4, 5 <- Path.Index after adding
+		
+		// 0, 1, 2, 3, 4, 5, 6 <- Path.Index after shift
+		// -> from array pos > 3 we shift up by 1 the Path.index
+
+		for (auto It = Nodes.CreateIterator(); It; ++It)
+		{
+			// Important: We use '>' (look at comment on top)
+			if (It.GetIndex() > From)
+			{
+				if (UXMSNode* Node = *It)
+				{
+					ShiftPathIndex(Node, 1);
+				}
+			}
+		}
+	}
+
+	virtual void ShiftDownPathIndexes(int32 From) override
+	{
+		// A, B, C, D, E, F    <- Content
+		// 0, 1, 2, 3, 4, 5	   <- Array index
+		// 0, 1, 2, 3, 4, 5	   <- Path.Index
+		
+		// A, B, D, E, F       <- removed C in pos 2
+		// 0, 1, 2, 3, 4       <- Array index after removing
+		// 0, 1, 3, 4, 5       <- Path.Index after removing
+		
+		// 0, 1, 2, 3, 4       <- Path.Index after shift
+		// -> from array pos >= 2 we shift down by 1 the Path.index
+
+		for (auto It = Nodes.CreateIterator(); It; ++It)
+		{
+			// Important: We use '>=' (look at comment on top)
+			if (It.GetIndex() >= From)
+			{
+				if (UXMSNode* Node = *It)
+				{
+					ShiftPathIndex(Node, -1);
+				}
+			}
+		}
+	}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -351,39 +456,6 @@ public:
 	}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-public:
-	virtual void Remove(int32 Index) override
-	{
-		if (!Nodes.IsValidIndex(Index)) return;
-
-		UXMSNode* OldNode = Nodes[Index].Get();
-		Nodes.RemoveAt(Index);
-		NodeRemoved(Index, OldNode);
-	}
-
-	/** Checks if a class is compatible with this container */
-	virtual bool IsCompatible(UClass* NodeClass) const override
-	{
-		if (!NodeClass) return false;
-		
-		if (!NodeClass->IsChildOf(BaseClass::StaticClass()))
-		{
-			return false;
-		}
-
-		if (!NodeClass->ImplementsInterface(BaseInterface::UClassType::StaticClass()))
-		{
-			return false;
-		}
-
-		if (!CompatibilityCheckFunction(NodeClass))
-		{
-			return false;
-		}
-		
-		return true;
-	}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
