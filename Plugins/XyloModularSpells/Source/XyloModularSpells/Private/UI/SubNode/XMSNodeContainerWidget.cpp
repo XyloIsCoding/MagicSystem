@@ -121,25 +121,22 @@ void UXMSNodeContainerWidget::BroadcastNodeClicked()
 
 void UXMSNodeContainerWidget::OnNodeChanged()
 {
+	SubNodeContainerWidgets.Empty();
 	UXMSNode* NewNode = GetNode();
 	if (!NewNode)
 	{
 		ResetNodeIcon();
 		BP_ResetNodeIcon();
-	}
-	else
-	{
-		UpdateNodeIcon(NewNode);
-		BP_UpdateNodeIcon(NewNode);
-
-		if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
-		{
-			NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerAdded);
-		}	
+		return;
 	}
 	
-	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
-	NodeChangedDelegate.Broadcast(this, NewNode);
+	UpdateNodeIcon(NewNode);
+	BP_UpdateNodeIcon(NewNode);
+
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
+	{
+		NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerAdded);
+	}
 }
 
 void UXMSNodeContainerWidget::OnSubNodeContainerAdded(const FXMSNodePathElement& PathElement)
@@ -154,7 +151,10 @@ void UXMSNodeContainerWidget::OnSubNodeContainerAdded(const FXMSNodePathElement&
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)
 {
 	if (PathElement != ThisNodePath) return;
+
 	OnNodeChanged();
+	// Broadcast change (in particular to inform canvas that it should redraw the sub-nodes chain)
+	NodeChangedDelegate.Broadcast(this, GetNode());
 }
 
 // ~Events

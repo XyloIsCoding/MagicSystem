@@ -104,5 +104,12 @@ protected:
 
 	// ~OwningNode
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+public:
+	/** Reference to the widgets representing the NodeContainers owned by this Node (this Node is the one contained
+	 * by this NodeContainer). Put differently these are the NodeContainers that hold the sub-nodes of this Node
+	 * This is emptied in OnNodeChanged, and filled by NodeCanvas when creating SubNodeContainers
+	 * The Last element should ALWAYS be the array terminator (XMSArrayAddButtonWidget) */
+	TArray<TWeakObjectPtr<UXMSNodeCanvasEntryWidget>> SubNodeContainerWidgets;
 	
 };

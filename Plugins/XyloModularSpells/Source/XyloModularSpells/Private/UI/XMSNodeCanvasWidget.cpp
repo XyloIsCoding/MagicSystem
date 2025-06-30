@@ -44,7 +44,7 @@ int32 UXMSNodeCanvasWidget::GetNodeWidgetIndex(UXMSNodeCanvasEntryWidget* NodeWi
 
 int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidget* NodeWidget)
 {
-	return  NodesWrapBox->AddChildAt(Index, NodeWidget);
+	return NodesWrapBox->AddChildAt(Index, NodeWidget);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -74,37 +74,29 @@ void UXMSNodeCanvasWidget::OnNodeClassSelected(UClass* NewClass)
 	}
 }
 
-void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewSubNode)
+void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode)
 {
 	// Only fill canvas for this node if not nullptr
-	if (!NewSubNode) return;
+	if (!NewNode) return;
 	
 	// Add widgets for all the sub-nodes of this sub-node
 	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
 	if (IndexInCanvas == INDEX_NONE) return;
 	
-	FillNodeCanvas(++IndexInCanvas, NewSubNode);
+	FillNodeCanvas(NodeWidget, ++IndexInCanvas, NewNode);
 }
 
 void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent)
 {
-	// TODO: instead of using NodeWidget, we use the array of NodeContainers ptr it owns, and use AddedSubNodePathFromParent.Index to select the right one
-	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
+	if (!NodeWidget) return;
+	if (!NodeWidget->SubNodeContainerWidgets.IsValidIndex(AddedSubNodePathFromParent.Index)) return;
+
+	// We add new container widget before the one at the needed index
+	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget->SubNodeContainerWidgets[AddedSubNodePathFromParent.Index].Get());
+	if (IndexInCanvas == INDEX_NONE) return;
 
 	// Fill canvas for this specific node container of parent node
-	// (is the same as calling FillNodeCanvas but only for one sub-node container instead of all of them)
-	UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(AddedSubNodeParent, AddedSubNodePathFromParent);
-	if (SubNodeWidget)
-	{
-		IndexInCanvas = AddNodeWidgetAt(IndexInCanvas, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
-		++IndexInCanvas;
-	}
-
-	// Recursive fill if sub-node is set
-	if (UXMSNode* AddedSubNode = AddedSubNodeParent->GetSubNode(AddedSubNodePathFromParent))
-	{
-		FillNodeCanvas(IndexInCanvas, AddedSubNode);
-	}
+	FillNodeCanvasSingleChild(NodeWidget, IndexInCanvas, AddedSubNodeParent, AddedSubNodePathFromParent);
 }
 
 // ~Events
@@ -117,70 +109,69 @@ void UXMSNodeCanvasWidget::InitializeNodeCanvas(UXMSNode* Node)
 {
 	NodesWrapBox->ClearChildren();
 	int32 Index = 0;
-	FillNodeCanvas(Index, Node);
+	FillNodeCanvas(nullptr, Index, Node);
 }
 
-void UXMSNodeCanvasWidget::FillNodeCanvas(int32& Index, UXMSNode* Node)
+void UXMSNodeCanvasWidget::FillNodeCanvas(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node)
 {
 	if (!Node) return;
 	
 	FXMSNodeQueryResult SubNodeContainers;
 	Node->GetAllSubNodes(SubNodeContainers);
 
-	for (const TPair<FXMSNodePathElement, UXMSNode*>& NodeContainer : SubNodeContainers.Nodes)
+	for (const TPair<FXMSNodePathElement, UXMSNode*>& SubNodeContainer : SubNodeContainers.Nodes)
 	{
-		UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(Node, NodeContainer.Key);
-		if (SubNodeWidget)
-		{
-			Index = AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
-			++Index;
-		}
-
-		// Recursive fill if sub-node is set
-		if (NodeContainer.Value)
-		{
-			FillNodeCanvas(Index, NodeContainer.Value);
-		}
+		FillNodeCanvasSingleChild(NodeWidget, Index, Node, SubNodeContainer.Key);
 	}
-
-	// TODO: find out why the order is not right
-	AddArrayTerminationWidget(Index, Node);
+	
+	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(Node))
+	{
+		AddArrayTerminationWidget(NodeWidget, Index, NodeWithArray);
+	}
 }
 
-void UXMSNodeCanvasWidget::AddArrayTerminationWidget(int32& Index, UXMSNode* Node)
+void UXMSNodeCanvasWidget::FillNodeCanvasSingleChild(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node, const FXMSNodePathElement& PathForSubNode)
 {
-	if (UXMSNodeWithArray* NewSubNodeWithArray = Cast<UXMSNodeWithArray>(Node))
+	if (!Node) return;
+	
+	UXMSNodeContainerWidget* SubNodeWidget = CreateNodeWidget(Node, PathForSubNode);
+	if (SubNodeWidget)
 	{
-		UXMSArrayAddButtonWidget* ArrayTerminator = CreateArrayTerminationWidget(NewSubNodeWithArray);
-		if (ArrayTerminator)
+		if (NodeWidget && Node->IsA<UXMSNodeWithArray>())
 		{
-			AddNodeWidgetAt(Index, ArrayTerminator);
-			++Index; // TODO: chekc if this fixed the + icon ordering issue
+			NodeWidget->SubNodeContainerWidgets.Insert(SubNodeWidget, FMath::Clamp(PathForSubNode.Index, 0, NodeWidget->SubNodeContainerWidgets.Num()));
 		}
+		Index = AddNodeWidgetAt(Index, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
+		++Index;
+	}
+
+	// Recursive fill if sub-node is set
+	if (UXMSNode* SubNode = Node->GetSubNode(PathForSubNode))
+	{
+		FillNodeCanvas(SubNodeWidget, Index, SubNode);
 	}
 }
 
-UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
+void UXMSNodeCanvasWidget::AddArrayTerminationWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithArray* Node)
+{
+	if (!Node) return;
+	
+	UXMSArrayAddButtonWidget* ArrayTerminator = CreateArrayTerminationWidget(Node);
+	if (ArrayTerminator)
+	{
+		if (NodeWidget) NodeWidget->SubNodeContainerWidgets.Add(ArrayTerminator);
+		Index = AddNodeWidgetAt(Index, ArrayTerminator);
+		++Index;
+	}
+}
+
+UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
 	if (!ParentNode) return nullptr;
 	
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
-
-	// Node with value
-	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
-	{
-		// Node with value
-		if (!Data || !Data->WidgetClassOverride) return nullptr;
-		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
-		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
-		if (Widget)
-		{
-			Widget->SetOwningNode(ParentNode);
-		}
-		return Widget;
-	}
 
 	// Node with sub-nodes
 	UXMSNodeContainerWidget* Widget = nullptr;
@@ -195,6 +186,13 @@ UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Pare
 		// Node with array
 		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
 		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
+	}
+	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
+	{
+		// Node with value
+		if (!Data || !Data->WidgetClassOverride) return nullptr;
+		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
+		Widget = CreateWidget<UXMSNodeContainerWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
 	}
 	if (!Widget) return nullptr;
 

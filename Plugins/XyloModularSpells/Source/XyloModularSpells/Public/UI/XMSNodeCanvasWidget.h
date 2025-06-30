@@ -56,7 +56,7 @@ protected:
 	/** Bound to ClassOptionsWidget */
 	virtual void OnNodeClassSelected(UClass* NewClass);
 	/** Bound to all SubNode Widgets */
-	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewSubNode);
+	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode);
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent);
 
@@ -69,9 +69,14 @@ protected:
 public:
 	void InitializeNodeCanvas(UXMSNode* Node);
 protected:
-	void FillNodeCanvas(int32& Index, UXMSNode* Node);
-	void AddArrayTerminationWidget(int32& Index, UXMSNode* Node);
-	UXMSNodeCanvasEntryWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
+	/** Fill node canvas for a specific node
+	 * @param NodeWidget: NodeContainerWidget representing the NodeContainer holding Node
+	 * @param Index: Where to insert the NodeContainerWidgets for Node and its children
+	 * @param Node: The node to fill the canvas with */
+	void FillNodeCanvas(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node);
+	void FillNodeCanvasSingleChild(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node, const FXMSNodePathElement& PathForSubNode);
+	void AddArrayTerminationWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithArray* Node);
+	UXMSNodeContainerWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
 	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode);
 	
 	// ~Canvas Filling
