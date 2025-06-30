@@ -141,11 +141,11 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 
 void UXMSNodeContainerWidget::OnSubNodeContainerAdded(const FXMSNodePathElement& PathElement)
 {
-	UXMSNode* OwningNodePtr = OwningNode.Get();
-	if (!OwningNodePtr) return;
+	UXMSNode* NewNode = GetNode();
+	if (!NewNode) return;
 	
 	// Broadcast addition (in particular to inform canvas that it should redraw the sub-nodes chain)
-	SubNodeContainerAddedDelegate.Broadcast(this, OwningNodePtr, PathElement);
+	SubNodeContainerAddedDelegate.Broadcast(this, NewNode, PathElement);
 }
 
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)

@@ -57,7 +57,14 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget*
 	
 	if (UXMSNodeClassOptionsWidget* OptionsWidget = CreateOptionsWidgetForNode(SubNodeWidget))
 	{
-		OptionsWidget->AddToViewport();
+		if (!OptionsWidget->IsInViewport())
+		{
+			OptionsWidget->AddToViewport();
+		}
+		else
+		{
+			OptionsWidget->SetFocus();
+		}
 		OptionsWidget->SetAlignmentInViewport(FVector2D(0.5f, 0.5f));
 		FVector2D PixelPos;
 		FVector2D ViewportPos;
@@ -84,6 +91,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* 
 	if (IndexInCanvas == INDEX_NONE) return;
 	
 	FillNodeCanvas(NodeWidget, ++IndexInCanvas, NewNode);
+	// TODO: Refresh widget to update order
 }
 
 void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent)
@@ -97,6 +105,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWi
 
 	// Fill canvas for this specific node container of parent node
 	FillNodeCanvasSingleChild(NodeWidget, IndexInCanvas, AddedSubNodeParent, AddedSubNodePathFromParent);
+	// TODO: Refresh widget to update order
 }
 
 // ~Events
