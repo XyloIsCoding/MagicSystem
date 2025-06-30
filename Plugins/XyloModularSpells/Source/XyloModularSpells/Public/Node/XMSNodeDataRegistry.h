@@ -7,6 +7,7 @@
 #include "XMSNodeDataRegistry.generated.h"
 
 
+class UXMSNodeValueWidget;
 class UXMSArrayAddButtonWidget;
 class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
@@ -74,6 +75,9 @@ struct FXMSNodeData
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UXMSNodeContainerWidget> WidgetClassOverride;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UXMSNodeValueWidget> ValueSelectorWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;

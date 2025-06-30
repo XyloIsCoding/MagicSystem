@@ -137,6 +137,10 @@ void UXMSNodeCanvasWidget::FillNodeCanvas(UXMSNodeContainerWidget* NodeWidget, i
 	{
 		AddArrayTerminationWidget(NodeWidget, Index, NodeWithArray);
 	}
+	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(Node))
+	{
+		AddValueSelectorWidget(NodeWidget, Index, NodeWithValue);
+	}
 }
 
 void UXMSNodeCanvasWidget::FillNodeCanvasSingleChild(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node, const FXMSNodePathElement& PathForSubNode)
@@ -174,6 +178,19 @@ void UXMSNodeCanvasWidget::AddArrayTerminationWidget(UXMSNodeContainerWidget* No
 	}
 }
 
+void UXMSNodeCanvasWidget::AddValueSelectorWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithValue* Node)
+{
+	if (!Node) return;
+	
+	UXMSNodeValueWidget* ValueSelector = CreateValueSelectorWidget(Node);
+	if (ValueSelector)
+	{
+		if (NodeWidget) NodeWidget->SubNodeContainerWidgets.Add(ValueSelector);
+		Index = AddNodeWidgetAt(Index, ValueSelector);
+		++Index;
+	}
+}
+
 UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
 	if (!ParentNode) return nullptr;
@@ -196,13 +213,6 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
 		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
 	}
-	else if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
-	{
-		// Node with value
-		if (!Data || !Data->WidgetClassOverride) return nullptr;
-		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
-		Widget = CreateWidget<UXMSNodeContainerWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
-	}
 	if (!Widget) return nullptr;
 
 	Widget->NodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked);
@@ -213,20 +223,36 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 	return Widget;
 }
 
-UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode)
+UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode)
 {
-	if (!ParentNode) return nullptr;
+	if (!ArrayNode) return nullptr;
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 		
 	UXMSArrayAddButtonWidget* SubNodeWidget = CreateWidget<UXMSArrayAddButtonWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayAddWidgetClass);
 	if (SubNodeWidget)
 	{
-		SubNodeWidget->SetOwningNode(ParentNode);
+		SubNodeWidget->SetOwningNode(ArrayNode);
 		if (NodeDataRegistry->ArrayAddTexture)
 		{
 			SubNodeWidget->Icon->SetDisplayIcon(NodeDataRegistry->ArrayAddTexture);
 		}
+	}
+	return SubNodeWidget;
+}
+
+UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode)
+{
+	if (!ValueNode) return nullptr;
+	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
+	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ValueNode->GetClass());
+	if (!Data) return nullptr;
+		
+	UXMSNodeValueWidget* SubNodeWidget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
+	if (SubNodeWidget)
+	{
+		SubNodeWidget->SetOwningNode(ValueNode);
 	}
 	return SubNodeWidget;
 }

@@ -8,6 +8,8 @@
 #include "XMSTypes.h"
 #include "XMSNodeCanvasWidget.generated.h"
 
+class UXMSNodeWithValue;
+class UXMSNodeValueWidget;
 class UXMSArrayAddButtonWidget;
 class UXMSNodeWithArray;
 class UXMSNodeCanvasEntryWidget;
@@ -76,8 +78,10 @@ protected:
 	void FillNodeCanvas(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node);
 	void FillNodeCanvasSingleChild(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node, const FXMSNodePathElement& PathForSubNode);
 	void AddArrayTerminationWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithArray* Node);
+	void AddValueSelectorWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithValue* Node);
 	UXMSNodeContainerWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
-	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ParentNode);
+	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode);
+	UXMSNodeValueWidget* CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode);
 	
 	// ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/
