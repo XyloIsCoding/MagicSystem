@@ -163,13 +163,12 @@ UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Pare
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
-	if (!Data) return nullptr;
 
 	// Node with value
 	if (UXMSNodeWithValue* NodeWithValue = Cast<UXMSNodeWithValue>(ParentNode))
 	{
 		// Node with value
-		if (!Data->WidgetClassOverride) return nullptr;
+		if (!Data || !Data->WidgetClassOverride) return nullptr;
 		if (!Data->WidgetClassOverride->IsChildOf(UXMSNodeValueWidget::StaticClass())) return nullptr;
 		UXMSNodeValueWidget* Widget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->WidgetClassOverride);
 		if (Widget)
@@ -184,13 +183,13 @@ UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Pare
 	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
 	{
 		// Node with map
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromMapWidget::StaticClass());
+		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromMapWidget::StaticClass());
 		Widget = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithMapWidgetClass);
 	}
 	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
 		// Node with array
-		bool bHasOverride = Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
+		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
 		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
 	}
 	if (!Widget) return nullptr;
