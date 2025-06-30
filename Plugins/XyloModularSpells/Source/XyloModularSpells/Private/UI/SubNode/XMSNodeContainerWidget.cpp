@@ -167,6 +167,7 @@ void UXMSNodeContainerWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const
 {
 	ThisNodePath = PathFromOwningNode;
 	SetOwningNode(InOwningNode);
+	OnNodeChanged();
 }
 
 // ~OwningNode

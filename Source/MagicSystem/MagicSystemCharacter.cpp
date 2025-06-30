@@ -23,6 +23,7 @@
 #include "Spell/XMSSpellActor.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Node/Runnable/XMSRootInstructionNode.h"
 #include "UI/XMSNodeCanvasWidget.h"
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 
@@ -103,11 +104,12 @@ void AMagicSystemCharacter::CreateWidget()
 
 void AMagicSystemCharacter::CreateNode()
 {
-	TestNode = NewObject<UXMSProgramNode>(this);
-
+	TestNode = NewObject<UXMSRootInstructionNode>(this);
+	UXMSProgramNode* Program = NewObject<UXMSProgramNode>(this);
+	TestNode->Instruction.Set(Program);
 
 	UXMSVariableDeclarationNode* Variable1Declaration = NewObject<UXMSVariableDeclarationNode>(this);
-	TestNode->Instructions.Add(Variable1Declaration);
+	Program->Instructions.Add(Variable1Declaration);
 	UXMSVariableTypeValueNode* Variable1Type = NewObject<UXMSVariableTypeValueNode>(this);
 	Variable1Declaration->VariableType.Set(Variable1Type);
 	Variable1Type->SetVariableType(XMSVariableType::EVT_Integer);
@@ -116,7 +118,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1Name->SetString("Pippo");
 
 	UXMSVariableSetterNode* Variable1Setter = NewObject<UXMSVariableSetterNode>(this);
-	TestNode->Instructions.Add(Variable1Setter);
+	Program->Instructions.Add(Variable1Setter);
 	UXMSIntegerVarSetterNode* Variable1IntegerSetter = NewObject<UXMSIntegerVarSetterNode>(this);
 	Variable1Setter->Setter.Set(Variable1IntegerSetter);
 	UXMSVariableNameNode* Variable1NameGetter = NewObject<UXMSVariableNameNode>(this);
@@ -127,7 +129,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1Value->SetInteger(10);
 
 	UXMSPrintInstructionNode* PrintVariable1 = NewObject<UXMSPrintInstructionNode>(this);
-	TestNode->Instructions.Add(PrintVariable1);
+	Program->Instructions.Add(PrintVariable1);
 	UXMSIntegerProviderNode* Variable1IntegerProvider = NewObject<UXMSIntegerProviderNode>(this);
 	PrintVariable1->OutputString.Set(Variable1IntegerProvider);
 	UXMSIntegerVarGetterNode* Variable1IntegerGetter = NewObject<UXMSIntegerVarGetterNode>(this);
@@ -137,7 +139,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1NameGetterP2->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
 
 	UXMSVariableDeclarationNode* Variable2Declaration = NewObject<UXMSVariableDeclarationNode>(this);
-	TestNode->Instructions.Add(Variable2Declaration);
+	Program->Instructions.Add(Variable2Declaration);
 	UXMSVariableTypeValueNode* Variable2Type = NewObject<UXMSVariableTypeValueNode>(this);
 	Variable2Declaration->VariableType.Set(Variable2Type);
 	Variable2Type->SetVariableType(XMSVariableType::EVT_Integer);
@@ -146,7 +148,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable2Name->SetString("Pluto");
 
 	UXMSVariableSetterNode* Variable2Setter = NewObject<UXMSVariableSetterNode>(this);
-	TestNode->Instructions.Add(Variable2Setter);
+	Program->Instructions.Add(Variable2Setter);
 	UXMSIntegerVarSetterNode* Variable2IntegerSetter = NewObject<UXMSIntegerVarSetterNode>(this);
 	Variable2Setter->Setter.Set(Variable2IntegerSetter);
 	UXMSVariableNameNode* Variable2NameGetter = NewObject<UXMSVariableNameNode>(this);
@@ -157,7 +159,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable2Value->SetInteger(15);
 
 	UXMSPrintInstructionNode* PrintVariable2 = NewObject<UXMSPrintInstructionNode>(this);
-	TestNode->Instructions.Add(PrintVariable2);
+	Program->Instructions.Add(PrintVariable2);
 	UXMSIntegerProviderNode* Variable2IntegerProvider = NewObject<UXMSIntegerProviderNode>(this);
 	PrintVariable2->OutputString.Set(Variable2IntegerProvider);
 	UXMSIntegerVarGetterNode* Variable2IntegerGetter = NewObject<UXMSIntegerVarGetterNode>(this);
@@ -213,7 +215,7 @@ void AMagicSystemCharacter::SerializeTestNode(const FString& Path)
 	UE_LOG(LogTemp, Warning, TEXT("AMagicSystemCharacter::SerializeTestNode >> Running TestNodeDeserialized ..."));
 	AXMSSpellActor* Spell = GetWorld()->SpawnActorDeferred<AXMSSpellActor>(AXMSSpellActor::StaticClass(), GetActorTransform(), this, this);
 
-	UXMSProgramNode* DeserializedNode = NewObject<UXMSProgramNode>(Spell);
+	UXMSRootInstructionNode* DeserializedNode = NewObject<UXMSRootInstructionNode>(Spell);
 	DeserializedNode->DeserializeFromJson(NewNodeJson);
 	Spell->Instruction.Set(DeserializedNode);
 	

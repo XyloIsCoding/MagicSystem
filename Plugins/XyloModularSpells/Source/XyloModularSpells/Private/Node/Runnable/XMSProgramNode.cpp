@@ -18,12 +18,16 @@ int32 UXMSProgramNode::ExecuteNode()
 {
 	TArray<IXMSRunnableNodeInterface*> InstructionsArray;
 	Instructions.GetAll(InstructionsArray);
+	int32 SuccessfulInstructions = 0;
 	for (IXMSRunnableNodeInterface* RunnableNodeInterface : InstructionsArray)
 	{
 		if (RunnableNodeInterface)
 		{
-			RunnableNodeInterface->ExecuteNode();
+			if (RunnableNodeInterface->ExecuteNode() != 0)
+			{
+				++SuccessfulInstructions;
+			}
 		}
 	}
-	return 0;
+	return SuccessfulInstructions;
 }

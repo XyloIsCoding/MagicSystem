@@ -10,6 +10,7 @@
 #include "SpellEditor/XMSSpellEditorInterface.h"
 #include "MagicSystemCharacter.generated.h"
 
+class UXMSRootInstructionNode;
 class UXMSNodeCanvasWidget;
 class UXMSProgramNode;
 class UXMSStringProviderNode;
@@ -86,9 +87,7 @@ public:
 
 	
 	UPROPERTY()
-	TObjectPtr<UXMSProgramNode> TestNode;
-	UPROPERTY()
-	TObjectPtr<UXMSProgramNode> TestNodeDeserialized;
+	TObjectPtr<UXMSRootInstructionNode> TestNode;
 
 	UFUNCTION(BlueprintCallable)
 	void CreateWidget();
