@@ -39,3 +39,24 @@ int32 UXMSWrapBox::AddChildAt(int32 Index, UWidget* Content)
 
 	return ReturnIndex;
 }
+
+void UXMSWrapBox::Rebuild()
+{
+	TArray<UWidget*> Widgets;
+	for (auto It = Slots.CreateIterator(); It; ++It)
+	{
+		UPanelSlot* PanelSlot = It->Get();
+		if (PanelSlot && PanelSlot->Content)
+		{
+			Widgets.Add(PanelSlot->Content);
+		}
+	}
+	
+	ClearChildren();
+	
+	for (UWidget* Widget : Widgets)
+	{
+		AddChild(Widget);
+	}
+}
+

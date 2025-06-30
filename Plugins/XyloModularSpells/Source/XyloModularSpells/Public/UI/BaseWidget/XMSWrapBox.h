@@ -16,4 +16,5 @@ class XYLOMODULARSPELLS_API UXMSWrapBox : public UWrapBox
 
 public:
 	int32 AddChildAt(int32 Index, UWidget* Content);
+	void Rebuild();
 };

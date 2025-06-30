@@ -91,7 +91,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* 
 	if (IndexInCanvas == INDEX_NONE) return;
 	
 	FillNodeCanvas(NodeWidget, ++IndexInCanvas, NewNode);
-	// TODO: Refresh widget to update order
+	NodesWrapBox->Rebuild();
 }
 
 void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent)
@@ -105,7 +105,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWi
 
 	// Fill canvas for this specific node container of parent node
 	FillNodeCanvasSingleChild(NodeWidget, IndexInCanvas, AddedSubNodeParent, AddedSubNodePathFromParent);
-	// TODO: Refresh widget to update order
+	NodesWrapBox->Rebuild();
 }
 
 // ~Events
