@@ -86,21 +86,25 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* 
 	FillNodeCanvas(++IndexInCanvas, NewSubNode);
 }
 
-void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNode, const FXMSNodePathElement& AddedSubNodePathFromParent)
+void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent)
 {
-	// TODO: find index to add the new node at
+	// TODO: instead of using NodeWidget, we use the array of NodeContainers ptr it owns, and use AddedSubNodePathFromParent.Index to select the right one
 	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget);
 
-	// Add a widget for the new sub-node
-	UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(AddedSubNode, AddedSubNodePathFromParent);
+	// Fill canvas for this specific node container of parent node
+	// (is the same as calling FillNodeCanvas but only for one sub-node container instead of all of them)
+	UXMSNodeCanvasEntryWidget* SubNodeWidget = CreateNodeWidget(AddedSubNodeParent, AddedSubNodePathFromParent);
 	if (SubNodeWidget)
 	{
 		IndexInCanvas = AddNodeWidgetAt(IndexInCanvas, SubNodeWidget); // We are setting Index to result, since insertion Index is clamped
 		++IndexInCanvas;
 	}
 
-	// Fill canvas for the just added widget
-	FillNodeCanvas(IndexInCanvas, AddedSubNode);
+	// Recursive fill if sub-node is set
+	if (UXMSNode* AddedSubNode = AddedSubNodeParent->GetSubNode(AddedSubNodePathFromParent))
+	{
+		FillNodeCanvas(IndexInCanvas, AddedSubNode);
+	}
 }
 
 // ~Events

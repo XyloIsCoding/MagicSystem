@@ -58,7 +58,7 @@ protected:
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewSubNode);
 	/** Bound to all SubNode Widgets */
-	virtual void OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNode, const FXMSNodePathElement& AddedSubNodePathFromParent);
+	virtual void OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent);
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
