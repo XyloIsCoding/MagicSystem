@@ -16,6 +16,21 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeContainerFromArrayWidget : public UXMSNodeContainerWidget
 {
 	GENERATED_BODY()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeCanvasEntryWidget
+	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// OwningNode
+	
+protected:
+	virtual void OnOwningNodeSet() override;
+
+	// ~OwningNode
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,5 +43,16 @@ protected:
 	void RemoveSubNode();
 	UFUNCTION(BlueprintCallable)
 	void InsertSubNode();
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Events
+
+private:
+	void OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement);
+	void OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement);
+
+	// ~Events
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 	
 };

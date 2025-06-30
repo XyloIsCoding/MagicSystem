@@ -18,6 +18,28 @@ UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& Objec
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UXMSNodeCanvasEntryWidget
+ */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// OwningNode
+
+void UXMSNodeContainerWidget::OnOwningNodeSet()
+{
+	Super::OnOwningNodeSet();
+
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
+	{
+		OwningNodePtr->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
+	}
+}
+
+// ~OwningNode
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * UXMSNodeContainerWidget
  */
 
@@ -103,7 +125,7 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	if (!NewNode)
 	{
 		ResetNodeIcon();
-		BP_NodeIcon();
+		BP_ResetNodeIcon();
 	}
 	else
 	{
@@ -112,7 +134,7 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 
 		if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
 		{
-			NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeAdded);
+			NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerAdded);
 		}	
 	}
 	
@@ -120,41 +142,19 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	NodeChangedDelegate.Broadcast(this, NewNode);
 }
 
-void UXMSNodeContainerWidget::OnSubNodeAdded(const FXMSNodePathElement& PathElement)
+void UXMSNodeContainerWidget::OnSubNodeContainerAdded(const FXMSNodePathElement& PathElement)
 {
 	UXMSNode* OwningNodePtr = OwningNode.Get();
 	if (!OwningNodePtr) return;
 	
 	// Broadcast addition (in particular to inform canvas that it should redraw the sub-nodes chain)
-	SubNodeAddedDelegate.Broadcast(this, OwningNodePtr, PathElement);
+	SubNodeContainerAddedDelegate.Broadcast(this, OwningNodePtr, PathElement);
 }
 
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)
 {
 	if (PathElement != ThisNodePath) return;
 	OnNodeChanged();
-}
-
-void UXMSNodeContainerWidget::OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement)
-{
-	// If a node got added before this one, then we want to shift up the index to account for that
-	// Look at TXMSMultiNodeContainer::ShiftUpPathIndexes
-	// We do not have to worry about risking increasing the index of the added NodeContainerWidget because
-	// that widget is created in OnSubNodeAdded (still bound to SubNodeAddedDelegate)
-	if (ThisNodePath.Index > PathElement.Index)
-	{
-		ThisNodePath.Index += 1;
-	}
-}
-
-void UXMSNodeContainerWidget::OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement)
-{
-	// If a node got removed before this one, then we want to shift down the index to account for that
-	// Look at TXMSMultiNodeContainer::ShiftDownPathIndexes
-	if (ThisNodePath.Index > PathElement.Index)
-	{
-		ThisNodePath.Index -= 1;
-	}
 }
 
 // ~Events
@@ -166,15 +166,6 @@ void UXMSNodeContainerWidget::OnOwningNodeSubNodeRemoved(const FXMSNodePathEleme
 void UXMSNodeContainerWidget::SetOwningNodeAndPath(UXMSNode* InOwningNode, const FXMSNodePathElement& PathFromOwningNode)
 {
 	ThisNodePath = PathFromOwningNode;
-	if (InOwningNode)
-	{
-		InOwningNode->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
-		if (UXMSNodeWithArray* OwningNodeWithArray = Cast<UXMSNodeWithArray>(InOwningNode))
-		{
-			OwningNodeWithArray->SubNodeAddedDelegate.AddUObject(this, &UXMSNodeContainerWidget::OnOwningNodeSubNodeAdded);
-			OwningNodeWithArray->SubNodeRemovedDelegate.AddUObject(this, &UXMSNodeContainerWidget::OnOwningNodeSubNodeRemoved);
-		}
-	}
 	SetOwningNode(InOwningNode);
 }
 

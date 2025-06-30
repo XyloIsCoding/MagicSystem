@@ -200,7 +200,7 @@ UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Pare
 
 	Widget->NodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked);
 	Widget->NodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate);
-	Widget->SubNodeAddedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded);
+	Widget->SubNodeContainerAddedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded);
 	Widget->SetOwningNodeAndPath(ParentNode, PathFromParentNode);
 	
 	return Widget;

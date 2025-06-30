@@ -14,7 +14,7 @@ class UXMSNode;
 class UXMSNodeContainerWidget;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSNodeWidgetUpdatedSignature, UXMSNodeContainerWidget*, UXMSNode*)
-DECLARE_MULTICAST_DELEGATE_ThreeParams(FXMSNodeWidgetSubNodeAddedSignature, UXMSNodeContainerWidget*, UXMSNode* /* Parent of Added SubNode */ , const FXMSNodePathElement& /* Path to Added SubNode */)
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FXMSNodeWidgetSubNodeContainerAddedSignature, UXMSNodeContainerWidget*, UXMSNode* /* Parent of Added SubNode */ , const FXMSNodePathElement& /* Path to Added SubNode */)
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeWidgetClickedSignature, UXMSNodeContainerWidget*)
 
 /**
@@ -27,6 +27,21 @@ class XYLOMODULARSPELLS_API UXMSNodeContainerWidget : public UXMSNodeCanvasEntry
 
 public:
 	UXMSNodeContainerWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeCanvasEntryWidget
+	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// OwningNode
+	
+protected:
+	virtual void OnOwningNodeSet() override;
+
+	// ~OwningNode
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +69,7 @@ public:
 protected:
 	virtual void ResetNodeIcon();
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_NodeIcon();
+	void BP_ResetNodeIcon();
 	virtual void UpdateNodeIcon(UXMSNode* Node);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_UpdateNodeIcon(UXMSNode* Node);
@@ -65,18 +80,16 @@ protected:
 public:
 	FXMSNodeWidgetClickedSignature NodeClickedDelegate;
 	FXMSNodeWidgetUpdatedSignature NodeChangedDelegate;
-	FXMSNodeWidgetSubNodeAddedSignature SubNodeAddedDelegate;
+	FXMSNodeWidgetSubNodeContainerAddedSignature SubNodeContainerAddedDelegate;
 	UFUNCTION(BlueprintCallable)
 	void BroadcastNodeClicked();
 protected:
 	virtual void OnNodeChanged();
 	/** Called if the node in this container is a NodeWithArray, and an element is added to it */
-	virtual void OnSubNodeAdded(const FXMSNodePathElement& PathElement);
+	virtual void OnSubNodeContainerAdded(const FXMSNodePathElement& PathElement);
 private:
 	void OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement);
-	void OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement);
-	void OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement);
-
+	
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
