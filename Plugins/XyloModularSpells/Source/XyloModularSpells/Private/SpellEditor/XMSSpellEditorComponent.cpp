@@ -174,7 +174,7 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController)
+UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController, UXMSNode* RootNode)
 {
 	if (!PlayerController) return nullptr;
 
@@ -187,6 +187,7 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 	if (Widget)
 	{
 		Widget->SetSpellEditorComponent(this);
+		Widget->InitializeNodeCanvas(RootNode);
 	}
 	return Widget;
 }

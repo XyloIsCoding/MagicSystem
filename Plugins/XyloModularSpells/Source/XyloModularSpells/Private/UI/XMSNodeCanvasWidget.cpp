@@ -55,7 +55,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget*
 	SelectedSubNodeWidget = SubNodeWidget;
 	if (!SubNodeWidget) return;
 	
-	if (UXMSNodeClassOptionsWidget* OptionsWidget = CreateOptionsWidgetForNode(SubNodeWidget))
+	if (UXMSNodeClassOptionsWidget* OptionsWidget = GetOrCreateOptionsWidgetForNode(SubNodeWidget))
 	{
 		if (!OptionsWidget->IsInViewport())
 		{
@@ -65,6 +65,7 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget*
 		{
 			OptionsWidget->SetFocus();
 		}
+		OptionsWidget->SetVisibility(ESlateVisibility::Visible);
 		OptionsWidget->SetAlignmentInViewport(FVector2D(0.5f, 0.5f));
 		FVector2D PixelPos;
 		FVector2D ViewportPos;
@@ -263,7 +264,7 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Class Options
 
-UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget)
+UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::GetOrCreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget)
 {
 	if (!NodeWidget) return nullptr;
 	
@@ -281,8 +282,6 @@ UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::CreateOptionsWidgetForNode(UXM
 		OptionsWidget->ClassOptionChosenDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeClassSelected);
 	}
 
-	OptionsWidget->SetVisibility(ESlateVisibility::Visible);
-	
 	TArray<UClass*> Options;
 	NodeWidget->GetNodeClassOptions(Options);
 	OptionsWidget->SetOptions(Options);

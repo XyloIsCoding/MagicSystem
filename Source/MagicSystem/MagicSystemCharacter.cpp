@@ -86,8 +86,7 @@ void AMagicSystemCharacter::CreateWidget()
 	
 	if (!NodeCanvasWidget)
 	{
-		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>());
-		NodeCanvasWidget->InitializeNodeCanvas(TestNode);
+		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>(), TestNode);
 		if (!NodeCanvasWidget) return;
 	}
 
@@ -97,9 +96,9 @@ void AMagicSystemCharacter::CreateWidget()
 	}
 	else
 	{
-		NodeCanvasWidget->SetVisibility(ESlateVisibility::Visible);
 		NodeCanvasWidget->SetFocus();
 	}
+	NodeCanvasWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AMagicSystemCharacter::CreateNode()

@@ -90,7 +90,7 @@ protected:
 	// Class Options
 
 public:
-	virtual UXMSNodeClassOptionsWidget* CreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget);
+	virtual UXMSNodeClassOptionsWidget* GetOrCreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget);
 protected:
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNodeClassOptionsWidget> ClassOptionsWidget;
