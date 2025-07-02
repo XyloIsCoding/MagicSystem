@@ -197,21 +197,18 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 	
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
-	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ParentNode->GetClass());
 
 	// Node with sub-nodes
 	UXMSNodeContainerWidget* Widget = nullptr;
 	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
 	{
 		// Node with map
-		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromMapWidget::StaticClass());
-		Widget = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithMapWidgetClass);
+		Widget = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), NodeDataRegistry->NodeWithMapWidgetClass);
 	}
 	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
 		// Node with array
-		bool bHasOverride = Data && Data->WidgetClassOverride && Data->WidgetClassOverride->IsChildOf(UXMSNodeContainerFromArrayWidget::StaticClass());
-		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), bHasOverride ? Data->WidgetClassOverride : NodeDataRegistry->NodeWithArrayWidgetClass);
+		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), NodeDataRegistry->NodeWithArrayWidgetClass);
 	}
 	if (!Widget) return nullptr;
 

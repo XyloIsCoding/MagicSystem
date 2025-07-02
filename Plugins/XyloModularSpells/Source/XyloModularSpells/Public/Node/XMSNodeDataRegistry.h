@@ -74,9 +74,6 @@ struct FXMSNodeData
 	TObjectPtr<UTexture2D> Glyph;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UXMSNodeContainerWidget> WidgetClassOverride;
-
-	UPROPERTY(EditAnywhere)
 	TSubclassOf<UXMSNodeValueWidget> ValueSelectorWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
