@@ -3,6 +3,9 @@
 #include "XyloModularSpells.h"
 
 
+DEFINE_LOG_CATEGORY(LogXyloModularSpells);
+
+
 #define LOCTEXT_NAMESPACE "FXyloModularSpellsModule"
 
 void FXyloModularSpellsModule::StartupModule()

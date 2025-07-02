@@ -6,6 +6,7 @@
 #include "XMSModularSpellsSubsystem.h"
 #include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
+#include "XyloModularSpells.h"
 #include "Node/XMSNodeContainer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +24,7 @@ TSharedPtr<FJsonObject> UXMSNodeWithMap::SerializeToJson(bool& bOutSuccess)
 	{
 		if (!SubNode.Value)
 		{
-			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
 
@@ -52,7 +53,7 @@ void UXMSNodeWithMap::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 	{
 		if (!SubNode.Value)
 		{
-			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
 
@@ -96,7 +97,7 @@ void UXMSNodeWithMap::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 	{
 		if (!SubNode.Value)
 		{
-			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
 		OutNodes.Nodes.Add(FXMSNodePathElement(SubNode.Key), SubNode.Value->GetGeneric());
@@ -109,7 +110,7 @@ void UXMSNodeWithMap::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
 	{
 		if (!SubNode.Value)
 		{
-			UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
+			UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNode.Key.ToString())
 			continue;
 		}
 		OutNodes.Add(SubNode.Value->GetGeneric());
@@ -126,7 +127,7 @@ void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElem
 	FXMSNodeContainer** NodeContainerFound = SubNodes.Find(PathElement.Identifier);
 	if (!NodeContainerFound)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *PathElement.Identifier.ToString())
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *PathElement.Identifier.ToString())
 		return;
 	}
 	

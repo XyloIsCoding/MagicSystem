@@ -6,6 +6,7 @@
 #include "XMSModularSpellsSubsystem.h"
 #include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
+#include "XyloModularSpells.h"
 #include "Node/XMSNodeContainer.h"
 
 
@@ -21,7 +22,7 @@ TSharedPtr<FJsonObject> UXMSNodeWithArray::SerializeToJson(bool& bOutSuccess)
 
 	if (!SubNodes.Value)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithArray::SerializeToJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
 		return NodeJson;
 	}
 
@@ -53,7 +54,7 @@ void UXMSNodeWithArray::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 
 	if (!SubNodes.Value)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::DeserializeFromJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithArray::DeserializeFromJson >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
 		return;
 	}
 	
@@ -99,7 +100,7 @@ void UXMSNodeWithArray::GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const
 {
 	if (!SubNodes.Value)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithArray::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
 		return;
 	}
 	TArray<UXMSNode*> SubNodesList;
@@ -125,7 +126,7 @@ void UXMSNodeWithArray::GetSubNodeClassOptions(const FXMSNodePathElement& PathEl
 {
 	if (!SubNodes.Value)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UXMSNodeWithArray::GetSubNodeClassOptions >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithArray::GetSubNodeClassOptions >> Sub-node container ptr not found for [%s]"), *SubNodes.Key.ToString())
 		return;
 	}
 

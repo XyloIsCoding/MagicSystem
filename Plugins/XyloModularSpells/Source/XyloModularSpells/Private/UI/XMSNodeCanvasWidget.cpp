@@ -5,6 +5,7 @@
 
 #include "XMSModularSpellsSubsystem.h"
 #include "XMSNodeStaticLibrary.h"
+#include "XyloModularSpells.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
@@ -245,6 +246,12 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 	if (!NodeDataRegistry) return nullptr;
 	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ValueNode->GetClass());
 	if (!Data) return nullptr;
+
+	if (!Data->ValueSelectorWidgetClass)
+	{
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeCanvasWidget::CreateValueSelectorWidget >> ValueSelectorWidgetClass non specified for [%s]"), *ValueNode->GetClass()->GetName())
+		return nullptr;
+	}
 		
 	UXMSNodeValueWidget* SubNodeWidget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
 	if (SubNodeWidget)
