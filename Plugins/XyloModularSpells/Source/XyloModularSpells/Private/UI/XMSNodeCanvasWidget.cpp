@@ -99,11 +99,11 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWi
 {
 	if (!NodeWidget) return;
 	if (!NodeWidget->SubNodeContainerWidgets.IsValidIndex(AddedSubNodePathFromParent.Index)) return;
-
+	
 	// We add new container widget before the one at the needed index
 	int32 IndexInCanvas = GetNodeWidgetIndex(NodeWidget->SubNodeContainerWidgets[AddedSubNodePathFromParent.Index].Get());
 	if (IndexInCanvas == INDEX_NONE) return;
-
+	
 	// Fill canvas for this specific node container of parent node
 	FillNodeCanvasSingleChild(NodeWidget, IndexInCanvas, AddedSubNodeParent, AddedSubNodePathFromParent);
 	NodesWrapBox->Rebuild();
@@ -186,7 +186,6 @@ void UXMSNodeCanvasWidget::AddValueSelectorWidget(UXMSNodeContainerWidget* NodeW
 	UXMSNodeValueWidget* ValueSelector = CreateValueSelectorWidget(Node);
 	if (ValueSelector)
 	{
-		if (NodeWidget) NodeWidget->SubNodeContainerWidgets.Add(ValueSelector);
 		Index = AddNodeWidgetAt(Index, ValueSelector);
 		++Index;
 	}
