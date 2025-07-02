@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Base/XMSNodeWithValue.h"
 #include "Engine/DataAsset.h"
 #include "XMSNodeDataRegistry.generated.h"
 
@@ -36,7 +37,7 @@ struct FXMSSubNodeData
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(MultiLine=true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = true))
 	FText Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -55,6 +56,7 @@ struct FXMSNodeData
 	FXMSNodeData(UClass* InClass)
 		: NodeClass(InClass)
 	{
+		bIsNodeWithValue = InClass->IsChildOf(UXMSNodeWithValue::StaticClass());
 		UpdateSubNodes();
 	}
 
@@ -63,20 +65,22 @@ struct FXMSNodeData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UClass> NodeClass;
+	UPROPERTY()
+	bool bIsNodeWithValue = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(MultiLine=true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = true))
 	FText Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> Glyph;
-
-	UPROPERTY(EditAnywhere)
+	
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
 	TSubclassOf<UXMSNodeValueWidget> ValueSelectorWidgetClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta=(TitleProperty="Identifier"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta = (TitleProperty = "Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;
 };
 
@@ -121,7 +125,7 @@ public:
 	FXMSNodeData* GetNodeData(UClass* NodeClass);
 private:
 	void UpdateNodeDataArray();
-	UPROPERTY(EditAnywhere, EditFixedSize, meta=(TitleProperty="NodeClass"))
+	UPROPERTY(EditAnywhere, EditFixedSize, meta = (TitleProperty = "NodeClass"))
 	TArray<FXMSNodeData> NodesData;
 	
 };
