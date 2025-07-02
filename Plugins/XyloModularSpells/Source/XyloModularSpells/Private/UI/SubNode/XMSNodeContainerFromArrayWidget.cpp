@@ -15,6 +15,23 @@
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+// Event
+
+void UXMSNodeContainerFromArrayWidget::OnOwningNodeRemovedFromParent()
+{
+	Super::OnOwningNodeRemovedFromParent();
+
+	if (UXMSNodeWithArray* OwningNodePtr = Cast<UXMSNodeWithArray>(OwningNode.Get()))
+	{
+		OwningNodePtr->SubNodeAddedDelegate.Remove(OnOwningNodeSubNodeAddedHandle);
+		OwningNodePtr->SubNodeRemovedDelegate.Remove(OnOwningNodeSubNodeRemovedHandle);
+	}
+}
+
+// ~Event
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 // OwningNode
 
 void UXMSNodeContainerFromArrayWidget::OnOwningNodeSet()
@@ -23,8 +40,8 @@ void UXMSNodeContainerFromArrayWidget::OnOwningNodeSet()
 
 	if (UXMSNodeWithArray* OwningNodePtr = Cast<UXMSNodeWithArray>(OwningNode.Get()))
 	{
-		OwningNodePtr->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeAdded);
-		OwningNodePtr->SubNodeRemovedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeRemoved);
+		OnOwningNodeSubNodeAddedHandle = OwningNodePtr->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeAdded);
+		OnOwningNodeSubNodeRemovedHandle = OwningNodePtr->SubNodeRemovedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeRemoved);
 	}
 }
 
@@ -75,6 +92,10 @@ void UXMSNodeContainerFromArrayWidget::OnOwningNodeSubNodeRemoved(const FXMSNode
 	if (ThisNodePath.Index > PathElement.Index)
 	{
 		ThisNodePath.Index -= 1;
+	}
+	else if (ThisNodePath.Index == PathElement.Index)
+	{
+		OnOwningNodeRemovedFromParent();
 	}
 }
 

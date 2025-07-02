@@ -19,6 +19,11 @@ void UXMSNodeCanvasEntryWidget::OnOwningNodeRemovedFromParent()
 {
 	// Remove widget from the widget container
 	RemoveFromParent();
+
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
+	{
+		OwningNodePtr->RemovedFromParentDelegate.Remove(OnOwningNodeRemovedFromParentHandle);
+	}
 }
 
 // ~Events
@@ -32,7 +37,7 @@ void UXMSNodeCanvasEntryWidget::SetOwningNode(UXMSNode* InOwningNode)
 	OwningNode = InOwningNode;
 	if (InOwningNode)
 	{
-		InOwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnOwningNodeRemovedFromParent);
+		OnOwningNodeRemovedFromParentHandle = InOwningNode->RemovedFromParentDelegate.AddUObject(this, &ThisClass::OnOwningNodeRemovedFromParent);
 	}
 	OnOwningNodeSet();
 	BP_OnOwningNodeSet();

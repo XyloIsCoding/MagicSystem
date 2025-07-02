@@ -26,7 +26,14 @@ class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget
 	// Events
 
 protected:
+	/** This function is called when the OwningNode is no longer part of the spell hierarchy.
+	 * This means that all its NodeContainers do no longer need widgets to be represented visually, so we remove
+	 * this widget from canvas.
+	 * @note This function should also unbind any delegate bound to OwningNode, since it is used by widgets like
+	 * XMSNodeContainerFromArrayWidget to remove themselves while parent is still in hierarchy. */
 	virtual void OnOwningNodeRemovedFromParent();
+private:
+	FDelegateHandle OnOwningNodeRemovedFromParentHandle;
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/

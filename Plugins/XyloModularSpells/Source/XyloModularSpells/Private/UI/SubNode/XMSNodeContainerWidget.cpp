@@ -22,6 +22,22 @@ UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& Objec
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+// Event
+	
+void UXMSNodeContainerWidget::OnOwningNodeRemovedFromParent()
+{
+	Super::OnOwningNodeRemovedFromParent();
+
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
+	{
+		OwningNodePtr->SubNodeChangedDelegate.Remove(OnOwningNodeSubNodeChangedHandle);
+	}
+}
+
+// ~Event
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 // OwningNode
 
 void UXMSNodeContainerWidget::OnOwningNodeSet()
@@ -30,7 +46,7 @@ void UXMSNodeContainerWidget::OnOwningNodeSet()
 
 	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{
-		OwningNodePtr->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
+		OnOwningNodeSubNodeChangedHandle = OwningNodePtr->SubNodeChangedDelegate.AddUObject(this, &ThisClass::OnOwningNodeSubNodeChanged);
 	}
 }
 
@@ -136,6 +152,7 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(NewNode))
 	{
 		NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerAdded);
+		NodeWithArray->SubNodeRemovedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerRemoved);
 	}
 }
 
@@ -146,6 +163,12 @@ void UXMSNodeContainerWidget::OnSubNodeContainerAdded(const FXMSNodePathElement&
 	
 	// Broadcast addition (in particular to inform canvas that it should redraw the sub-nodes chain)
 	SubNodeContainerAddedDelegate.Broadcast(this, NewNode, PathElement);
+}
+
+void UXMSNodeContainerWidget::OnSubNodeContainerRemoved(const FXMSNodePathElement& PathElement)
+{
+	if (!SubNodeContainerWidgets.IsValidIndex(PathElement.Index)) return;
+	SubNodeContainerWidgets.RemoveAt(PathElement.Index);
 }
 
 void UXMSNodeContainerWidget::OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement)

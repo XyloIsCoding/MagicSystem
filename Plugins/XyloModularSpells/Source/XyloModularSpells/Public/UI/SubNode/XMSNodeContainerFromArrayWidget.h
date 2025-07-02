@@ -24,6 +24,15 @@ class XYLOMODULARSPELLS_API UXMSNodeContainerFromArrayWidget : public UXMSNodeCo
 	 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+	// Event
+	
+protected:
+	virtual void OnOwningNodeRemovedFromParent() override;
+
+	// ~Event
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
 	// OwningNode
 	
 protected:
@@ -50,6 +59,8 @@ protected:
 private:
 	void OnOwningNodeSubNodeAdded(const FXMSNodePathElement& PathElement);
 	void OnOwningNodeSubNodeRemoved(const FXMSNodePathElement& PathElement);
+	FDelegateHandle OnOwningNodeSubNodeAddedHandle;
+	FDelegateHandle OnOwningNodeSubNodeRemovedHandle;
 
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/

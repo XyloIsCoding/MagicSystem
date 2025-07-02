@@ -35,6 +35,15 @@ public:
 	 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+	// Event
+	
+protected:
+	virtual void OnOwningNodeRemovedFromParent() override;
+
+	// ~Event
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
+/*--------------------------------------------------------------------------------------------------------------------*/
 	// OwningNode
 	
 protected:
@@ -87,8 +96,11 @@ protected:
 	virtual void OnNodeChanged();
 	/** Called if the node in this container is a NodeWithArray, and an element is added to it */
 	virtual void OnSubNodeContainerAdded(const FXMSNodePathElement& PathElement);
+	/** Called if the node in this container is a NodeWithArray, and an element is removed to it */
+	virtual void OnSubNodeContainerRemoved(const FXMSNodePathElement& PathElement);
 private:
 	void OnOwningNodeSubNodeChanged(const FXMSNodePathElement& PathElement);
+	FDelegateHandle OnOwningNodeSubNodeChangedHandle;
 	
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -108,7 +120,8 @@ protected:
 public:
 	/** Reference to the widgets representing the NodeContainers owned by this Node (this Node is the one contained
 	 * by this NodeContainer). Put differently these are the NodeContainers that hold the sub-nodes of this Node
-	 * This is emptied in OnNodeChanged, and filled by NodeCanvas when creating SubNodeContainers
+	 * This is emptied in OnNodeChanged, filled by NodeCanvas when creating SubNodeContainerWidgets and elements are
+	 * removed in OnSubNodeContainerRemoved
 	 * The Last element should ALWAYS be the array terminator (XMSArrayAddButtonWidget) */
 	TArray<TWeakObjectPtr<UXMSNodeCanvasEntryWidget>> SubNodeContainerWidgets;
 	
