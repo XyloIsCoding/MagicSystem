@@ -8,6 +8,11 @@
 #include "SpellEditor/XMSSpellEditorInterface.h"
 
 
+UXMSIntegerVarSetterNode::UXMSIntegerVarSetterNode()
+{
+	VariableName.Set(NewObject<UXMSVariableNameNode>(GetOuter()));
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

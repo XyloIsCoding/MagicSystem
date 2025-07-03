@@ -124,7 +124,6 @@ void UXMSNodeContainerWidget::ResetNodeIcon()
 
 void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* Node)
 {
-	
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -143,6 +142,8 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	{
 		ResetNodeIcon();
 		BP_ResetNodeIcon();
+
+		SetVisibility(ESlateVisibility::Visible);
 		return;
 	}
 	
@@ -153,6 +154,15 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 	{
 		NodeWithArray->SubNodeAddedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerAdded);
 		NodeWithArray->SubNodeRemovedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerRemoved);
+	}
+
+	if (UXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(NewNode->GetClass()))
+	{
+		// Hide this widget if requested
+		if (NodeData->bHideInSpellEditor)
+		{
+			SetVisibility(ESlateVisibility::Collapsed);
+		}
 	}
 }
 
