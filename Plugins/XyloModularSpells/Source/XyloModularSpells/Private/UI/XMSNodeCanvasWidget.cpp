@@ -232,10 +232,6 @@ UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXM
 	if (SubNodeWidget)
 	{
 		SubNodeWidget->SetOwningNode(ArrayNode);
-		if (NodeDataRegistry->ArrayAddTexture)
-		{
-			SubNodeWidget->Icon->SetDisplayIcon(NodeDataRegistry->ArrayAddTexture);
-		}
 	}
 	return SubNodeWidget;
 }
