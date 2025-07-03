@@ -8,82 +8,12 @@
 #include "XMSNodeDataRegistry.generated.h"
 
 
-class UXMSNodeValueWidget;
+class UXMSNodeData;
 class UXMSArrayAddButtonWidget;
+class UXMSNodeContainerFromArrayWidget;
+class UXMSNodeContainerFromMapWidget;
 class UXMSNodeClassOptionsWidget;
 class UXMSNodeCanvasWidget;
-class UXMSNodeContainerFromArrayWidget;
-class UXMSNodeContainerWidget;
-class UXMSNodeContainerFromMapWidget;
-class UXMSNode;
-
-USTRUCT(BlueprintType)
-struct FXMSSubNodeData
-{
-	GENERATED_BODY()
-
-	FXMSSubNodeData()
-	{
-	}
-	
-	FXMSSubNodeData(FName InIdentifier)
-		: Identifier(InIdentifier)
-	{
-	}
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FName Identifier;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = true))
-	FText Description;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UTexture2D> Glyph;
-};
-
-USTRUCT(BlueprintType)
-struct FXMSNodeData
-{
-	GENERATED_BODY()
-
-	FXMSNodeData()
-	{
-	}
-	
-	FXMSNodeData(UClass* InClass)
-		: NodeClass(InClass)
-	{
-		bIsNodeWithValue = InClass->IsChildOf(UXMSNodeWithValue::StaticClass());
-		UpdateSubNodes();
-	}
-
-	void UpdateSubNodes();
-	FXMSSubNodeData* GetSubNodeData(FName SubNodeIdentifier);
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UClass> NodeClass;
-	UPROPERTY()
-	bool bIsNodeWithValue = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = true))
-	FText Description;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UTexture2D> Glyph;
-	
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
-	TSubclassOf<UXMSNodeValueWidget> ValueSelectorWidgetClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta = (TitleProperty = "Identifier"))
-	TArray<FXMSSubNodeData> SubNodes;
-};
-
 
 /**
  * 
@@ -96,36 +26,45 @@ class XYLOMODULARSPELLS_API UXMSNodeDataRegistry : public UDataAsset
 public:
 	UXMSNodeDataRegistry(const FObjectInitializer& ObjectInitializer);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UObject Interface
+	 */
+	
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeDataRegistry
+	 */
 
 public:
-	UPROPERTY(EditAnywhere, Category = "UI")
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas")
 	TSubclassOf<UXMSNodeCanvasWidget> NodeCanvasWidgetClass;
-	UPROPERTY(EditAnywhere, Category = "UI")
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas")
 	TSubclassOf<UXMSNodeClassOptionsWidget> NodeOptionsWidgetClass;
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSNodeContainerFromMapWidget> NodeWithMapWidgetClass;
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSNodeContainerFromArrayWidget> NodeWithArrayWidgetClass;
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UXMSArrayAddButtonWidget> ArrayAddWidgetClass;
-	UPROPERTY(EditAnywhere, Category = "UI")
+	
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|Node")
 	UTexture2D* EmptyNodeTexture;
-	UPROPERTY(EditAnywhere, Category = "UI")
-    UTexture2D* ArrayAddTexture;
-	UPROPERTY(EditAnywhere, Category = "UI")
-	UTexture2D* ArrayRemoveTexture;
+	
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithMap")
+	TSubclassOf<UXMSNodeContainerFromMapWidget> NodeWithMapWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
+	TSubclassOf<UXMSNodeContainerFromArrayWidget> NodeWithArrayWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
+	TSubclassOf<UXMSArrayAddButtonWidget> ArrayTerminatorWidgetClass;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	bool GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData);
-	FXMSNodeData* GetNodeData(UClass* NodeClass);
+	UXMSNodeData* GetNodeData(UClass* NodeClass);
 private:
-	void UpdateNodeDataArray();
-	UPROPERTY(EditAnywhere, EditFixedSize, meta = (TitleProperty = "NodeClass"))
-	TArray<FXMSNodeData> NodesData;
+	void UpdateNodeDataMap();
+	UPROPERTY(EditAnywhere, meta = (TitleProperty = "NodeClass", ReadOnlyKeys))
+	TMap<TSubclassOf<UXMSNode>, UXMSNodeData*> NodesData;
 	
 };

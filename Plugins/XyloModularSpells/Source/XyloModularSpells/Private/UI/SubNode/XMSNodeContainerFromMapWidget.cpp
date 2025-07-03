@@ -4,6 +4,7 @@
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
+#include "Node/XMSNodeData.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
@@ -33,7 +34,7 @@ bool UXMSNodeContainerFromMapWidget::GetSubNodeTypeDisplayData(UTexture2D*& OutG
 	UXMSNode* ParentNode = OwningNode.Get();
 	if (!ParentNode) return false;
 	
-	FXMSNodeData* ParentNodeData = UXMSNodeStaticLibrary::GetNodeClassData(ParentNode->GetClass());
+	UXMSNodeData* ParentNodeData = UXMSNodeStaticLibrary::GetNodeClassData(ParentNode->GetClass());
 	if (!ParentNodeData) return false;
 
 	FXMSSubNodeData* SubNodeData = ParentNodeData->GetSubNodeData(ThisNodePath.Identifier);
@@ -50,7 +51,7 @@ UTexture2D* UXMSNodeContainerFromMapWidget::GetSubNodeTypeIcon() const
 	UXMSNode* ParentNode = OwningNode.Get();
 	if (!ParentNode) return nullptr;
 	
-	FXMSNodeData* ParentNodeData = UXMSNodeStaticLibrary::GetNodeClassData(ParentNode->GetClass());
+	UXMSNodeData* ParentNodeData = UXMSNodeStaticLibrary::GetNodeClassData(ParentNode->GetClass());
 	if (!ParentNodeData) return nullptr;
 
 	FXMSSubNodeData* SubNodeData = ParentNodeData->GetSubNodeData(ThisNodePath.Identifier);

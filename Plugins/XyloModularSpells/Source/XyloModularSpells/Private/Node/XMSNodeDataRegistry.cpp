@@ -4,63 +4,22 @@
 #include "Node/XMSNodeDataRegistry.h"
 
 #include "XMSModularSpellsSubsystem.h"
+#include "Node/XMSNodeData.h"
 #include "Node/Base/XMSNode.h"
 
 
-void FXMSNodeData::UpdateSubNodes()
-{
-	if (NodeClass)
-	{
-		// Get sub-nodes identifiers
-		UXMSNode* DefaultNode = NodeClass->GetDefaultObject<UXMSNode>();
-		TArray<FName> SubNodesIdentifiers;
-		DefaultNode->GetSubNodesIdentifiers(SubNodesIdentifiers);
-
-		TArray<FXMSSubNodeData> TempArray;
-		for (FName Identifier : SubNodesIdentifiers)
-		{
-			// Add entry or get existing one
-			FXMSSubNodeData* OldData = SubNodes.FindByPredicate([Identifier](const FXMSSubNodeData& SubNodeData )
-			{
-				return Identifier.IsEqual(SubNodeData.Identifier);
-			});
-			if (OldData)
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("FXMSNodeData::UpdateSubNodes >> Retriving %s"), *Identifier.ToString())
-				TempArray.Add(*OldData);
-			}
-			else
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("FXMSNodeData::UpdateSubNodes >> Adding %s"), *Identifier.ToString())
-				TempArray.Add(FXMSSubNodeData(Identifier));
-			}
-		}
-
-		SubNodes.Empty(TempArray.Num());
-		SubNodes.Append(TempArray);
-	}
-}
-
-FXMSSubNodeData* FXMSNodeData::GetSubNodeData(FName SubNodeIdentifier)
-{
-	return SubNodes.FindByPredicate([SubNodeIdentifier](const FXMSSubNodeData& SubNodeData)
-	{
-		return SubNodeData.Identifier.IsEqual(SubNodeIdentifier);
-	});
-}
 
 UXMSNodeDataRegistry::UXMSNodeDataRegistry(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	UpdateNodeDataArray();
-
-	if (UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get())
-	{
-		MSS->RegisterNodeDataRegistry(this);
-	}
+	UpdateNodeDataMap();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
+ * UObject Interface
+ */
 
 #if WITH_EDITOR
 
@@ -68,54 +27,41 @@ void UXMSNodeDataRegistry::PostEditChangeProperty(struct FPropertyChangedEvent& 
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	UpdateNodeDataArray();
+	if (PropertyChangedEvent.GetPropertyName().IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, NodesData)))
+	{
+		UpdateNodeDataMap();
+	}
 }
 
 #endif
 
-bool UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass, FXMSNodeData& OutNodeData)
-{
-	FXMSNodeData* FoundData = NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData){ return NodeData.NodeClass == NodeClass; });
-	if (!FoundData) return false;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	OutNodeData = *FoundData;
-	return true;
+/*
+ * UXMSNodeDataRegistry
+ */
+
+UXMSNodeData* UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass)
+{
+	if (UXMSNodeData** NodeDataPtr = NodesData.Find(NodeClass))
+	{
+		return *NodeDataPtr;
+	}
+	return nullptr;
 }
 
-FXMSNodeData* UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass)
-{
-	return NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData){ return NodeData.NodeClass == NodeClass; });
-}
-
-void UXMSNodeDataRegistry::UpdateNodeDataArray()
+void UXMSNodeDataRegistry::UpdateNodeDataMap()
 {
 	UXMSModularSpellsSubsystem* NodesSubsystem = UXMSModularSpellsSubsystem::Get();
-	if (!NodesSubsystem)
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> UXMSModularSpellsSubsystem not found"))
-		return;
-	}
-
-	//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Updating NodesData"))
+	if (!NodesSubsystem) return;
 	
-	TArray<FXMSNodeData> TempArray;
 	for (UClass* NodeClass : NodesSubsystem->GetNodeClasses())
 	{
-		// Add entry or get existing one
-		FXMSNodeData* OldData = NodesData.FindByPredicate([NodeClass](const FXMSNodeData& NodeData ){ return NodeClass == NodeData.NodeClass; });
-		if (OldData)
+		UXMSNodeData*& NodeDataPtrRef = NodesData.FindOrAdd(NodeClass);
+		if (NodeDataPtrRef && NodeDataPtrRef->GetNodeClass() != NodeClass)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Retriving %s"), *NodeClass->GetName())
-			TempArray.Add(*OldData);
-			OldData->UpdateSubNodes();
-		}
-		else
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeDataRegistry::UpdateNodeDataArray >> Adding %s"), *NodeClass->GetName())
-			TempArray.Add(FXMSNodeData(NodeClass));
+			// Resetting ptr if asset defines a wrong class
+			NodeDataPtrRef = nullptr;
 		}
 	}
-	
-	NodesData.Empty(TempArray.Num());
-	NodesData.Append(TempArray);
 }

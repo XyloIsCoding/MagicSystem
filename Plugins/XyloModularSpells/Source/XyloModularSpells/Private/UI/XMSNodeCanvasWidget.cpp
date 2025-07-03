@@ -7,6 +7,7 @@
 #include "XMSNodeStaticLibrary.h"
 #include "XyloModularSpells.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
+#include "Node/XMSNodeData.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
@@ -227,7 +228,7 @@ UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXM
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 		
-	UXMSArrayAddButtonWidget* SubNodeWidget = CreateWidget<UXMSArrayAddButtonWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayAddWidgetClass);
+	UXMSArrayAddButtonWidget* SubNodeWidget = CreateWidget<UXMSArrayAddButtonWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayTerminatorWidgetClass);
 	if (SubNodeWidget)
 	{
 		SubNodeWidget->SetOwningNode(ArrayNode);
@@ -244,7 +245,7 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 	if (!ValueNode) return nullptr;
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
-	FXMSNodeData* Data = NodeDataRegistry->GetNodeData(ValueNode->GetClass());
+	UXMSNodeData* Data = NodeDataRegistry->GetNodeData(ValueNode->GetClass());
 	if (!Data) return nullptr;
 
 	if (!Data->ValueSelectorWidgetClass)

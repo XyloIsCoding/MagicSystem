@@ -4,6 +4,7 @@
 #include "XMSNodeStaticLibrary.h"
 
 #include "XMSModularSpellsSubsystem.h"
+#include "Node/XMSNodeData.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
 #include "Spell/XMSSpellExecutorInterface.h"
@@ -114,7 +115,7 @@ UXMSNodeDataRegistry* UXMSNodeStaticLibrary::GetNodeClassDataRegistry()
 	return MSS->GetNodeDataRegistry();
 }
 
-FXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
+UXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
 {
 	if (!NodeClass) return nullptr;
 	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
@@ -126,7 +127,7 @@ UTexture2D* UXMSNodeStaticLibrary::GetNodeClassIconFromNode(UXMSNode* Node)
 {
 	if (Node)
 	{
-		FXMSNodeData* NodeData = GetNodeClassData(Node->GetClass());
+		UXMSNodeData* NodeData = GetNodeClassData(Node->GetClass());
 		return NodeData? NodeData->Glyph : nullptr;
 	}
 
@@ -145,7 +146,7 @@ UTexture2D* UXMSNodeStaticLibrary::GetNodeClassIcon(UClass* NodeClass)
 {
 	if (!NodeClass) return nullptr;
 	
-	FXMSNodeData* NodeData = GetNodeClassData(NodeClass);
+	UXMSNodeData* NodeData = GetNodeClassData(NodeClass);
 	return NodeData? NodeData->Glyph : nullptr;
 }
 

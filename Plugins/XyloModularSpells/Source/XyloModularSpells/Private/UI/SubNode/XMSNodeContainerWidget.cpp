@@ -4,7 +4,7 @@
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
-#include "Node/XMSNodeDataRegistry.h"
+#include "Node/XMSNodeData.h"
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
@@ -85,7 +85,7 @@ bool UXMSNodeContainerWidget::GetNodeDisplayData(UTexture2D*& OutGlyph, FText& O
 	UXMSNode* ThisNode = GetNode();
 	if (!ThisNode) return false;
 	
-	FXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(ThisNode->GetClass());
+	UXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(ThisNode->GetClass());
 	if (!NodeData) return false;
 
 	OutGlyph = NodeData->Glyph;

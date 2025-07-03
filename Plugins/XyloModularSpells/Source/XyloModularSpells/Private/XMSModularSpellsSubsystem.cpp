@@ -2,7 +2,10 @@
 
 
 #include "XMSModularSpellsSubsystem.h"
+
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
+#include "Settings/UXMSSpellsEditorSettings.h"
 
 
 void FXMSNodeClassCache::InitForType(UClass* InClass)
@@ -35,12 +38,23 @@ void UXMSModularSpellsSubsystem::Initialize(FSubsystemCollectionBase& Collection
 	Super::Initialize(Collection);
 
 	NodeClassCache.InitForType(UXMSNode::StaticClass());
+	RegisterNodeDataRegistry();
 }
 
-void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry(UXMSNodeDataRegistry* InNodeDataRegistry)
+void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry()
 {
-	if (!InNodeDataRegistry) return;
-	NodeDataRegistry = InNodeDataRegistry;
+	if (const UUXMSSpellsEditorSettings* Settings = GetMutableDefault<UUXMSSpellsEditorSettings>())
+	{
+		NodeDataRegistry = Settings->NodeDataRegistry.LoadSynchronous();
+		if (NodeDataRegistry)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UXMSModularSpellsSubsystem::RegisterNodeDataRegistry >> success"))
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UXMSModularSpellsSubsystem::RegisterNodeDataRegistry >> failed"))
+		}
+	}
 }
 
 const TArray<UClass*>& UXMSModularSpellsSubsystem::GetNodeClasses()

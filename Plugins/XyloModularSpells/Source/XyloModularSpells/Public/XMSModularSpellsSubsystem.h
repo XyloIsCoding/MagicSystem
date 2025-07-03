@@ -37,7 +37,7 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 public:
-	void RegisterNodeDataRegistry(UXMSNodeDataRegistry* InNodeDataRegistry);
+	void RegisterNodeDataRegistry();
 	UXMSNodeDataRegistry* GetNodeDataRegistry() const { return NodeDataRegistry; }
 private:
 	UPROPERTY()

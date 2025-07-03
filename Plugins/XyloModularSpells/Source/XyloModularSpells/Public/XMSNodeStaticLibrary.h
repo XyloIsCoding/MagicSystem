@@ -7,7 +7,7 @@
 #include "XMSNodeStaticLibrary.generated.h"
 
 class UXMSNodeDataRegistry;
-struct FXMSNodeData;
+class UXMSNodeData;
 class UXMSSpellEditorComponent;
 class UXMSNode;
 
@@ -28,7 +28,7 @@ public:
 
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
-	static FXMSNodeData* GetNodeClassData(UClass* NodeClass);
+	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);
 	/** If Node is not valid, falls back to using a default texture */
 	static UTexture2D* GetNodeClassIconFromNode(UXMSNode* Node);
 	static FString GetNodeClassNameFromNode(UXMSNode* Node);
