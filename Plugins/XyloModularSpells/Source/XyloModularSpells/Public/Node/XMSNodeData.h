@@ -67,14 +67,24 @@ public:
 	/*
 	 * UXMSNodeData
 	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// NodeClass
 	
 public:
 	UClass* GetNodeClass() const;
 protected:
 	void OnNodeClassChanged();
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<UXMSNode> NodeClass;
+private:
+	UPROPERTY()
+	bool bIsNodeWithValue = false;
+
+	// ~NodeClass
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -95,6 +105,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
 	bool bHideInSpellEditor = false;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// SubNodes
+	
 public:
 	void UpdateSubNodes();
 	UFUNCTION(BlueprintCallable)
@@ -104,7 +117,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta = (TitleProperty = "Identifier"))
 	TArray<FXMSSubNodeData> SubNodes;
 
-private:
-	UPROPERTY()
-	bool bIsNodeWithValue = false;
+	// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 };

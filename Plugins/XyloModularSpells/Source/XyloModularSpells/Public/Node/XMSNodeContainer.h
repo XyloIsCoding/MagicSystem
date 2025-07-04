@@ -18,14 +18,12 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeChangedSignature, FName)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSArrayNodeChangedSignature, FName, int32)
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*--------------------------------------------------------------------------------------------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-/*====================================================================================================================*/
-/* FXMSNodeContainer */
 
 /**
  * Interface class for TXMSNodeContainer
@@ -48,6 +46,12 @@ struct FXMSNodeContainer
 	FXMSNodeContainer& operator=(const FXMSNodeContainer& Other) = delete;
 	FXMSNodeContainer& operator=(FXMSNodeContainer&& Other) = delete;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * FXMSNodeContainer
+	 */
+	
 public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
@@ -55,26 +59,27 @@ protected:
 	virtual UXMSNode* GetGeneric() const { return nullptr; }
 	virtual void SetGeneric(UXMSNode* InNode) {}
 
-	virtual void NodeSet(UXMSNode* InNode, UXMSNode* OldNode)
-	{
-		if (OldNode) OldNode->RemovedFromParent_Internal();
-		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, 0));
-		if (UXMSNodeWithMap* OwnerPtr = Owner.Get())
-		{
-			OwnerPtr->OnSubNodeChanged(Identifier);
-			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, 0));
-		}
-	}
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// ContainerManagement
 
+protected:
+	virtual void NodeSet(UXMSNode* InNode, UXMSNode* OldNode);
+private:
 	FName Identifier;
 	TWeakObjectPtr<UXMSNodeWithMap> Owner;
+
+	// ~ContainerManagement
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
 };
 
-// ~FXMSNodeContainer
-/*====================================================================================================================*/
 
-/*====================================================================================================================*/
-/* TXMSNodeContainer */
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /**
  * Wrapper for nodes with constrains over what nodes can be contained.
@@ -102,33 +107,13 @@ struct TXMSNodeContainer : public FXMSNodeContainer
 
 	TXMSNodeContainer& operator=(const TXMSNodeContainer& Other) = delete;
 	TXMSNodeContainer& operator=(TXMSNodeContainer&& Other) = delete;
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-public:
-	BaseInterface* GetInterface() const
-	{
-		return Cast<BaseInterface>(Node.Get());
-	}
-
-	BaseClass* Get() const
-	{
-		return Node.Get();
-	}
-
-	template <DerivedNode<BaseClass, BaseInterface> NodeType>
-	void Set(NodeType* InNode)
-	{
-		if (!InNode || IsCompatible(InNode->GetClass()))
-		{
-			UXMSNode* OldNode = Node.Get();
-			Node.Reset(InNode);
-			NodeSet(static_cast<UXMSNode*>(InNode), OldNode);
-		}
-	}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
+	/*
+	 * FXMSNodeContainer Interface
+	 */
+	
 public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const override
@@ -152,9 +137,7 @@ public:
 		
 		return true;
 	}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
+	
 protected:
 	virtual UXMSNode* GetGeneric() const override
 	{
@@ -170,17 +153,40 @@ protected:
 			NodeSet(InNode, OldNode);
 		}
 	}
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+	/*
+	 * TXMSNodeContainer
+	 */
+	
+public:
+	BaseInterface* GetInterface() const
+	{
+		return Cast<BaseInterface>(Node.Get());
+	}
+
+	BaseClass* Get() const
+	{
+		return Node.Get();
+	}
+
+	template <DerivedNode<BaseClass, BaseInterface> NodeType>
+	void Set(NodeType* InNode)
+	{
+		if (!InNode || IsCompatible(InNode->GetClass()))
+		{
+			UXMSNode* OldNode = Node.Get();
+			Node.Reset(InNode);
+			NodeSet(static_cast<UXMSNode*>(InNode), OldNode);
+		}
+	}
 
 private:
 	CompatibilityCheck CompatibilityCheckFunction;
 	TStrongObjectPtr<BaseClass> Node;
 };
 
-// ~TXMSNodeContainer
-/*====================================================================================================================*/
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,9 +194,6 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-/*====================================================================================================================*/
-/* FXMSMultiNodeContainer */
 
 /**
  * Interface class for TXMSMultiNodeContainer
@@ -213,6 +216,12 @@ struct FXMSMultiNodeContainer
 	FXMSMultiNodeContainer& operator=(const FXMSMultiNodeContainer& Other) = delete;
 	FXMSMultiNodeContainer& operator=(FXMSMultiNodeContainer&& Other) = delete;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * FXMSMultiNodeContainer
+	 */
+	
 public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
@@ -225,68 +234,34 @@ protected:
 	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) {}
 	virtual void Remove(int32 Index) {}
 
-	virtual void NodeSet(UXMSNode* InNode, int32 Index, UXMSNode* OldNode)
-	{
-		if (OldNode) OldNode->RemovedFromParent_Internal();
-		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
-		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
-		{
-			OwnerPtr->OnSubNodeChanged(Identifier, Index);
-			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
-		}
-	}
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// ContainerManagement
 
-	virtual void NodeAdded(UXMSNode* InNode, int32 Index)
-	{
-		// We need to call this before we set parent on new node, else there will be an overlapping
-		// PathFromParentNode in the parent's node container (this function shift up path index to make
-		// space for new node)
-		ShiftUpPathIndexes(Index);
-		
-		if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
-		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
-		{
-			OwnerPtr->OnSubNodeAdded(Identifier, Index);
-			OwnerPtr->SubNodeAddedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
-		}
-	}
-
-	virtual void NodeRemoved(int32 Index, UXMSNode* OldNode)
-	{
-		if (OldNode) OldNode->RemovedFromParent_Internal();
-
-		// We need to call this after we removed old node from parent, else there will be an overlapping
-		// PathFromParentNode in the parent's node container (this function shift down path index so it would
-		// cover the index of the removed one)
-		ShiftDownPathIndexes(Index);
-		
-		if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
-		{
-			OwnerPtr->OnSubNodeRemoved(Identifier, Index);
-			OwnerPtr->SubNodeRemovedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
-		}
-	}
+protected:
+	virtual void NodeSet(UXMSNode* InNode, int32 Index, UXMSNode* OldNode);
+	virtual void NodeAdded(UXMSNode* InNode, int32 Index);
+	virtual void NodeRemoved(int32 Index, UXMSNode* OldNode);
 
 	virtual void ShiftUpPathIndexes(int32 From) {}
 	virtual void ShiftDownPathIndexes(int32 From) {}
-	void ShiftPathIndex(UXMSNode* Node, int32 Amount)
-	{
-		if (Node)
-		{
-			Node->PathFromParentNode.Index += Amount;
-			Node->PathIndexChangedDelegate.Broadcast(Node->PathFromParentNode.Index);
-		}
-	}
+	void ShiftPathIndex(UXMSNode* Node, int32 Amount);
 
+private:
 	FName Identifier;
 	TWeakObjectPtr<UXMSNodeWithArray> Owner;
+
+	// ~ContainerManagement
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
 };
 
-// ~FXMSMultiNodeContainer
-/*====================================================================================================================*/
 
-/*====================================================================================================================*/
-/* TXMSMultiNodeContainer */
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /**
  * Wrapper for array of nodes with constrains over what nodes can be contained.
@@ -315,17 +290,13 @@ struct TXMSMultiNodeContainer : public FXMSMultiNodeContainer
 	TXMSMultiNodeContainer& operator=(const TXMSMultiNodeContainer& Other) = delete;
 	TXMSMultiNodeContainer& operator=(TXMSMultiNodeContainer&& Other) = delete;
 
-	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * FXMSMultiNodeContainer Interface
+	 */
+
 public:
-	virtual void Remove(int32 Index) override
-	{
-		if (!Nodes.IsValidIndex(Index)) return;
-
-		UXMSNode* OldNode = Nodes[Index].Get();
-		Nodes.RemoveAt(Index);
-		NodeRemoved(Index, OldNode);
-	}
-
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const override
 	{
@@ -348,6 +319,63 @@ public:
 		
 		return true;
 	}
+
+	virtual void Remove(int32 Index) override
+	{
+		if (!Nodes.IsValidIndex(Index)) return;
+
+		UXMSNode* OldNode = Nodes[Index].Get();
+		Nodes.RemoveAt(Index);
+		NodeRemoved(Index, OldNode);
+	}
+	
+protected:
+	virtual UXMSNode* GetGeneric(int32 Index) const override
+	{
+		if (!Nodes.IsValidIndex(Index)) return nullptr;
+		return Nodes[Index].Get();
+	}
+
+	virtual void GetAllGeneric(TArray<UXMSNode*>& OutSubNodes) const override
+	{
+		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
+		{
+			OutSubNodes.Add(Node.Get());
+		}
+	}
+	
+	virtual void SetGeneric(int32 Index, UXMSNode* InNode) override
+	{
+		if (!Nodes.IsValidIndex(Index)) return;
+		if (!InNode || IsCompatible(InNode->GetClass()))
+		{
+			UXMSNode* OldNode = Nodes[Index].Get();
+			Nodes[Index].Reset(Cast<BaseClass>(InNode));
+			NodeSet(InNode, Index, OldNode);
+		}
+	}
+
+	virtual void AddGeneric(UXMSNode* InNode) override
+	{
+		if (!InNode || IsCompatible(InNode->GetClass()))
+		{
+			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
+			NodeAdded(InNode, Index);
+		}
+	}
+	
+	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) override
+	{
+		if (!Nodes.IsValidIndex(Index)) return;
+		if (!InNode || IsCompatible(InNode->GetClass()))
+		{
+			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
+			NodeAdded(InNode, Index);
+		}
+	}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// ContainerManagement
 
 protected:
 	virtual void ShiftUpPathIndexes(int32 From) override
@@ -402,7 +430,14 @@ protected:
 		}
 	}
 
+	// ~ContainerManagement
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * TXMSMultiNodeContainer
+	 */
 
 public:
 	BaseInterface* GetInterface(int32 Index) const
@@ -458,63 +493,9 @@ public:
 			NodeAdded(static_cast<UXMSNode*>(InNode), Index);
 		}
 	}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-protected:
-	virtual UXMSNode* GetGeneric(int32 Index) const override
-	{
-		if (!Nodes.IsValidIndex(Index)) return nullptr;
-		return Nodes[Index].Get();
-	}
-
-	virtual void GetAllGeneric(TArray<UXMSNode*>& OutSubNodes) const override
-	{
-		for (const TStrongObjectPtr<BaseClass>& Node : Nodes)
-		{
-			OutSubNodes.Add(Node.Get());
-		}
-	}
 	
-	virtual void SetGeneric(int32 Index, UXMSNode* InNode) override
-	{
-		if (!Nodes.IsValidIndex(Index)) return;
-		if (!InNode || IsCompatible(InNode->GetClass()))
-		{
-			UXMSNode* OldNode = Nodes[Index].Get();
-			Nodes[Index].Reset(Cast<BaseClass>(InNode));
-			NodeSet(InNode, Index, OldNode);
-		}
-	}
-
-	virtual void AddGeneric(UXMSNode* InNode) override
-	{
-		if (!InNode || IsCompatible(InNode->GetClass()))
-		{
-			int32 Index = Nodes.Add(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)));
-			NodeAdded(InNode, Index);
-		}
-	}
-	
-	virtual void InsertGeneric(int32 Index, UXMSNode* InNode) override
-	{
-		if (!Nodes.IsValidIndex(Index)) return;
-		if (!InNode || IsCompatible(InNode->GetClass()))
-		{
-			Nodes.Insert(TStrongObjectPtr<BaseClass>(Cast<BaseClass>(InNode)), Index);
-			NodeAdded(InNode, Index);
-		}
-	}
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
 private:
 	CompatibilityCheck CompatibilityCheckFunction;
 	TArray<TStrongObjectPtr<BaseClass>> Nodes;
 };
-
-// ~TXMSMultiNodeContainer
-/*====================================================================================================================*/
 

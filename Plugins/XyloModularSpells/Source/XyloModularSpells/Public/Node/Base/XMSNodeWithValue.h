@@ -19,10 +19,16 @@ class XYLOMODULARSPELLS_API UXMSNodeWithValue : public UXMSNode
 	/*
 	 * UXMSNode Interface
 	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Serialization
 	
 public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
+
+	// ~Serialization
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +36,7 @@ public:
 	 * UXMSNodeWithValue Interface
 	 */
 
-protected:
+public:
 	static const FString ValueJsonKey;
 	
 };

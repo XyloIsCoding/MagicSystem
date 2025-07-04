@@ -23,10 +23,19 @@ class XYLOMODULARSPELLS_API UXMSNodeWithMap : public UXMSNode
 	/*
 	 * UXMSNode Interface
 	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Serialization
 	
 public:
 	virtual TSharedPtr<FJsonObject> SerializeToJson(bool& bOutSuccess) override;
 	virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) override;
+
+	// ~Serialization
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// SubNodes
 	
 	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) const override;
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const override;
@@ -34,15 +43,20 @@ public:
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) override;
 
 	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions) override;
-
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
+
+	// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * UXMSNodeWithMap
 	 */
-	
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// SubNodes
+
 public:
 	virtual UXMSNode* GetSubNode(FName Identifier) const;
 	virtual void SetSubNode(FName Identifier, UXMSNode* InNode);
@@ -51,4 +65,9 @@ protected:
 private:
 	/** Map containing sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */
 	TMap<FName, FXMSNodeContainer*> SubNodes;
+	
+	// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
 };
+

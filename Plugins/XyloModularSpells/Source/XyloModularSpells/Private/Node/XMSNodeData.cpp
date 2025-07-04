@@ -30,11 +30,6 @@ void UXMSNodeData::PostEditChangeChainProperty(struct FPropertyChangedChainEvent
 	}
 }
 
-UClass* UXMSNodeData::GetNodeClass() const
-{
-	return NodeClass;
-}
-
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,11 +38,25 @@ UClass* UXMSNodeData::GetNodeClass() const
  * UXMSNodeData
  */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+// NodeClass
+
+UClass* UXMSNodeData::GetNodeClass() const
+{
+	return NodeClass;
+}
+
 void UXMSNodeData::OnNodeClassChanged()
 {
 	bIsNodeWithValue = NodeClass && NodeClass->IsChildOf(UXMSNodeWithValue::StaticClass());
 	UpdateSubNodes();
 }
+
+// ~NodeClass
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// SubNodes
 
 void UXMSNodeData::UpdateSubNodes()
 {
@@ -62,7 +71,7 @@ void UXMSNodeData::UpdateSubNodes()
 	for (FName Identifier : SubNodesIdentifiers)
 	{
 		// Add entry or get existing one
-		FXMSSubNodeData* OldData = SubNodes.FindByPredicate([Identifier](const FXMSSubNodeData& SubNodeData )
+		FXMSSubNodeData* OldData = SubNodes.FindByPredicate([Identifier](const FXMSSubNodeData& SubNodeData)
 		{
 			return Identifier.IsEqual(SubNodeData.Identifier);
 		});
@@ -99,4 +108,7 @@ FXMSSubNodeData* UXMSNodeData::GetSubNodeData(FName SubNodeIdentifier)
 		return SubNodeData.Identifier.IsEqual(SubNodeIdentifier);
 	});
 }
+
+// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -34,7 +34,10 @@ public:
 	 */
 	
 #if WITH_EDITOR
+
+public:
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+	
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +65,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
 	TSubclassOf<UXMSArrayAddButtonWidget> ArrayTerminatorWidgetClass;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// NodesData
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	UXMSNodeData* GetNodeData(UClass* NodeClass);
@@ -69,5 +75,8 @@ private:
 	void UpdateNodeDataMap();
 	UPROPERTY(EditAnywhere, meta = (TitleProperty = "NodeClass", ReadOnlyKeys))
 	TMap<TSubclassOf<UXMSNode>, UXMSNodeData*> NodesData;
+
+	// ~NodesData
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 };

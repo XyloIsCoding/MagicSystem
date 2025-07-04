@@ -41,6 +41,9 @@ void UXMSNodeDataRegistry::PostEditChangeProperty(struct FPropertyChangedEvent& 
  * UXMSNodeDataRegistry
  */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+// NodesData
+
 UXMSNodeData* UXMSNodeDataRegistry::GetNodeData(UClass* NodeClass)
 {
 	if (UXMSNodeData** NodeDataPtr = NodesData.Find(NodeClass))
@@ -65,3 +68,7 @@ void UXMSNodeDataRegistry::UpdateNodeDataMap()
 		}
 	}
 }
+
+// ~NodesData
+/*--------------------------------------------------------------------------------------------------------------------*/
+

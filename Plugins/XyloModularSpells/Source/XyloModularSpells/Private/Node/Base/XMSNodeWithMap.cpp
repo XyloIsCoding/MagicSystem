@@ -15,6 +15,9 @@
  * UXMSNode Interface
  */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Serialization
+
 TSharedPtr<FJsonObject> UXMSNodeWithMap::SerializeToJson(bool& bOutSuccess)
 {
 	TSharedPtr<FJsonObject> NodeJson = Super::SerializeToJson(bOutSuccess);
@@ -86,6 +89,12 @@ void UXMSNodeWithMap::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 	}
 }
 
+// ~Serialization
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// SubNodes
+
 UXMSNode* UXMSNodeWithMap::GetSubNode(const FXMSNodePathElement& PathElement) const
 {
 	return GetSubNode(PathElement.Identifier);
@@ -146,11 +155,17 @@ void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) cons
 	SubNodes.GetKeys(OutIdentifiers);
 }
 
+// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
  * UXMSNodeWithMap
  */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// SubNodes
 
 UXMSNode* UXMSNodeWithMap::GetSubNode(FName Identifier) const
 {
@@ -171,3 +186,7 @@ void UXMSNodeWithMap::SetSubNode(FName Identifier, UXMSNode* InNode)
 void UXMSNodeWithMap::OnSubNodeChanged(FName Identifier)
 {
 }
+
+// ~SubNodes
+/*--------------------------------------------------------------------------------------------------------------------*/
+

@@ -41,6 +41,19 @@ bool UXMSNode::IsInSpellEditorContext() const
 	return GetOuter() && GetOuter()->Implements<IXMSSpellEditorInterface::UClassType>();
 }
 
+void UXMSNode::GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const
+{
+	GetNodeFlags(OutFlags);
+	
+	if (UXMSNode* Parent = ParentNode.Get())
+	{
+		Parent->GetNodeFlagsRecursive(OutFlags);
+	}
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Serialization
+
 TSharedPtr<FJsonObject> UXMSNode::SerializeToJson(bool& bOutSuccess)
 {
 	TSharedPtr<FJsonObject> NodeJson = MakeShareable<>(new FJsonObject);
@@ -54,15 +67,11 @@ void UXMSNode::DeserializeFromJson(TSharedPtr<FJsonObject>)
 	
 }
 
-void UXMSNode::GetNodeFlagsRecursive(FGameplayTagContainer& OutFlags) const
-{
-	GetNodeFlags(OutFlags);
-	
-	if (UXMSNode* Parent = ParentNode.Get())
-	{
-		Parent->GetNodeFlagsRecursive(OutFlags);
-	}
-}
+// ~Serialization
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Hierarchy
 
 void UXMSNode::GetHierarchy(TArray<UXMSNode*>& OutHierarchy) const
 {
@@ -115,23 +124,29 @@ bool UXMSNode::IsInScopeOf(UXMSNode* Other, const TArray<UXMSNode*>& ThisNodeHie
 	return ChildOfMatchingParent && ChildOfMatchingParent->PathFromParentNode.Index >= Other->PathFromParentNode.Index;
 }
 
+// ~Hierarchy
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// ParentNode
+
+void UXMSNode::RemoveFromParent()
+{
+	UXMSNode* Parent = ParentNode.Get();
+	if (!Parent) return;
+
+	// If ParentNode is not nullptr, it means that this node is still set as sub-node of ParentNode
+	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node).
+	// This means that we can safely use SetSubNode without worrying about overriding nodes
+	Parent->SetSubNode(PathFromParentNode, nullptr);
+}
+
 void UXMSNode::ReparentNode(UXMSNode* InParentNode, const FXMSNodePathElement& InPathFromParent)
 {
 	// UE_LOG(LogTemp, Warning, TEXT("UXMSNode::ReparentNode >> [%s] now has parent [%s]"), *GetName(), InParentNode ? *InParentNode->GetName() : *FString())
 	ParentNode = InParentNode;
 	PathFromParentNode = InPathFromParent;
 	OnParentSet();
-}
-
-void UXMSNode::RemoveFromParent()
-{
-	UXMSNode* ParentNodePtr = ParentNode.Get();
-	if (!ParentNodePtr) return;
-
-	// If ParentNode is not nullptr, it means that this node is still set as sub-node of ParentNode
-	// (When a node is set in a node container RemovedFromParent_Internal is called on the old node).
-	// This means that we can safely use SetSubNode without worrying about overriding nodes
-	ParentNodePtr->SetSubNode(PathFromParentNode, nullptr);
 }
 
 void UXMSNode::RemovedFromParent_Internal()
@@ -154,4 +169,7 @@ void UXMSNode::RemovedFromParent_Internal()
 		if (SubNode) SubNode->RemoveFromParent();
 	}
 }
+
+// ~ParentNode
+/*--------------------------------------------------------------------------------------------------------------------*/
 

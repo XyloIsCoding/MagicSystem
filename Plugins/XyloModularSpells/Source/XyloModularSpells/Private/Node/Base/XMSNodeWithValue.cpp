@@ -8,9 +8,12 @@ const FString UXMSNodeWithValue::ValueJsonKey = FString(TEXT("Value"));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/*
-	 * UXMSNode Interface
-	 */
+/*
+ * UXMSNode Interface
+ */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Serialization
 
 TSharedPtr<FJsonObject> UXMSNodeWithValue::SerializeToJson(bool& bOutSuccess)
 {
@@ -21,3 +24,7 @@ void UXMSNodeWithValue::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
 	Super::DeserializeFromJson(JsonObject);
 }
+
+// ~Serialization
+/*--------------------------------------------------------------------------------------------------------------------*/
+
