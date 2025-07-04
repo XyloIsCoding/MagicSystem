@@ -24,6 +24,13 @@ struct FXMSNodeClassCache
 };
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /**
  * 
  */
@@ -34,8 +41,25 @@ class XYLOMODULARSPELLS_API UXMSModularSpellsSubsystem : public UEngineSubsystem
 
 public:
 	static UXMSModularSpellsSubsystem* Get();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UEngineSubsystem Interface
+	 */
+
+public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSModularSpellsSubsystem
+	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// NodeDataRegistry
+	
 public:
 	void RegisterNodeDataRegistry();
 	UXMSNodeDataRegistry* GetNodeDataRegistry() const { return NodeDataRegistry; }
@@ -43,8 +67,18 @@ private:
 	UPROPERTY()
 	TObjectPtr<UXMSNodeDataRegistry> NodeDataRegistry;
 
+	// ~NodeDataRegistry
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// NodeClasses
+	
 public:
 	const TArray<UClass*>& GetNodeClasses();
 private:
 	FXMSNodeClassCache NodeClassCache;
+
+	// ~NodeClasses
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
 };

@@ -27,11 +27,25 @@ void FXMSNodeClassCache::InitForType(UClass* InClass)
 	Classes.Sort([](const UClass& A, const UClass& B) { return A.GetName().ToLower() > B.GetName().ToLower(); });
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*--------------------------------------------------------------------------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 UXMSModularSpellsSubsystem* UXMSModularSpellsSubsystem::Get()
 {
 	if (!GEngine) return nullptr;
 	return GEngine->GetEngineSubsystem<UXMSModularSpellsSubsystem>();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UEngineSubsystem Interface
+ */
 
 void UXMSModularSpellsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -40,6 +54,15 @@ void UXMSModularSpellsSubsystem::Initialize(FSubsystemCollectionBase& Collection
 	NodeClassCache.InitForType(UXMSNode::StaticClass());
 	RegisterNodeDataRegistry();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSModularSpellsSubsystem
+ */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// NodeDataRegistry
 
 void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry()
 {
@@ -57,7 +80,17 @@ void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry()
 	}
 }
 
+// ~NodeDataRegistry
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// NodeClasses
+
 const TArray<UClass*>& UXMSModularSpellsSubsystem::GetNodeClasses()
 {
 	return NodeClassCache.Classes;
 }
+
+// ~NodeClasses
+/*--------------------------------------------------------------------------------------------------------------------*/
+
