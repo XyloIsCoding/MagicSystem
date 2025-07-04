@@ -36,6 +36,7 @@ void UXMSSpellEditorComponent::BeginPlay()
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+// VariablesManagement
 
 void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type)
 {
@@ -170,9 +171,11 @@ FXMSScopedVariable* UXMSSpellEditorComponent::GetVariable(UXMSVariableDeclaratio
 			});
 }
 
+// ~VariablesManagement
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
+// NodeCanvas
 
 UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerController* PlayerController, UXMSNode* RootNode)
 {
@@ -192,5 +195,6 @@ UXMSNodeCanvasWidget* UXMSSpellEditorComponent::CreateNodeCanvas(APlayerControll
 	return Widget;
 }
 
+// ~NodeCanvas
 /*--------------------------------------------------------------------------------------------------------------------*/
 

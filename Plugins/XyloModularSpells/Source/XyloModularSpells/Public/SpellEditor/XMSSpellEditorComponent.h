@@ -70,7 +70,8 @@ protected:
 	 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+	// VariablesManagement
+	
 public:
 	/** Broadcasts the Name and Type of the changed variable */
 	FXMSDeclaredVariableListChangedSignature DeclaredVariableListChangedDelegate;
@@ -82,18 +83,20 @@ protected:
 	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, int32 Type = XMSVariableType::EVT_None) const;
 	bool HasVariable(UXMSVariableDeclarationNode* DeclarationNode) const;
 	FXMSScopedVariable* GetVariable(UXMSVariableDeclarationNode* DeclarationNode);
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-
-public:
-	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController, UXMSNode* RootNode);
-	
-/*--------------------------------------------------------------------------------------------------------------------*/
-	
 private:
 	UPROPERTY()
 	TArray<FXMSScopedVariable> ScopedVariables;
+
+	// ~VariablesManagement
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// NodeCanvas
+	
+public:
+	UXMSNodeCanvasWidget* CreateNodeCanvas(APlayerController* PlayerController, UXMSNode* RootNode);
+
+	// ~NodeCanvas
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 };
