@@ -111,7 +111,7 @@ void UXMSSpellEditorComponent::UnRegisterVariable(UXMSVariableDeclarationNode* D
 	}
 }
 
-void UXMSSpellEditorComponent::GetVariablesNamesByType(int32 Type, const UXMSNode* RequestingNode, TArray<FString>& OutVariableNames) const
+void UXMSSpellEditorComponent::GetVariablesNamesByType(const UXMSNode* RequestingNode, int32 Type, TArray<FString>& OutVariableNames) const
 {
 	if (!RequestingNode) return;
 	

@@ -111,7 +111,7 @@ void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
 	UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter());
 	if (!SpellEditor) return;
 	
-	SpellEditor->GetVariablesNamesByType(VariableType, this, OutStringOptions);
+	SpellEditor->GetVariablesNamesByType(this, VariableType, OutStringOptions);
 }
 
 void UXMSVariableNameNode::CacheString(int32 Index)

@@ -78,7 +78,7 @@ public:
 	void RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type);
 	void UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, int32 Type);
 	void UnRegisterVariable(UXMSVariableDeclarationNode* DeclarationNode);
-	void GetVariablesNamesByType(int32 Type, const UXMSNode* RequestingNode, TArray<FString>& OutVariableNames) const;
+	void GetVariablesNamesByType(const UXMSNode* RequestingNode, int32 Type, TArray<FString>& OutVariableNames) const;
 protected:
 	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, int32 Type = XMSVariableType::EVT_None) const;
 	bool HasVariable(UXMSVariableDeclarationNode* DeclarationNode) const;
