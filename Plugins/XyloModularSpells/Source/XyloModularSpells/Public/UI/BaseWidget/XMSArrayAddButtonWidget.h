@@ -24,7 +24,7 @@ class XYLOMODULARSPELLS_API UXMSArrayAddButtonWidget : public UXMSNodeCanvasEntr
 
 public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UXMSNodeIconWidget* Icon;
+	TObjectPtr<UXMSNodeIconWidget> Icon;
 
 protected:
 	UFUNCTION(BlueprintCallable)

@@ -28,7 +28,7 @@ public:
 	virtual void UpdateSubNodeTypeIcon();
 protected:
 	UPROPERTY(meta = (BindWidget))
-	UXMSNodeIconWidget* NodeTypeIcon;
+	TObjectPtr<UXMSNodeIconWidget> NodeTypeIcon;
 	
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)

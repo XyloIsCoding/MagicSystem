@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "XMSTypes.h"
 #include "UI/BaseWidget/XMSNodeCanvasEntryWidget.h"
+#include "UI/NodeOptions/XMSNodeOptionsInterface.h"
 #include "XMSNodeContainerWidget.generated.h"
 
 class UXMSNodeIconWidget;
@@ -15,13 +16,12 @@ class UXMSNodeContainerWidget;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSNodeWidgetUpdatedSignature, UXMSNodeContainerWidget*, UXMSNode*)
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FXMSNodeWidgetSubNodeContainerAddedSignature, UXMSNodeContainerWidget*, UXMSNode* /* Parent of Added SubNode */ , const FXMSNodePathElement& /* Path to Added SubNode */)
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeWidgetClickedSignature, UXMSNodeContainerWidget*)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeContainerWidget : public UXMSNodeCanvasEntryWidget
+class XYLOMODULARSPELLS_API UXMSNodeContainerWidget : public UXMSNodeCanvasEntryWidget, public IXMSNodeOptionsInterface
 {
 	GENERATED_BODY()
 
@@ -31,7 +31,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeCanvasEntryWidget
+	 * UXMSNodeCanvasEntryWidget Interface
 	 */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +51,17 @@ protected:
 
 	// ~OwningNode
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSNodeOptionsInterface Interface
+	 */
+
+public:
+	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
+	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override;
+	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,7 +74,7 @@ public:
 	virtual void UpdateNodeClassIcon();
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UXMSNodeIconWidget* NodeClassIcon;
+	TObjectPtr<UXMSNodeIconWidget> NodeClassIcon;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -74,7 +85,7 @@ public:
 public:
 	UXMSNode* GetNode() const;
 	virtual void GetNodeClassOptions(TArray<UClass*>& OutClassOptions);
-	void ChangeNodeClass(UClass* NewClass);
+	void ChangeNodeClass(TSubclassOf<UXMSNode> NewClass);
 protected:
 	virtual void ResetNodeIcon();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -87,7 +98,6 @@ protected:
 	// Events
 
 public:
-	FXMSNodeWidgetClickedSignature NodeClickedDelegate;
 	FXMSNodeWidgetUpdatedSignature NodeChangedDelegate;
 	FXMSNodeWidgetSubNodeContainerAddedSignature SubNodeContainerAddedDelegate;
 	UFUNCTION(BlueprintCallable)

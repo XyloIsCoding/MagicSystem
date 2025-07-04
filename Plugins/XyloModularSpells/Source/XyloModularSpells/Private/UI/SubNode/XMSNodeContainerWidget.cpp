@@ -5,9 +5,12 @@
 
 #include "XMSNodeStaticLibrary.h"
 #include "Node/XMSNodeData.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
+#include "UI/NodeOptions/XMSNodeClassOptionEntryWidget.h"
+#include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 
 
 UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& ObjectInitializer)
@@ -18,7 +21,7 @@ UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& Objec
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSNodeCanvasEntryWidget
+ * UXMSNodeCanvasEntryWidget Interface
  */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -52,6 +55,42 @@ void UXMSNodeContainerWidget::OnOwningNodeSet()
 
 // ~OwningNode
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * IXMSNodeOptionsInterface Interface
+ */
+
+FXMSOptionsRequestedSignature& UXMSNodeContainerWidget::GetOptionsRequestedDelegate()
+{
+	return OptionsRequestedDelegate;
+}
+
+void UXMSNodeContainerWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
+{
+	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return;
+	
+	TArray<UClass*> Options;
+	GetNodeClassOptions(Options);
+	TArray<UXMSNodeClassOptionEntryWidget*> OptionWidgets;
+	OptionsSelectionWidget->InitializeOptions<UXMSNodeClassOptionEntryWidget>(Options.Num(), NodeDataRegistry->NodeClassOptionWidgetClass, OptionWidgets);
+
+	for (auto It = OptionWidgets.CreateIterator(); It; ++It)
+	{
+		if (!Options.IsValidIndex(It.GetIndex()))
+		{
+			UE_LOG(LogXyloModularSpells, Warning, TEXT("UXMSNodeContainerWidget::InitializeOptions >> No matching class option for option widget??"))
+			break;
+		}
+		if (UXMSNodeClassOptionEntryWidget* OptionWidget = *It)
+		{
+			OptionWidget->SetNodeClass(Options[It.GetIndex()]);
+			OptionWidget->NodeClassOptionSelectedDelegate.AddUObject(this, &ThisClass::ChangeNodeClass);
+		}
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -110,12 +149,12 @@ void UXMSNodeContainerWidget::GetNodeClassOptions(TArray<UClass*>& OutClassOptio
 	}
 }
 
-void UXMSNodeContainerWidget::ChangeNodeClass(UClass* NewClass)
+void UXMSNodeContainerWidget::ChangeNodeClass(TSubclassOf<UXMSNode> NewClass)
 {
-	if (UXMSNode* ParentNode = OwningNode.Get())
-	{
-		ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
-	}
+	UXMSNode* ParentNode = OwningNode.Get();
+	if (!ParentNode) return;
+	
+	ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
 }
 
 void UXMSNodeContainerWidget::ResetNodeIcon()
@@ -131,7 +170,7 @@ void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* Node)
 
 void UXMSNodeContainerWidget::BroadcastNodeClicked()
 {
-	NodeClickedDelegate.Broadcast(this);
+	OptionsRequestedDelegate.Broadcast(this);
 }
 
 void UXMSNodeContainerWidget::OnNodeChanged()

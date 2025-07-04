@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSNodeClassOptionsWidget.h"
+#include "NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "XMSNodeEditorWidget.h"
 #include "XMSTypes.h"
 #include "XMSNodeCanvasWidget.generated.h"
 
+class IXMSNodeOptionsInterface;
 class UXMSNodeWithValue;
 class UXMSNodeValueWidget;
 class UXMSArrayAddButtonWidget;
@@ -54,9 +55,9 @@ protected:
 
 protected:
 	/** Bound to all SubNode Widgets */
-	virtual void OnNodeContainerWidgetClicked(UXMSNodeContainerWidget* SubNodeWidget);
+	virtual void OnOptionsRequested(UWidget* OptionsRequestingWidget);
 	/** Bound to ClassOptionsWidget */
-	virtual void OnNodeClassSelected(UClass* NewClass);
+	virtual void OnNodeOptionSelected(int32 Index);
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode);
 	/** Bound to all SubNode Widgets */
@@ -90,10 +91,10 @@ protected:
 	// Class Options
 
 public:
-	virtual UXMSNodeClassOptionsWidget* GetOrCreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget);
+	virtual UXMSNodeOptionsSelectionWidget* GetOrCreateOptionsWidgetForNode(IXMSNodeOptionsInterface* NodeOptionsInterface);
 protected:
 	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeClassOptionsWidget> ClassOptionsWidget;
+	TWeakObjectPtr<UXMSNodeOptionsSelectionWidget> ClassOptionsWidget;
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNodeContainerWidget> SelectedSubNodeWidget;
 	

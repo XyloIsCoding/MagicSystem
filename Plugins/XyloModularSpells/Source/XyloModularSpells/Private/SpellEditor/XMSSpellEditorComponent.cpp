@@ -7,7 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "UI/XMSNodeCanvasWidget.h"
-#include "UI/XMSNodeClassOptionsWidget.h"
+#include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 #include "UI/SubNode/XMSNodeValueWidget.h"

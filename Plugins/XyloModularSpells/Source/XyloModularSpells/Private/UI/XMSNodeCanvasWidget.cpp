@@ -13,11 +13,12 @@
 #include "Node/Base/XMSNodeWithArray.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
-#include "UI/XMSNodeClassOptionsWidget.h"
+#include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
+#include "UI/NodeOptions/XMSNodeOptionsInterface.h"
 #include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 #include "UI/SubNode/XMSNodeValueWidget.h"
@@ -52,12 +53,13 @@ int32 UXMSNodeCanvasWidget::AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidg
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Events
 
-void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget* SubNodeWidget)
+void UXMSNodeCanvasWidget::OnOptionsRequested(UWidget* OptionsRequestingWidget)
 {
-	SelectedSubNodeWidget = SubNodeWidget;
-	if (!SubNodeWidget) return;
-	
-	if (UXMSNodeClassOptionsWidget* OptionsWidget = GetOrCreateOptionsWidgetForNode(SubNodeWidget))
+	if (!OptionsRequestingWidget) return;
+	IXMSNodeOptionsInterface* NodeOptionsInterface = Cast<IXMSNodeOptionsInterface>(OptionsRequestingWidget);
+	if (!NodeOptionsInterface) return;
+
+	if (UXMSNodeOptionsSelectionWidget* OptionsWidget = GetOrCreateOptionsWidgetForNode(NodeOptionsInterface))
 	{
 		if (!OptionsWidget->IsInViewport())
 		{
@@ -71,17 +73,13 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked(UXMSNodeContainerWidget*
 		OptionsWidget->SetAlignmentInViewport(FVector2D(0.5f, 0.5f));
 		FVector2D PixelPos;
 		FVector2D ViewportPos;
-		USlateBlueprintLibrary::LocalToViewport(this, SubNodeWidget->GetCachedGeometry(), FVector2D(0.5f, 0.5f), PixelPos, ViewportPos);
+		USlateBlueprintLibrary::LocalToViewport(this, OptionsRequestingWidget->GetCachedGeometry(), FVector2D(0.0f, 0.0f), PixelPos, ViewportPos);
 		OptionsWidget->SetPositionInViewport(ViewportPos);
 	}
 }
 
-void UXMSNodeCanvasWidget::OnNodeClassSelected(UClass* NewClass)
+void UXMSNodeCanvasWidget::OnNodeOptionSelected(int32 Index)
 {
-	if (UXMSNodeContainerWidget* SubNodeWidget = SelectedSubNodeWidget.Get())
-	{
-		SubNodeWidget->ChangeNodeClass(NewClass);
-	}
 }
 
 void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode)
@@ -214,7 +212,10 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 	}
 	if (!Widget) return nullptr;
 
-	Widget->NodeClickedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetClicked);
+	if (IXMSNodeOptionsInterface* NodeOptionsInterface = Cast<IXMSNodeOptionsInterface>(Widget))
+	{
+		NodeOptionsInterface->GetOptionsRequestedDelegate().AddUObject(this, &UXMSNodeCanvasWidget::OnOptionsRequested);
+	}
 	Widget->NodeChangedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate);
 	Widget->SubNodeContainerAddedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded);
 	Widget->SetOwningNodeAndPath(ParentNode, PathFromParentNode);
@@ -249,13 +250,17 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeCanvasWidget::CreateValueSelectorWidget >> ValueSelectorWidgetClass non specified for [%s]"), *ValueNode->GetClass()->GetName())
 		return nullptr;
 	}
-		
-	UXMSNodeValueWidget* SubNodeWidget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
-	if (SubNodeWidget)
+	
+	UXMSNodeValueWidget* NodeValueWidget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
+	if (!NodeValueWidget) return nullptr;
+	
+	if (IXMSNodeOptionsInterface* NodeOptionsInterface = Cast<IXMSNodeOptionsInterface>(NodeValueWidget))
 	{
-		SubNodeWidget->SetOwningNode(ValueNode);
+		NodeOptionsInterface->GetOptionsRequestedDelegate().AddUObject(this, &UXMSNodeCanvasWidget::OnOptionsRequested);
 	}
-	return SubNodeWidget;
+	NodeValueWidget->SetOwningNode(ValueNode);
+	
+	return NodeValueWidget;
 }
 
 // ~Canvas Filling
@@ -264,11 +269,11 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Class Options
 
-UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::GetOrCreateOptionsWidgetForNode(UXMSNodeContainerWidget* NodeWidget)
+UXMSNodeOptionsSelectionWidget* UXMSNodeCanvasWidget::GetOrCreateOptionsWidgetForNode(IXMSNodeOptionsInterface* NodeOptionsInterface)
 {
-	if (!NodeWidget) return nullptr;
+	if (!NodeOptionsInterface) return nullptr;
 	
-	UXMSNodeClassOptionsWidget* OptionsWidget = ClassOptionsWidget.Get();
+	UXMSNodeOptionsSelectionWidget* OptionsWidget = ClassOptionsWidget.Get();
 	if (!OptionsWidget)
 	{
 		UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
@@ -276,16 +281,13 @@ UXMSNodeClassOptionsWidget* UXMSNodeCanvasWidget::GetOrCreateOptionsWidgetForNod
 		UXMSNodeDataRegistry* NodesData = MSS->GetNodeDataRegistry();
 		if (!NodesData) return nullptr;
 	
-		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeClassOptionsWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
+		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeOptionsSelectionWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
 		if (!OptionsWidget) return nullptr;
 		
-		OptionsWidget->ClassOptionChosenDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeClassSelected);
+		OptionsWidget->OptionSelectedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeOptionSelected);
 	}
 
-	TArray<UClass*> Options;
-	NodeWidget->GetNodeClassOptions(Options);
-	OptionsWidget->SetOptions(Options);
-	
+	NodeOptionsInterface->InitializeOptions(OptionsWidget);
 	return OptionsWidget;
 }
 	

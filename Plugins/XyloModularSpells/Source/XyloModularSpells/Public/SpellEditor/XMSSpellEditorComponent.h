@@ -8,7 +8,7 @@
 #include "Node/Runnable/Instruction/XMSVariableDeclarationNode.h"
 #include "XMSSpellEditorComponent.generated.h"
 
-class UXMSNodeClassOptionsWidget;
+class UXMSNodeOptionsSelectionWidget;
 class UXMSNodeCanvasWidget;
 class UXMSNodeContainerWidget;
 

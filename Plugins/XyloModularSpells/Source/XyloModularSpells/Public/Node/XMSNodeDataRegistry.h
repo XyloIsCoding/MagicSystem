@@ -8,11 +8,12 @@
 #include "XMSNodeDataRegistry.generated.h"
 
 
+class UXMSNodeClassOptionEntryWidget;
 class UXMSNodeData;
 class UXMSArrayAddButtonWidget;
 class UXMSNodeContainerFromArrayWidget;
 class UXMSNodeContainerFromMapWidget;
-class UXMSNodeClassOptionsWidget;
+class UXMSNodeOptionsSelectionWidget;
 class UXMSNodeCanvasWidget;
 
 /**
@@ -46,10 +47,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas")
 	TSubclassOf<UXMSNodeCanvasWidget> NodeCanvasWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas")
-	TSubclassOf<UXMSNodeClassOptionsWidget> NodeOptionsWidgetClass;
+	TSubclassOf<UXMSNodeOptionsSelectionWidget> NodeOptionsWidgetClass;
 	
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|Node")
 	UTexture2D* EmptyNodeTexture;
+	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|Node")
+	TSubclassOf<UXMSNodeClassOptionEntryWidget> NodeClassOptionWidgetClass;
 	
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithMap")
 	TSubclassOf<UXMSNodeContainerFromMapWidget> NodeWithMapWidgetClass;

@@ -1,0 +1,35 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "UI/NodeOptions/XMSNodeClassOptionEntryWidget.h"
+
+#include "XMSNodeStaticLibrary.h"
+#include "Node/Base/XMSNode.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
+
+
+void UXMSNodeClassOptionEntryWidget::InitializeOption(int32 InOptionIndex)
+{
+	Super::InitializeOption(InOptionIndex);
+	NodeClassOptionSelectedDelegate.Clear();
+}
+
+void UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate()
+{
+	NodeClassOptionSelectedDelegate.Broadcast(NodeClass);
+	Super::BroadcastOptionSelectedDelegate();
+}
+
+void UXMSNodeClassOptionEntryWidget::SetNodeClass(TSubclassOf<UXMSNode> InNodeClass)
+{
+	NodeClass = InNodeClass;
+
+	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIcon(NodeClass))
+	{
+		NodeClassIcon->SetDisplayIcon(Icon);
+	}
+	else
+	{
+		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
+	}
+}
