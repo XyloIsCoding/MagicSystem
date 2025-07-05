@@ -8,6 +8,26 @@
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
+UXMSNodeClassOptionEntryWidget::UXMSNodeClassOptionEntryWidget()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UUserWidget Interface
+ */
+
+void UXMSNodeClassOptionEntryWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (NodeClassIcon)
+	{
+		NodeClassIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

@@ -22,3 +22,8 @@ void UXMSNodeIconWidget::SetDisplayIcon(UTexture2D* Icon)
 void UXMSNodeIconWidget::DisplayIconSet(UTexture2D* Icon)
 {
 }
+
+void UXMSNodeIconWidget::BroadcastNodeIconClickedDelegate()
+{
+	NodeIconClickedDelegate.Broadcast();
+}

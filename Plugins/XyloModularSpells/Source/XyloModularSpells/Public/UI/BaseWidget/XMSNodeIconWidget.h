@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeIconWidget.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FXMSNodeIconClickedSignature)
+
 /**
  * 
  */
@@ -29,4 +31,9 @@ protected:
 	virtual void DisplayIconSet(UTexture2D* Icon);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_DisplayIconSet(UTexture2D* Icon);
+
+public:
+	FXMSNodeIconClickedSignature NodeIconClickedDelegate;
+	UFUNCTION(BlueprintCallable)
+	void BroadcastNodeIconClickedDelegate();
 };

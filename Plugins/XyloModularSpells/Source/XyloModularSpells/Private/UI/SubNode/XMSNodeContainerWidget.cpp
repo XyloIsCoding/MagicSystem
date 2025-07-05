@@ -21,6 +21,22 @@ UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& Objec
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UUserWidget Interface
+ */
+
+void UXMSNodeContainerWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (NodeClassIcon)
+	{
+		NodeClassIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeContainerWidget::BroadcastNodeClicked);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * UXMSNodeCanvasEntryWidget Interface
  */
 

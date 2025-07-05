@@ -4,7 +4,28 @@
 #include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
 
 #include "Node/Base/XMSNodeWithArray.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 
+
+UXMSArrayAddButtonWidget::UXMSArrayAddButtonWidget()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UUserWidget Interface
+ */
+
+void UXMSArrayAddButtonWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (Icon)
+	{
+		Icon->NodeIconClickedDelegate.AddUObject(this, &UXMSArrayAddButtonWidget::AddSubNode);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
