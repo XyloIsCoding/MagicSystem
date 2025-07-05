@@ -16,11 +16,17 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeOptionEntryWidget
+	 */
+	
 public:
+	FXMSNodeOptionEntrySelectedSignature NodeOptionEntrySelectedDelegate;
 	virtual void InitializeOption(int32 InOptionIndex);
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastOptionSelectedDelegate();
-	FXMSNodeOptionEntrySelectedSignature NodeOptionEntrySelectedDelegate;
 protected:
 	int32 OptionIndex = 0;
 };

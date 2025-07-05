@@ -3,6 +3,13 @@
 
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeOptionEntryWidget
+ */
+
 void UXMSNodeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	OptionIndex = InOptionIndex;

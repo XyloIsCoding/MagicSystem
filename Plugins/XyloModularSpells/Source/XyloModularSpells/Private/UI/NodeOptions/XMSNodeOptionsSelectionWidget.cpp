@@ -7,6 +7,15 @@
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeOptionsSelectionWidget
+ */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// OptionSelection
+
 void UXMSNodeOptionsSelectionWidget::SelectOption(int32 Index)
 {
 	OptionSelected(Index);
@@ -18,3 +27,5 @@ void UXMSNodeOptionsSelectionWidget::OptionSelected(int32 Index)
 {
 }
 
+// ~OptionSelection
+/*--------------------------------------------------------------------------------------------------------------------*/

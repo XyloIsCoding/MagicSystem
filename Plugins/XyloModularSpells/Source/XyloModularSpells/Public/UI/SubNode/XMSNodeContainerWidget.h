@@ -69,23 +69,14 @@ public:
 	 * UXMSNodeContainerWidget
 	 */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Icon
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void UpdateNodeClassIcon();
-protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> NodeClassIcon;
-
-public:
-	UFUNCTION(BlueprintCallable)
-	virtual FString GetNodeName() const;
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual bool GetNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
-
-public:
-	UXMSNode* GetNode() const;
-	virtual void GetNodeClassOptions(TArray<UClass*>& OutClassOptions);
-	void ChangeNodeClass(TSubclassOf<UXMSNode> NewClass);
 protected:
 	virtual void ResetNodeIcon();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -93,6 +84,26 @@ protected:
 	virtual void UpdateNodeIcon(UXMSNode* Node);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_UpdateNodeIcon(UXMSNode* Node);
+protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeIconWidget> NodeClassIcon;
+
+	// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// ContainedNode
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetNodeName() const;
+public:
+	UXMSNode* GetNode() const;
+	virtual void GetNodeClassOptions(TArray<UClass*>& OutClassOptions);
+	void ChangeNodeClass(TSubclassOf<UXMSNode> NewClass);
+
+	// ~ContainedNode
+/*--------------------------------------------------------------------------------------------------------------------*/
 	
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events

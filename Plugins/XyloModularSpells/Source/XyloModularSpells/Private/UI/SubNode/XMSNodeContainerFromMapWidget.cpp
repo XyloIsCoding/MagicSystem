@@ -16,6 +16,9 @@
  * UXMSNodeContainerFromMapWidget
  */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Icon
+
 void UXMSNodeContainerFromMapWidget::UpdateSubNodeTypeIcon()
 {
 	if (UTexture2D* Icon = GetSubNodeTypeIcon())
@@ -59,4 +62,7 @@ UTexture2D* UXMSNodeContainerFromMapWidget::GetSubNodeTypeIcon() const
 
 	return SubNodeData->Glyph;
 }
+
+// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
 

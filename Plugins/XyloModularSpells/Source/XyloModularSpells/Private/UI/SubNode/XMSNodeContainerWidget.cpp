@@ -98,6 +98,9 @@ void UXMSNodeContainerWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* 
  * UXMSNodeContainerWidget
  */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Icon
+
 void UXMSNodeContainerWidget::UpdateNodeClassIcon()
 {
 	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIconFromNode(GetNode()))
@@ -108,15 +111,6 @@ void UXMSNodeContainerWidget::UpdateNodeClassIcon()
 	{
 		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetNode()));
 	}
-}
-
-FString UXMSNodeContainerWidget::GetNodeName() const
-{
-	if (UXMSNode* ThisNode = GetNode())
-	{
-		return ThisNode->GetName();
-	}
-	return FString(TEXT("[-]"));
 }
 
 bool UXMSNodeContainerWidget::GetNodeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const
@@ -131,6 +125,29 @@ bool UXMSNodeContainerWidget::GetNodeDisplayData(UTexture2D*& OutGlyph, FText& O
 	OutDisplayName = NodeData->Name;
 	OutDescription = NodeData->Description;
 	return true;
+}
+
+void UXMSNodeContainerWidget::ResetNodeIcon()
+{
+}
+
+void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* Node)
+{
+}
+
+// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// ContainedNode
+
+FString UXMSNodeContainerWidget::GetNodeName() const
+{
+	if (UXMSNode* ThisNode = GetNode())
+	{
+		return ThisNode->GetName();
+	}
+	return FString(TEXT("[-]"));
 }
 
 UXMSNode* UXMSNodeContainerWidget::GetNode() const
@@ -157,13 +174,8 @@ void UXMSNodeContainerWidget::ChangeNodeClass(TSubclassOf<UXMSNode> NewClass)
 	ParentNode->SetSubNode(ThisNodePath, NewObject<UXMSNode>(ParentNode->GetOuter(), NewClass));
 }
 
-void UXMSNodeContainerWidget::ResetNodeIcon()
-{
-}
-
-void UXMSNodeContainerWidget::UpdateNodeIcon(UXMSNode* Node)
-{
-}
+// ~ContainedNode
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 // Events

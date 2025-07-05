@@ -8,6 +8,12 @@
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeOptionEntryWidget Interface
+ */
+
 void UXMSNodeClassOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	Super::InitializeOption(InOptionIndex);
@@ -19,6 +25,12 @@ void UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate()
 	NodeClassOptionSelectedDelegate.Broadcast(NodeClass);
 	Super::BroadcastOptionSelectedDelegate();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSNodeClassOptionEntryWidget
+ */
 
 void UXMSNodeClassOptionEntryWidget::SetNodeClass(TSubclassOf<UXMSNode> InNodeClass)
 {

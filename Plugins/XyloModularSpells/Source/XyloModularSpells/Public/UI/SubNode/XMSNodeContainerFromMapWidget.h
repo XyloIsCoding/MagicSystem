@@ -23,17 +23,21 @@ class XYLOMODULARSPELLS_API UXMSNodeContainerFromMapWidget : public UXMSNodeCont
 	 * UXMSNodeContainerFromMapWidget
 	 */
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Icon
+
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void UpdateSubNodeTypeIcon();
-protected:
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> NodeTypeIcon;
-	
-public:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual bool GetSubNodeTypeDisplayData(UTexture2D*& OutGlyph, FText& OutDisplayName, FText& OutDescription) const;
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual UTexture2D* GetSubNodeTypeIcon() const;
+protected:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UXMSNodeIconWidget> NodeTypeIcon;
+
+	// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 };

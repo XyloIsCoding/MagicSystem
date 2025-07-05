@@ -240,9 +240,7 @@ UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXM
 UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode)
 {
 	if (!ValueNode) return nullptr;
-	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
-	if (!NodeDataRegistry) return nullptr;
-	UXMSNodeData* Data = NodeDataRegistry->GetNodeData(ValueNode->GetClass());
+	UXMSNodeData* Data = UXMSNodeStaticLibrary::GetNodeClassData(ValueNode->GetClass());
 	if (!Data) return nullptr;
 
 	if (!Data->ValueSelectorWidgetClass)

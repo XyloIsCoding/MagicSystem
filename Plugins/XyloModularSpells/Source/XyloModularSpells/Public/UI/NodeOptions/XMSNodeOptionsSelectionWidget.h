@@ -33,6 +33,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UPanelWidget> OptionsContainer;
 
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// OptionSelection
+	
 public:
 	FXMSOptionSelectedSignature OptionSelectedDelegate;
 protected:
@@ -40,7 +43,14 @@ protected:
 	virtual void OptionSelected(int32 Index);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OptionSelected(int32 Index);
+
+	// ~OptionSelection
+/*--------------------------------------------------------------------------------------------------------------------*/
+	
 };
+
+
+
 
 template <typename EntryClass> requires std::is_base_of_v<UXMSNodeOptionEntryWidget, EntryClass>
 void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries)
