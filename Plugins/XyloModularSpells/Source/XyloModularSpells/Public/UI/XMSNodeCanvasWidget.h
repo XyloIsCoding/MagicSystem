@@ -95,8 +95,6 @@ public:
 protected:
 	UPROPERTY()
 	TWeakObjectPtr<UXMSNodeOptionsSelectionWidget> ClassOptionsWidget;
-	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeContainerWidget> SelectedSubNodeWidget;
 	
 	// ~Class Options
 /*--------------------------------------------------------------------------------------------------------------------*/
