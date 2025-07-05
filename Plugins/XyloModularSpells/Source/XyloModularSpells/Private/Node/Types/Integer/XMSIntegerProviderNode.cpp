@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/ValueProvider/XMSIntegerProviderNode.h"
+#include "Node/Types/Integer/XMSIntegerProviderNode.h"
 
 UXMSIntegerProviderNode::UXMSIntegerProviderNode()
 {

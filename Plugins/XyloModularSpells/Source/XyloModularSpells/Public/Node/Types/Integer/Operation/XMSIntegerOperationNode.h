@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Integer/XMSIntegerOperatorInterface.h"
+#include "Node/Types/Integer/Operation/XMSIntegerOperatorInterface.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
-#include "Node/Value/XMSIntegerValueInterface.h"
+#include "Node/Types/Integer/XMSIntegerValueInterface.h"
 #include "XMSIntegerOperationNode.generated.h"
 
 /**

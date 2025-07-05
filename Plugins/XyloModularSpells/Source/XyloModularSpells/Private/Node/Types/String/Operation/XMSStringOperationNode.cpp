@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Operation/XMSStringOperationNode.h"
+#include "Node/Types/String/Operation/XMSStringOperationNode.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

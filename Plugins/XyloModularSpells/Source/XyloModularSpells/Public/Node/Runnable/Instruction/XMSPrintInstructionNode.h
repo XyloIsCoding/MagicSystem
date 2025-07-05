@@ -6,7 +6,7 @@
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Runnable/XMSRunnableNodeInterface.h"
-#include "Node/Value/XMSStringValueInterface.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
 #include "XMSPrintInstructionNode.generated.h"
 
 /**

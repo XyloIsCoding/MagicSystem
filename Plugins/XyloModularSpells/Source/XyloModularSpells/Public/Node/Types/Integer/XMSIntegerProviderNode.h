@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Node/XMSNodeContainer.h"
-#include "Node/Value/XMSIntegerValueInterface.h"
-#include "Node/Value/XMSStringValueInterface.h"
+#include "Node/Types/Integer/XMSIntegerValueInterface.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
 #include "XMSIntegerProviderNode.generated.h"
 
 /**

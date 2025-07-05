@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSStringValueInterface.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSVariableNameNode.generated.h"
 

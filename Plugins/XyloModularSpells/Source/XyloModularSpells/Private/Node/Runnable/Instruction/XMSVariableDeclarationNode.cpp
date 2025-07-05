@@ -5,7 +5,7 @@
 
 #include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
-#include "Node/Value/XMSVariableNameNode.h"
+#include "Node/Variable/XMSVariableNameNode.h"
 #include "Spell/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
 

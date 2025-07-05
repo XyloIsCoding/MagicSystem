@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Value/XMSVariableNameNode.h"
+#include "Node/Variable/XMSVariableNameNode.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"

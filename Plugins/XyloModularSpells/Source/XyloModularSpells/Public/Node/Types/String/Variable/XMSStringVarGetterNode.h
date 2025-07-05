@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
-#include "Node/Value/XMSStringValueInterface.h"
-#include "Node/Value/XMSVariableNameNode.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
+#include "Node/Variable/XMSVariableNameNode.h"
 #include "XMSStringVarGetterNode.generated.h"
 
 /**

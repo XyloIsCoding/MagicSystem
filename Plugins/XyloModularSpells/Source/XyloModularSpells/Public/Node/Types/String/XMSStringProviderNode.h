@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Node/XMSNodeContainer.h"
-#include "Node/Value/XMSStringValueInterface.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
 #include "XMSStringProviderNode.generated.h"
 
 class UXMSStringValueNode;

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Variable/Getter/XMSStringVarGetterNode.h"
+#include "Node/Types/String/Variable/XMSStringVarGetterNode.h"
 
 #include "XMSTypes.h"
 #include "Spell/XMSSpellExecutorInterface.h"

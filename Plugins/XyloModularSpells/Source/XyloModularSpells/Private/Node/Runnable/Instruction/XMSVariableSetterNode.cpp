@@ -3,7 +3,7 @@
 
 #include "Node/Runnable/Instruction/XMSVariableSetterNode.h"
 
-#include "Node/Variable/Setter/XMSVariableSetterInterface.h"
+#include "Node/Variable/XMSVariableSetterInterface.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

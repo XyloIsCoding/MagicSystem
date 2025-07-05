@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Node/XMSNodeContainer.h"
 #include "Node/Runnable/XMSRunnableNodeInterface.h"
-#include "Node/Value/XMSStringValueInterface.h"
-#include "Node/Value/XMSStringValueNode.h"
-#include "Node/Value/XMSVariableTypeValueInterface.h"
-#include "Node/Value/XMSVariableTypeValueNode.h"
+#include "Node/Types/String/XMSStringValueInterface.h"
+#include "Node/Types/String/XMSStringValueNode.h"
+#include "Node/Variable/XMSVariableTypeValueInterface.h"
+#include "Node/Variable/XMSVariableTypeValueNode.h"
 #include "XMSVariableDeclarationNode.generated.h"
 
 /**
