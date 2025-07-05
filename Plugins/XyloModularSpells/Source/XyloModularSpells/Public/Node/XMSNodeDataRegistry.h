@@ -10,7 +10,7 @@
 
 class UXMSNodeClassOptionEntryWidget;
 class UXMSNodeData;
-class UXMSArrayAddButtonWidget;
+class UXMSArrayTerminatorWidget;
 class UXMSNodeContainerFromArrayWidget;
 class UXMSNodeContainerFromMapWidget;
 class UXMSNodeOptionsSelectionWidget;
@@ -63,7 +63,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
 	TSubclassOf<UXMSNodeContainerFromArrayWidget> NodeWithArrayWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
-	TSubclassOf<UXMSArrayAddButtonWidget> ArrayTerminatorWidgetClass;
+	TSubclassOf<UXMSArrayTerminatorWidget> ArrayTerminatorWidgetClass;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// NodesData

@@ -151,7 +151,7 @@ public:
 	 * by this NodeContainer). Put differently these are the NodeContainers that hold the sub-nodes of this Node
 	 * This is emptied in OnNodeChanged, filled by NodeCanvas when creating SubNodeContainerWidgets and elements are
 	 * removed in OnSubNodeContainerRemoved
-	 * The Last element should ALWAYS be the array terminator (XMSArrayAddButtonWidget) */
+	 * The Last element should ALWAYS be the array terminator (UXMSArrayTerminatorWidget) */
 	TArray<TWeakObjectPtr<UXMSNodeCanvasEntryWidget>> SubNodeContainerWidgets;
 	
 };

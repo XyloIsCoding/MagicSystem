@@ -14,14 +14,14 @@
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Base/XMSNodeWithValue.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
-#include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
+#include "UI/BaseWidget/XMSArrayTerminatorWidget.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 #include "UI/NodeOptions/XMSNodeOptionsInterface.h"
 #include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
-#include "UI/SubNode/XMSNodeValueWidget.h"
+#include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ void UXMSNodeCanvasWidget::AddArrayTerminationWidget(UXMSNodeContainerWidget* No
 {
 	if (!Node) return;
 	
-	UXMSArrayAddButtonWidget* ArrayTerminator = CreateArrayTerminationWidget(Node);
+	UXMSArrayTerminatorWidget* ArrayTerminator = CreateArrayTerminationWidget(Node);
 	if (ArrayTerminator)
 	{
 		if (NodeWidget) NodeWidget->SubNodeContainerWidgets.Add(ArrayTerminator);
@@ -183,7 +183,7 @@ void UXMSNodeCanvasWidget::AddValueSelectorWidget(UXMSNodeContainerWidget* NodeW
 {
 	if (!Node) return;
 	
-	UXMSNodeValueWidget* ValueSelector = CreateValueSelectorWidget(Node);
+	UXMSNodeValueSelectorWidget* ValueSelector = CreateValueSelectorWidget(Node);
 	if (ValueSelector)
 	{
 		Index = AddNodeWidgetAt(Index, ValueSelector);
@@ -223,13 +223,13 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 	return Widget;
 }
 
-UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode)
+UXMSArrayTerminatorWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode)
 {
 	if (!ArrayNode) return nullptr;
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 		
-	UXMSArrayAddButtonWidget* SubNodeWidget = CreateWidget<UXMSArrayAddButtonWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayTerminatorWidgetClass);
+	UXMSArrayTerminatorWidget* SubNodeWidget = CreateWidget<UXMSArrayTerminatorWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayTerminatorWidgetClass);
 	if (SubNodeWidget)
 	{
 		SubNodeWidget->SetOwningNode(ArrayNode);
@@ -237,7 +237,7 @@ UXMSArrayAddButtonWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UXM
 	return SubNodeWidget;
 }
 
-UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode)
+UXMSNodeValueSelectorWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode)
 {
 	if (!ValueNode) return nullptr;
 	UXMSNodeData* Data = UXMSNodeStaticLibrary::GetNodeClassData(ValueNode->GetClass());
@@ -249,7 +249,7 @@ UXMSNodeValueWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXMSNodeWit
 		return nullptr;
 	}
 	
-	UXMSNodeValueWidget* NodeValueWidget = CreateWidget<UXMSNodeValueWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
+	UXMSNodeValueSelectorWidget* NodeValueWidget = CreateWidget<UXMSNodeValueSelectorWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
 	if (!NodeValueWidget) return nullptr;
 	
 	if (IXMSNodeOptionsInterface* NodeOptionsInterface = Cast<IXMSNodeOptionsInterface>(NodeValueWidget))

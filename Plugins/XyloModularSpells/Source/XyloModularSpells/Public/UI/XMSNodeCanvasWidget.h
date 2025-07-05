@@ -10,8 +10,8 @@
 
 class IXMSNodeOptionsInterface;
 class UXMSNodeWithValue;
-class UXMSNodeValueWidget;
-class UXMSArrayAddButtonWidget;
+class UXMSNodeValueSelectorWidget;
+class UXMSArrayTerminatorWidget;
 class UXMSNodeWithArray;
 class UXMSNodeCanvasEntryWidget;
 class UXMSNode;
@@ -81,8 +81,8 @@ protected:
 	void AddArrayTerminationWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithArray* Node);
 	void AddValueSelectorWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithValue* Node);
 	UXMSNodeContainerWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
-	UXMSArrayAddButtonWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode);
-	UXMSNodeValueWidget* CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode);
+	UXMSArrayTerminatorWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode);
+	UXMSNodeValueSelectorWidget* CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode);
 	
 	// ~Canvas Filling
 /*--------------------------------------------------------------------------------------------------------------------*/

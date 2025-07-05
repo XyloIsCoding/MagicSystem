@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSNodeCanvasEntryWidget.h"
-#include "XMSArrayAddButtonWidget.generated.h"
+#include "XMSArrayTerminatorWidget.generated.h"
 
 class UXMSNodeIconWidget;
 
@@ -12,12 +12,12 @@ class UXMSNodeIconWidget;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSArrayAddButtonWidget : public UXMSNodeCanvasEntryWidget
+class XYLOMODULARSPELLS_API UXMSArrayTerminatorWidget : public UXMSNodeCanvasEntryWidget
 {
 	GENERATED_BODY()
 
 public:
-	UXMSArrayAddButtonWidget();
+	UXMSArrayTerminatorWidget();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSArrayAddButtonWidget
+	 * UXMSArrayTerminatorWidget
 	 */
 
 public:

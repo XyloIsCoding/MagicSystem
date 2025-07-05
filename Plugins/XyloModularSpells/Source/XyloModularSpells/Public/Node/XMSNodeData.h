@@ -8,7 +8,7 @@
 
 
 class UXMSNode;
-class UXMSNodeValueWidget;
+class UXMSNodeValueSelectorWidget;
 
 USTRUCT(BlueprintType)
 struct FXMSSubNodeData
@@ -104,7 +104,7 @@ public:
 	TObjectPtr<UTexture2D> Glyph;
 	
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
-	TSubclassOf<UXMSNodeValueWidget> ValueSelectorWidgetClass;
+	TSubclassOf<UXMSNodeValueSelectorWidget> ValueSelectorWidgetClass;
 
 	/** Node with this property set to true will not be displayed in spell editor, which means that the ContainerWidget
 	 * set to display this node, will disappear, and the node of the container will no longer be modifiable.

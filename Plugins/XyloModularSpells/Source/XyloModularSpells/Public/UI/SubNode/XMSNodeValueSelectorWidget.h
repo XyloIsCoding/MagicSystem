@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "XMSNodeContainerWidget.h"
-#include "XMSNodeValueWidget.generated.h"
+#include "XMSNodeValueSelectorWidget.generated.h"
 
 class UXMSNodeWithValue;
 
@@ -13,14 +13,14 @@ class UXMSNodeWithValue;
  * It is used to display stuff like text input fields and similar
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeValueWidget : public UXMSNodeCanvasEntryWidget
+class XYLOMODULARSPELLS_API UXMSNodeValueSelectorWidget : public UXMSNodeCanvasEntryWidget
 {
 	GENERATED_BODY()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSNodeValueWidget
+	 * UXMSNodeValueSelectorWidget
 	 */
 	
 };

@@ -10,7 +10,7 @@
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
-#include "UI/SubNode/XMSNodeValueWidget.h"
+#include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 
 
 UXMSSpellEditorComponent::UXMSSpellEditorComponent()

@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/BaseWidget/XMSArrayAddButtonWidget.h"
+#include "UI/BaseWidget/XMSArrayTerminatorWidget.h"
 
 #include "Node/Base/XMSNodeWithArray.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
-UXMSArrayAddButtonWidget::UXMSArrayAddButtonWidget()
+UXMSArrayTerminatorWidget::UXMSArrayTerminatorWidget()
 {
 }
 
@@ -17,23 +17,23 @@ UXMSArrayAddButtonWidget::UXMSArrayAddButtonWidget()
  * UUserWidget Interface
  */
 
-void UXMSArrayAddButtonWidget::NativeOnInitialized()
+void UXMSArrayTerminatorWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
 	if (Icon)
 	{
-		Icon->NodeIconClickedDelegate.AddUObject(this, &UXMSArrayAddButtonWidget::AddSubNode);
+		Icon->NodeIconClickedDelegate.AddUObject(this, &UXMSArrayTerminatorWidget::AddSubNode);
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSArrayAddButtonWidget
+ * UXMSArrayTerminatorWidget
  */
 
-void UXMSArrayAddButtonWidget::AddSubNode()
+void UXMSArrayTerminatorWidget::AddSubNode()
 {
 	if (UXMSNodeWithArray* ParentNode = Cast<UXMSNodeWithArray>(OwningNode.Get()))
 	{
