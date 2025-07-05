@@ -78,11 +78,6 @@ void UXMSNodeContainerWidget::OnOwningNodeSet()
  * IXMSNodeOptionsInterface Interface
  */
 
-FXMSOptionsRequestedSignature& UXMSNodeContainerWidget::GetOptionsRequestedDelegate()
-{
-	return OptionsRequestedDelegate;
-}
-
 void UXMSNodeContainerWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();

@@ -68,7 +68,7 @@ protected:
 
 public:
 	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
-	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override;
+	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override { return OptionsRequestedDelegate; }
 	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
