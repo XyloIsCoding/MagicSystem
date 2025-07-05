@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Node/Variable/XMSVariableNameNode.h"
+#include "Node/Variable/XMSVariableNameValueNode.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
@@ -14,7 +14,7 @@
  * UXMSNode Interface
  */
 
-TSharedPtr<FJsonObject> UXMSVariableNameNode::SerializeToJson(bool& bOutSuccess)
+TSharedPtr<FJsonObject> UXMSVariableNameValueNode::SerializeToJson(bool& bOutSuccess)
 {
 	TSharedPtr<FJsonObject> NodeJson = Super::SerializeToJson(bOutSuccess);
 
@@ -29,7 +29,7 @@ TSharedPtr<FJsonObject> UXMSVariableNameNode::SerializeToJson(bool& bOutSuccess)
 	return NodeJson;
 }
 
-void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
+void UXMSVariableNameValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
 	Super::DeserializeFromJson(JsonObject);
 
@@ -42,7 +42,7 @@ void UXMSVariableNameNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 	}
 }
 
-void UXMSVariableNameNode::OnParentSet()
+void UXMSVariableNameValueNode::OnParentSet()
 {
 	Super::OnParentSet();
 
@@ -58,7 +58,7 @@ void UXMSVariableNameNode::OnParentSet()
  * IXMSStringValueInterface Interface
  */
 
-bool UXMSVariableNameNode::GetString(FString& OutString)
+bool UXMSVariableNameValueNode::GetString(FString& OutString)
 {
 	if (CachedName.IsEmpty())
 	{
@@ -75,7 +75,7 @@ bool UXMSVariableNameNode::GetString(FString& OutString)
  * UXMSStringValueNode
  */
 
-void UXMSVariableNameNode::OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType)
+void UXMSVariableNameValueNode::OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType)
 {
 	if (NewVariableType != VariableType && OldVariableType != VariableType) return;
 
@@ -89,14 +89,14 @@ void UXMSVariableNameNode::OnDeclaredVariablesListChanged(const FString& NewVari
 	}
 }
 
-void UXMSVariableNameNode::SelectByIndex(int32 InStringIndex)
+void UXMSVariableNameValueNode::SelectByIndex(int32 InStringIndex)
 {
 	if (!IsInSpellEditorContext()) return;
 	
 	CacheString(InStringIndex);
 }
 
-void UXMSVariableNameNode::SetType(int32 InVariableType)
+void UXMSVariableNameValueNode::SetType(int32 InVariableType)
 {
 	if (!IsInSpellEditorContext()) return;
 	
@@ -106,7 +106,7 @@ void UXMSVariableNameNode::SetType(int32 InVariableType)
 	CacheString(-1);
 }
 
-void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
+void UXMSVariableNameValueNode::GetOptions(TArray<FString>& OutStringOptions) const
 {
 	UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter());
 	if (!SpellEditor) return;
@@ -114,7 +114,7 @@ void UXMSVariableNameNode::GetOptions(TArray<FString>& OutStringOptions) const
 	SpellEditor->GetVariablesNamesByType(this, VariableType, OutStringOptions);
 }
 
-void UXMSVariableNameNode::CacheString(int32 Index)
+void UXMSVariableNameValueNode::CacheString(int32 Index)
 {
 	FString OldName = CachedName;
 

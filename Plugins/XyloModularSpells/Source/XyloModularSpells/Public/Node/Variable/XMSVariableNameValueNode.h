@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Node/Types/String/XMSStringValueInterface.h"
 #include "Node/Base/XMSNodeWithValue.h"
-#include "XMSVariableNameNode.generated.h"
+#include "XMSVariableNameValueNode.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableNameChangedSignature, const FString& /* New */ , const FString& /* Old */ )
 
@@ -13,7 +13,7 @@ DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableNameChangedSignature, const FSt
  * Call SetType from the parent node!!!
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVariableNameNode : public UXMSNodeWithValue, public IXMSStringValueInterface
+class XYLOMODULARSPELLS_API UXMSVariableNameValueNode : public UXMSNodeWithValue, public IXMSStringValueInterface
 {
 	GENERATED_BODY()
 

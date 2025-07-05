@@ -10,7 +10,7 @@
 
 UXMSIntegerVarSetterNode::UXMSIntegerVarSetterNode()
 {
-	VariableName.Set(NewObject<UXMSVariableNameNode>(GetOuter()));
+	VariableName.Set(NewObject<UXMSVariableNameValueNode>(GetOuter()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ void UXMSIntegerVarSetterNode::OnSubNodeChanged(FName Identifier)
 
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableName)))
 	{
-		if (UXMSVariableNameNode* VariableNameNode = VariableName.Get())
+		if (UXMSVariableNameValueNode* VariableNameNode = VariableName.Get())
 		{
 			VariableNameNode->SetType(XMSVariableType::EVT_Integer);
 		}

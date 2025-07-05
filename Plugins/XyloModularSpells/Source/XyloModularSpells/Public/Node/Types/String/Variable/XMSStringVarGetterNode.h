@@ -6,7 +6,7 @@
 #include "Node/XMSNodeContainer.h"
 #include "Node/Base/XMSNodeWithMap.h"
 #include "Node/Types/String/XMSStringValueInterface.h"
-#include "Node/Variable/XMSVariableNameNode.h"
+#include "Node/Variable/XMSVariableNameValueNode.h"
 #include "XMSStringVarGetterNode.generated.h"
 
 /**
@@ -45,7 +45,7 @@ public:
 	 */
 	
 public:
-	TXMSNodeContainer<UXMSVariableNameNode, IXMSStringValueInterface> VariableName = {
+	TXMSNodeContainer<UXMSVariableNameValueNode, IXMSStringValueInterface> VariableName = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, VariableName),
 		[](UClass* NodeClass){ return true; } };
