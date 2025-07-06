@@ -96,6 +96,30 @@ void UXMSNodeStaticLibrary::WriteJson(FString JsonFilePath, TSharedPtr<FJsonObje
 	OutInfoMessage = FString::Printf(TEXT("UXMSNodeStaticLibrary::WriteJson >> Write to json succeeded - %s"), *JsonFilePath);
 }
 
+void UXMSNodeStaticLibrary::GetAllValueTypes(TArray<FGameplayTag>& OutTypes)
+{
+	if (UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry())
+	{
+		NodeDataRegistry->GetTypesData().GetKeys(OutTypes);
+	}
+	OutTypes.Insert(XMSVariableType::None, 0);
+}
+
+FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
+{
+	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return XMSVariableType::None;
+
+	for (TPair<FGameplayTag, FXMSValueTypeData> TypeDataPair : NodeDataRegistry->GetTypesData())
+	{
+		if (TypeDataPair.Key.GetTagName().IsEqual(TypeName))
+		{
+			return TypeDataPair.Key;
+		}
+	}
+	return XMSVariableType::None;
+}
+
 UClass* UXMSNodeStaticLibrary::GetNodeClassByName(const FString& ClassName)
 {
 	for (UClass* NodeClass : UXMSModularSpellsSubsystem::Get()->GetNodeClasses())

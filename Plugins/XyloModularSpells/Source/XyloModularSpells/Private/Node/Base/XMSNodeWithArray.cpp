@@ -101,7 +101,7 @@ void UXMSNodeWithArray::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 
 UXMSNode* UXMSNodeWithArray::GetSubNode(const FXMSNodePathElement& PathElement) const
 {
-	if (PathElement.Identifier != SubNodes.Key) return nullptr;
+	if (!PathElement.Identifier.IsEqual(SubNodes.Key)) return nullptr;
 	return GetSubNode(PathElement.Index);
 }
 
@@ -127,7 +127,7 @@ void UXMSNodeWithArray::GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const
 
 void UXMSNodeWithArray::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode)
 {
-	if (PathElement.Identifier != SubNodes.Key) return;
+	if (!PathElement.Identifier.IsEqual(SubNodes.Key)) return;
 	SetSubNode(PathElement.Index, InNode);
 }
 

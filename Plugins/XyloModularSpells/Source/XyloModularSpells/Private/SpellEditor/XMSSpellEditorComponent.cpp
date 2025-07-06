@@ -38,16 +38,16 @@ void UXMSSpellEditorComponent::BeginPlay()
 /*--------------------------------------------------------------------------------------------------------------------*/
 // VariablesManagement
 
-void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type)
+void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& NewName, const FGameplayTag& NewType)
 {
-	if (Name.IsEmpty()) return;
+	if (NewName.IsEmpty()) return;
 	
 	FXMSScopedVariable* ScopedVariable = GetVariable(DeclarationNode);
 	if (!ScopedVariable)
 	{
-		if (!HasVariableInScope(DeclarationNode, Name))
+		if (!HasVariableInScope(DeclarationNode, NewName))
 		{
-			int32 Index = ScopedVariables.Add(FXMSScopedVariable(Name, Type, DeclarationNode));
+			int32 Index = ScopedVariables.Add(FXMSScopedVariable(NewName, NewType, DeclarationNode));
 			
 			const FXMSScopedVariable& NewScopedVariable = ScopedVariables[Index];
 			// Since it is a new variable, I use new name and type as old too
@@ -58,19 +58,19 @@ void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationN
 
 	bool bUpdated = false;
 	FString OldName = ScopedVariable->Name;
-	int32 OldType = ScopedVariable->Type;
+	FGameplayTag OldType = ScopedVariable->Type;
 
 	// We can only change name if there is not another variable of this name in scope
-	if (ScopedVariable->Name != Name && !HasVariableInScope(DeclarationNode, Name))
+	if (!ScopedVariable->Name.Equals(NewName) && !HasVariableInScope(DeclarationNode, NewName))
 	{
-		ScopedVariable->Name = Name;
+		ScopedVariable->Name = NewName;
 		bUpdated = true;
 	}
 
 	// We can change type freely because name uniqueness is checked across types
-	if (ScopedVariable->Type != Type)
+	if (!ScopedVariable->Type.MatchesTagExact(NewType))
 	{
-		ScopedVariable->Type = Type;
+		ScopedVariable->Type = NewType;
 		bUpdated = true;
 	}
 
@@ -80,14 +80,14 @@ void UXMSSpellEditorComponent::RegisterOrUpdateVariable(UXMSVariableDeclarationN
 	}
 }
 
-void UXMSSpellEditorComponent::UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, int32 Type)
+void UXMSSpellEditorComponent::UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, const FGameplayTag& Type)
 {
 	FXMSScopedVariable* ScopedVariable = GetVariable(DeclarationNode);
 	if (!ScopedVariable) return;
 
-	if (ScopedVariable->Type != Type)
+	if (!ScopedVariable->Type.MatchesTagExact(Type))
 	{
-		int32 OldType = ScopedVariable->Type;
+		FGameplayTag OldType = ScopedVariable->Type;
 		ScopedVariable->Type = Type;
 		// Since name did not change, I use new name as old too
 		DeclaredVariableListChangedDelegate.Broadcast(ScopedVariable->Name, ScopedVariable->Type, ScopedVariable->Name, OldType);
@@ -102,7 +102,7 @@ void UXMSSpellEditorComponent::UnRegisterVariable(UXMSVariableDeclarationNode* D
 		if (DeclarationNode == ScopedVariable.DeclarationNode.Get())
 		{
 			FString VariableName = ScopedVariable.Name;
-			int32 VariableType = ScopedVariable.Type;
+			FGameplayTag VariableType = ScopedVariable.Type;
 			
 			It.RemoveCurrent();
 			// Since we are removing the variable, I use new name and type as old too
@@ -111,7 +111,7 @@ void UXMSSpellEditorComponent::UnRegisterVariable(UXMSVariableDeclarationNode* D
 	}
 }
 
-void UXMSSpellEditorComponent::GetVariablesNamesByType(const UXMSNode* RequestingNode, int32 Type, TArray<FString>& OutVariableNames) const
+void UXMSSpellEditorComponent::GetVariablesNamesByType(const UXMSNode* RequestingNode, const FGameplayTag& Type, TArray<FString>& OutVariableNames) const
 {
 	if (!RequestingNode) return;
 	
@@ -120,7 +120,7 @@ void UXMSSpellEditorComponent::GetVariablesNamesByType(const UXMSNode* Requestin
 	
 	for (const FXMSScopedVariable& ScopedVariable : ScopedVariables)
 	{
-		if (ScopedVariable.Type == Type)
+		if (ScopedVariable.Type.MatchesTagExact(Type))
 		{
 			// We only want to add the variable if Node is in scope of the node that created the variable
 			if (RequestingNode->IsInScopeOf(ScopedVariable.DeclarationNode.Get(), RequestingNodeHierarchy))
@@ -131,7 +131,7 @@ void UXMSSpellEditorComponent::GetVariablesNamesByType(const UXMSNode* Requestin
 	}
 }
 
-bool UXMSSpellEditorComponent::HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, int32 Type) const
+bool UXMSSpellEditorComponent::HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, const FGameplayTag& Type) const
 {
 	if (!RequestingNode) return false;
 
@@ -139,12 +139,12 @@ bool UXMSSpellEditorComponent::HasVariableInScope(UXMSNode* RequestingNode, cons
 	TArray<UXMSNode*> RequestingNodeHierarchy;
 	RequestingNode->GetHierarchy(RequestingNodeHierarchy);
 	
-	if (Type != XMSVariableType::EVT_None)
+	if (!Type.MatchesTagExact(XMSVariableType::None))
 	{
 		// Check by type first to decrease string comparison
 		return ScopedVariables.ContainsByPredicate([RequestingNode, RequestingNodeHierarchy, Name, Type](const FXMSScopedVariable& Variable)
 			{
-				return Type == Variable.Type && Name.Equals(Variable.Name) && RequestingNode->IsInScopeOf(Variable.DeclarationNode.Get(), RequestingNodeHierarchy);
+				return Type.MatchesTagExact(Variable.Type) && Name.Equals(Variable.Name) && RequestingNode->IsInScopeOf(Variable.DeclarationNode.Get(), RequestingNodeHierarchy);
 			});
 	}
 

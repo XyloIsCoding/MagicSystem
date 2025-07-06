@@ -3,6 +3,9 @@
 
 #include "Node/Variable/XMSVariableTypeValueNode.h"
 
+#include "XMSNodeStaticLibrary.h"
+#include "Node/XMSNodeDataRegistry.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -13,8 +16,9 @@
 TSharedPtr<FJsonObject> UXMSVariableTypeValueNode::SerializeToJson(bool& bOutSuccess)
 {
 	TSharedPtr<FJsonObject> NodeJson = Super::SerializeToJson(bOutSuccess);
-
-	NodeJson->SetNumberField(ValueJsonKey, VariableType);
+	
+	NodeJson->SetStringField(ValueJsonKey, VariableType.ToString());
+	
 	return NodeJson;
 }
 
@@ -22,7 +26,9 @@ void UXMSVariableTypeValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> Json
 {
 	Super::DeserializeFromJson(JsonObject);
 
-	JsonObject->TryGetNumberField(ValueJsonKey, VariableType);
+	FString VariableTypeString;
+	JsonObject->TryGetStringField(ValueJsonKey, VariableTypeString);
+	VariableType = UXMSNodeStaticLibrary::GetValueTypeFromName(FName(VariableTypeString));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,9 +37,14 @@ void UXMSVariableTypeValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> Json
  * UXMSVariableTypeValueNode
  */
 
-void UXMSVariableTypeValueNode::SetVariableType(int32 InType)
+void UXMSVariableTypeValueNode::GetPossibleTypes(TArray<FGameplayTag>& OutTypes)
 {
-	int32 OldType = VariableType;
+	UXMSNodeStaticLibrary::GetAllValueTypes(OutTypes);
+}
+
+void UXMSVariableTypeValueNode::SetVariableType(const FGameplayTag& InType)
+{
+	FGameplayTag OldType = VariableType;
 	VariableType = InType;
 	
 	VariableTypeChangedDelegate.Broadcast(VariableType, OldType);

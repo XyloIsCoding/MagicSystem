@@ -7,7 +7,7 @@
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSVariableTypeValueNode.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableTypeChangedSignature, int32 /* New */ , int32 /* Old */ )
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableTypeChangedSignature, const FGameplayTag& /* New */ , const FGameplayTag& /* Old */ )
 
 /**
  * 
@@ -34,7 +34,7 @@ public:
 	 */
 	
 public:
-	virtual int32 GetVariableType() override { return VariableType; }
+	virtual const FGameplayTag& GetVariableType() override { return VariableType; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +44,8 @@ public:
 
 public:
 	FXMSVariableTypeChangedSignature VariableTypeChangedDelegate;
-	virtual void SetVariableType(int32 InType);
+	virtual void GetPossibleTypes(TArray<FGameplayTag>& OutTypes);
+	virtual void SetVariableType(const FGameplayTag& InType);
 private:
-	int32 VariableType = 0;
+	FGameplayTag VariableType = XMSVariableType::None;
 };

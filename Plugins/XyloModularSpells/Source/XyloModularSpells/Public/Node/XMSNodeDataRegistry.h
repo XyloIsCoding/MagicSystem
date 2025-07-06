@@ -16,6 +16,25 @@ class UXMSNodeContainerFromMapWidget;
 class UXMSNodeOptionsSelectionWidget;
 class UXMSNodeCanvasWidget;
 
+USTRUCT(BlueprintType)
+struct FXMSValueTypeData
+{
+	GENERATED_BODY()
+	
+	FXMSValueTypeData()
+	{
+	}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MultiLine = true))
+	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UTexture2D> Glyph;
+};
+
 /**
  * 
  */
@@ -64,6 +83,23 @@ public:
 	TSubclassOf<UXMSNodeContainerFromArrayWidget> NodeWithArrayWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "UI|NodeCanvas|NodeWithArray")
 	TSubclassOf<UXMSArrayTerminatorWidget> ArrayTerminatorWidgetClass;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// ValueTypes
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	const TMap<FGameplayTag, FXMSValueTypeData>& GetTypesData();
+	UFUNCTION(BlueprintCallable)
+	bool GetTypeData(const FGameplayTag& InType, FXMSValueTypeData& OutTypeData);
+	FXMSValueTypeData* GetTypeData(const FGameplayTag& InType);
+private:
+	void UpdateTypesMap();
+	UPROPERTY(EditAnywhere, Category = "ValueTypes", meta=(TitleProperty = "Name", ForceInlineRow))
+	TMap<FGameplayTag, FXMSValueTypeData> ValueTypesData;
+
+	// ~ValueTypes
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// NodesData

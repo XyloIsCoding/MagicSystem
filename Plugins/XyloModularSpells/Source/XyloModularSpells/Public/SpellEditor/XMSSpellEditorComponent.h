@@ -19,13 +19,13 @@ struct FXMSScopedVariable
 
 	FXMSScopedVariable()
 		: Name(FString())
-		, Type(0)
+		, Type(XMSVariableType::None)
 		, DeclarationNode(nullptr)
 	{
 		
 	}
 
-	FXMSScopedVariable(const FString& VariableName, int32 VariableType, UXMSVariableDeclarationNode* InDeclarationNode)
+	FXMSScopedVariable(const FString& VariableName, const FGameplayTag& VariableType, UXMSVariableDeclarationNode* InDeclarationNode)
 		: Name(VariableName)
 		, Type(VariableType)
 		, DeclarationNode(InDeclarationNode)
@@ -37,14 +37,14 @@ struct FXMSScopedVariable
 	FString Name;
 	
 	UPROPERTY()
-	int32 Type;
+	FGameplayTag Type;
 
 	/** Pointer to the node that declared this variable */
 	UPROPERTY()
 	TWeakObjectPtr<UXMSVariableDeclarationNode> DeclarationNode;
 };
 
-DECLARE_MULTICAST_DELEGATE_FourParams(FXMSDeclaredVariableListChangedSignature, const FString& /* NeVariableName */, int32 /* NeVariableType */, const FString& /* OldVariableName */, int32 /* OldVariableType */)
+DECLARE_MULTICAST_DELEGATE_FourParams(FXMSDeclaredVariableListChangedSignature, const FString& /* NeVariableName */, const FGameplayTag& /* NeVariableType */, const FString& /* OldVariableName */, const FGameplayTag& /* OldVariableType */)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class XYLOMODULARSPELLS_API UXMSSpellEditorComponent : public UActorComponent
@@ -75,12 +75,12 @@ protected:
 public:
 	/** Broadcasts the Name and Type of the changed variable */
 	FXMSDeclaredVariableListChangedSignature DeclaredVariableListChangedDelegate;
-	void RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& Name, int32 Type);
-	void UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, int32 Type);
+	void RegisterOrUpdateVariable(UXMSVariableDeclarationNode* DeclarationNode, const FString& NewName, const FGameplayTag& NewType);
+	void UpdateVariableType(UXMSVariableDeclarationNode* DeclarationNode, const FGameplayTag& Type);
 	void UnRegisterVariable(UXMSVariableDeclarationNode* DeclarationNode);
-	void GetVariablesNamesByType(const UXMSNode* RequestingNode, int32 Type, TArray<FString>& OutVariableNames) const;
+	void GetVariablesNamesByType(const UXMSNode* RequestingNode, const FGameplayTag& Type, TArray<FString>& OutVariableNames) const;
 protected:
-	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, int32 Type = XMSVariableType::EVT_None) const;
+	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, const FGameplayTag& Type = XMSVariableType::None) const;
 	bool HasVariable(UXMSVariableDeclarationNode* DeclarationNode) const;
 	FXMSScopedVariable* GetVariable(UXMSVariableDeclarationNode* DeclarationNode);
 private:

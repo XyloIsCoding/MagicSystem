@@ -46,7 +46,7 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 			VariableTypeNode->VariableTypeChangedDelegate.AddUObject(this, &ThisClass::OnVariableTypeChanged);
 
 			// Set initial value
-			OnVariableTypeChanged(VariableTypeNode->GetVariableType(), XMSVariableType::EVT_None);
+			OnVariableTypeChanged(VariableTypeNode->GetVariableType(), XMSVariableType::None);
 		}
 	}
 
@@ -87,29 +87,33 @@ int32 UXMSVariableDeclarationNode::ExecuteNode()
 	FString VariableNameString;
 	if (!VariableNameNode->GetString(VariableNameString)) return 0;
 	if (VariableNameString.IsEmpty()) return 0;
-	
-	switch (VariableTypeNode->GetVariableType())
+
+	// TODO: move in spell executor component
+	FGameplayTag VariableType = VariableTypeNode->GetVariableType();
+
+	if (VariableType.MatchesTagExact(XMSVariableType::Integer))
 	{
-	case XMSVariableType::EVT_Integer :
 		SpellExecutor->SetIntegerValue(VariableNameString, 0);
-		break;
-	case XMSVariableType::EVT_Float :
+	}
+	else if (VariableType.MatchesTagExact(XMSVariableType::Float))
+	{
 		SpellExecutor->SetFlotValue(VariableNameString, 0.f);
-		break;
-	case XMSVariableType::EVT_Vector :
+	}
+	else if (VariableType.MatchesTagExact(XMSVariableType::Vector))
+	{
 		SpellExecutor->SetVectorValue(VariableNameString, FVector::ZeroVector);
-		break;
-	case XMSVariableType::EVT_Rotator :
+	}
+	else if (VariableType.MatchesTagExact(XMSVariableType::Rotator))
+	{
 		SpellExecutor->SetRotatorValue(VariableNameString, FRotator::ZeroRotator);
-		break;
-	case XMSVariableType::EVT_String :
+	}
+	else if (VariableType.MatchesTagExact(XMSVariableType::String))
+	{
 		SpellExecutor->SetStringValue(VariableNameString, FString());
-		break;
-	case XMSVariableType::EVT_Object :
+	}
+	else if (VariableType.MatchesTagExact(XMSVariableType::Object))
+	{
 		SpellExecutor->SetObjectValue(VariableNameString, nullptr);
-		break;
-	default:
-		return 0;
 	}
 
 	return 1;
@@ -121,7 +125,7 @@ int32 UXMSVariableDeclarationNode::ExecuteNode()
  * UXMSVariableDeclarationNode
  */
 
-void UXMSVariableDeclarationNode::OnVariableTypeChanged(int32 NewType, int32 OldType)
+void UXMSVariableDeclarationNode::OnVariableTypeChanged(const FGameplayTag& NewType, const FGameplayTag& OldType)
 {
 	if (UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter()))
 	{

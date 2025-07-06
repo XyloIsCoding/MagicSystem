@@ -20,12 +20,6 @@ TSharedPtr<FJsonObject> UXMSVariableNameValueNode::SerializeToJson(bool& bOutSuc
 
 	NodeJson->SetStringField(ValueJsonKey, CachedName);
 
-	// Only serialize StringIndex if we are editing the spell
-	if (IsInSpellEditorContext())
-	{
-		NodeJson->SetNumberField(TEXT("EditorVariableType"), VariableType);
-	}
-	
 	return NodeJson;
 }
 
@@ -34,12 +28,6 @@ void UXMSVariableNameValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> Json
 	Super::DeserializeFromJson(JsonObject);
 
 	JsonObject->TryGetStringField(ValueJsonKey, CachedName);
-
-	// Only deserialize StringIndex if we are editing the spell
-	if (IsInSpellEditorContext())
-	{
-		JsonObject->TryGetNumberField(TEXT("EditorVariableType"), VariableType);
-	}
 }
 
 void UXMSVariableNameValueNode::OnParentSet()
@@ -75,9 +63,9 @@ bool UXMSVariableNameValueNode::GetString(FString& OutString)
  * UXMSStringValueNode
  */
 
-void UXMSVariableNameValueNode::OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType)
+void UXMSVariableNameValueNode::OnDeclaredVariablesListChanged(const FString& NewVariableName, const FGameplayTag& NewVariableType, const FString& OldVariableName, const FGameplayTag& OldVariableType)
 {
-	if (NewVariableType != VariableType && OldVariableType != VariableType) return;
+	if (!NewVariableType.MatchesTagExact(VariableType) && !OldVariableType.MatchesTagExact(VariableType)) return;
 
 	// Declared variable list changed for the variable type of this node, so we want to check if the CachedName is
 	// still a valid option, else we reset CachedName
@@ -96,7 +84,7 @@ void UXMSVariableNameValueNode::SelectByIndex(int32 InStringIndex)
 	CacheString(InStringIndex);
 }
 
-void UXMSVariableNameValueNode::SetType(int32 InVariableType)
+void UXMSVariableNameValueNode::SetType(const FGameplayTag& InVariableType)
 {
 	if (!IsInSpellEditorContext()) return;
 	

@@ -13,6 +13,7 @@ UXMSNodeDataRegistry::UXMSNodeDataRegistry(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer)
 {
 	UpdateNodeDataMap();
+	UpdateTypesMap();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +32,10 @@ void UXMSNodeDataRegistry::PostEditChangeProperty(struct FPropertyChangedEvent& 
 	{
 		UpdateNodeDataMap();
 	}
+	else if (PropertyChangedEvent.GetPropertyName().IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, ValueTypesData)))
+	{
+		UpdateTypesMap();
+	}
 }
 
 #endif
@@ -40,6 +45,42 @@ void UXMSNodeDataRegistry::PostEditChangeProperty(struct FPropertyChangedEvent& 
 /*
  * UXMSNodeDataRegistry
  */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// ValueTypes
+
+const TMap<FGameplayTag, FXMSValueTypeData>& UXMSNodeDataRegistry::GetTypesData()
+{
+	return ValueTypesData;
+}
+
+bool UXMSNodeDataRegistry::GetTypeData(const FGameplayTag& InType, FXMSValueTypeData& OutTypeData)
+{
+	if (FXMSValueTypeData* FoundData = ValueTypesData.Find(InType))
+	{
+		OutTypeData = *FoundData;
+		return true;
+	}
+	return false;
+}
+
+FXMSValueTypeData* UXMSNodeDataRegistry::GetTypeData(const FGameplayTag& InType)
+{
+	return ValueTypesData.Find(InType);
+}
+
+void UXMSNodeDataRegistry::UpdateTypesMap()
+{
+	ValueTypesData.Add(XMSVariableType::Integer);
+	ValueTypesData.Add(XMSVariableType::Float);
+	ValueTypesData.Add(XMSVariableType::Vector);
+	ValueTypesData.Add(XMSVariableType::Rotator);
+	ValueTypesData.Add(XMSVariableType::String);
+	ValueTypesData.Add(XMSVariableType::Object);
+}
+
+// ~ValueTypes
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 // NodesData

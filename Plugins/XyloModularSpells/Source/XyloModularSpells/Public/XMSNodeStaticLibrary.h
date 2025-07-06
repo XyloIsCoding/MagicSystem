@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+struct FGameplayTag;
 class UXMSNodeDataRegistry;
 class UXMSNodeData;
 class UXMSSpellEditorComponent;
@@ -26,6 +27,9 @@ public:
 	static TSharedPtr<FJsonObject> ReadJson(FString JsonFilePath, bool& bOutSuccess, FString& OutInfoMessage);
 	static void WriteJson(FString JsonFilePath, TSharedPtr<FJsonObject> JsonObject, bool& bOutSuccess, FString& OutInfoMessage);
 
+	static void GetAllValueTypes(TArray<FGameplayTag>& OutTypes);
+	static FGameplayTag GetValueTypeFromName(FName TypeName);
+	
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
 	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);

@@ -48,7 +48,7 @@ public:
 	 */
 
 public:
-	virtual void OnVariableTypeChanged(int32 NewType, int32 OldType);
+	virtual void OnVariableTypeChanged(const FGameplayTag& NewType, const FGameplayTag& OldType);
 	virtual void OnVariableNameChanged(const FString& NewName, const FString& OldName);
 	
 public:

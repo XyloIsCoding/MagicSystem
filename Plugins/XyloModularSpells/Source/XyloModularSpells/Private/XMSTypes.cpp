@@ -31,3 +31,13 @@ bool FXMSNodePath::GetPathElement(int32 Index, FXMSNodePathElement& OutPathEleme
 	return true;
 }
 
+namespace XMSVariableType
+{
+	UE_DEFINE_GAMEPLAY_TAG(None, "XMS.Node.Type.None")
+	UE_DEFINE_GAMEPLAY_TAG(Integer, "XMS.Node.Type.Integer")
+	UE_DEFINE_GAMEPLAY_TAG(Float, "XMS.Node.Type.Float")
+	UE_DEFINE_GAMEPLAY_TAG(Vector, "XMS.Node.Type.Vector")
+	UE_DEFINE_GAMEPLAY_TAG(Rotator, "XMS.Node.Type.Rotator")
+	UE_DEFINE_GAMEPLAY_TAG(String, "XMS.Node.Type.String")
+	UE_DEFINE_GAMEPLAY_TAG(Object, "XMS.Node.Type.Object")
+}

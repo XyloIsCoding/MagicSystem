@@ -46,17 +46,18 @@ public:
 	
 public:
 	FXMSVariableNameChangedSignature VariableNameChangedDelegate;
-	virtual void OnDeclaredVariablesListChanged(const FString& NewVariableName, int32 NewVariableType, const FString& OldVariableName, int32 OldVariableType);
+	virtual void OnDeclaredVariablesListChanged(const FString& NewVariableName, const FGameplayTag& NewVariableType, const FString& OldVariableName, const FGameplayTag& OldVariableType);
 	virtual void SelectByIndex(int32 InStringIndex);
-	/** Set the type of variables that can be used by this node */
-	virtual void SetType(int32 InVariableType);
+	/** Set the type of variables that can be used by this node. Usually only called by parent node */
+	virtual void SetType(const FGameplayTag& InVariableType);
 	virtual void GetOptions(TArray<FString>& OutStringOptions) const;
 protected:
 	virtual void CacheString(int32 Index);
 
 private:
+	/** Non serialized. It is set by parent node */
 	UPROPERTY()
-	int32 VariableType = 0;
+	FGameplayTag VariableType = XMSVariableType::None;
 	UPROPERTY()
 	FString CachedName = FString();
 };

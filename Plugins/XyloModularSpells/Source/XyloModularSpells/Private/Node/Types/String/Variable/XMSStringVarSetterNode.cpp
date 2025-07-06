@@ -27,7 +27,7 @@ void UXMSStringVarSetterNode::OnSubNodeChanged(FName Identifier)
 	{
 		if (UXMSVariableNameValueNode* VariableNameNode = VariableName.Get())
 		{
-			VariableNameNode->SetType(XMSVariableType::EVT_String);
+			VariableNameNode->SetType(XMSVariableType::String);
 		}
 	}
 }

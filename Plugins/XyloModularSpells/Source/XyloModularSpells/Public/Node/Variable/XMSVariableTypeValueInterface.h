@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "XMSVariableTypeValueInterface.generated.h"
 
+struct FGameplayTag;
+
 // This class does not need to be modified.
 UINTERFACE()
 class UXMSVariableTypeValueInterface : public UInterface
@@ -21,5 +23,5 @@ class XYLOMODULARSPELLS_API IXMSVariableTypeValueInterface
 	GENERATED_BODY()
 
 public:
-	virtual int32 GetVariableType() = 0;
+	virtual const FGameplayTag& GetVariableType() = 0;
 };
