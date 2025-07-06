@@ -85,6 +85,7 @@ void UXMSNodeContainerWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* 
 	
 	TArray<UClass*> Options;
 	GetNodeClassOptions(Options);
+	
 	TArray<UXMSNodeClassOptionEntryWidget*> OptionWidgets;
 	OptionsSelectionWidget->InitializeOptions<UXMSNodeClassOptionEntryWidget>(Options.Num(), NodeDataRegistry->NodeClassOptionWidgetClass, OptionWidgets);
 

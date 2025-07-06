@@ -120,6 +120,15 @@ FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
 	return XMSVariableType::None;
 }
 
+UTexture2D* UXMSNodeStaticLibrary::GetValueTypeIcon(const FGameplayTag& Type)
+{
+	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return nullptr;
+
+	FXMSValueTypeData* ValueTypeData = NodeDataRegistry->GetTypeData(Type);
+	return ValueTypeData ? ValueTypeData->Glyph : nullptr;
+}
+
 UClass* UXMSNodeStaticLibrary::GetNodeClassByName(const FString& ClassName)
 {
 	for (UClass* NodeClass : UXMSModularSpellsSubsystem::Get()->GetNodeClasses())

@@ -30,6 +30,7 @@ public:
 
 	static void GetAllValueTypes(TArray<FGameplayTag>& OutTypes);
 	static FGameplayTag GetValueTypeFromName(FName TypeName);
+	static UTexture2D* GetValueTypeIcon(const FGameplayTag& Type);
 	
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
