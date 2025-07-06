@@ -7,7 +7,7 @@
 #include "Node/XMSNodeData.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
-#include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellExecutor/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
 #include "SpellEditor/XMSSpellEditorInterface.h"
 
@@ -202,4 +202,13 @@ UXMSSpellEditorComponent* UXMSNodeStaticLibrary::GetSpellEditorComponent(UObject
 	if (!SpellEditorInterface) return nullptr;
 
 	return SpellEditorInterface->GetSpellEditorComponent();
+}
+
+UXMSSpellExecutorComponent* UXMSNodeStaticLibrary::GetSpellExecutorComponent(UObject* Actor)
+{
+	if (!Actor) return nullptr;
+	IXMSSpellExecutorInterface* SpellExecutorInterface = Cast<IXMSSpellExecutorInterface>(Actor);
+	if (!SpellExecutorInterface) return nullptr;
+
+	return SpellExecutorInterface->GetSpellExecutorComponent();
 }

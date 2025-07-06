@@ -3,10 +3,11 @@
 
 #include "Node/Types/String/Variable/XMSStringVarGetterNode.h"
 
+#include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
-#include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellExecutor/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorInterface.h"
-
+#include "SpellExecutor/XMSSpellExecutorComponent.h"
 
 
 UXMSStringVarGetterNode::UXMSStringVarGetterNode()
@@ -41,7 +42,7 @@ void UXMSStringVarGetterNode::OnSubNodeChanged(FName Identifier)
 
 bool UXMSStringVarGetterNode::GetString(FString& OutString)
 {
-	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
+	UXMSSpellExecutorComponent* SpellExecutor = UXMSNodeStaticLibrary::GetSpellExecutorComponent(GetOuter());
 	if (!SpellExecutor)
 	{
 		OutString = FString(TEXT("ERROR: UXMSStringVarGetterNode::GetString >> Failed to get string variable!"));

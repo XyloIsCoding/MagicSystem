@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+class UXMSSpellExecutorComponent;
 struct FGameplayTag;
 class UXMSNodeDataRegistry;
 class UXMSNodeData;
@@ -52,5 +53,6 @@ public:
 	}
 
 	static UXMSSpellEditorComponent* GetSpellEditorComponent(UObject* Actor);
+	static UXMSSpellExecutorComponent* GetSpellExecutorComponent(UObject* Actor);
 };
 

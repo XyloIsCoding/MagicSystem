@@ -3,9 +3,11 @@
 
 #include "Node/Types/Integer/Variable/XMSIntegerVarGetterNode.h"
 
+#include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
-#include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellExecutor/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorInterface.h"
+#include "SpellExecutor/XMSSpellExecutorComponent.h"
 
 
 UXMSIntegerVarGetterNode::UXMSIntegerVarGetterNode()
@@ -40,7 +42,7 @@ void UXMSIntegerVarGetterNode::OnSubNodeChanged(FName Identifier)
 
 int32 UXMSIntegerVarGetterNode::GetInteger()
 {
-	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
+	UXMSSpellExecutorComponent* SpellExecutor = UXMSNodeStaticLibrary::GetSpellExecutorComponent(GetOuter());
 	if (!SpellExecutor)
 	{
 		return 0;

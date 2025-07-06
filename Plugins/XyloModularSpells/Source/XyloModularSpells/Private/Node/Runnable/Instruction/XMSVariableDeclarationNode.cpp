@@ -6,8 +6,9 @@
 #include "XMSNodeStaticLibrary.h"
 #include "XMSTypes.h"
 #include "Node/Variable/XMSVariableNameValueNode.h"
-#include "Spell/XMSSpellExecutorInterface.h"
+#include "SpellExecutor/XMSSpellExecutorInterface.h"
 #include "SpellEditor/XMSSpellEditorComponent.h"
+#include "SpellExecutor/XMSSpellExecutorComponent.h"
 
 
 UXMSVariableDeclarationNode::UXMSVariableDeclarationNode()
@@ -75,7 +76,7 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 
 int32 UXMSVariableDeclarationNode::ExecuteNode()
 {
-	IXMSSpellExecutorInterface* SpellExecutor = Cast<IXMSSpellExecutorInterface>(GetOuter());
+	UXMSSpellExecutorComponent* SpellExecutor = UXMSNodeStaticLibrary::GetSpellExecutorComponent(GetOuter());
 	if (!SpellExecutor) return 0;
 	
 	IXMSVariableTypeValueInterface* VariableTypeNode = VariableType.GetInterface();
@@ -88,34 +89,7 @@ int32 UXMSVariableDeclarationNode::ExecuteNode()
 	if (!VariableNameNode->GetString(VariableNameString)) return 0;
 	if (VariableNameString.IsEmpty()) return 0;
 
-	// TODO: move in spell executor component
-	FGameplayTag VariableType = VariableTypeNode->GetVariableType();
-
-	if (VariableType.MatchesTagExact(XMSVariableType::Integer))
-	{
-		SpellExecutor->SetIntegerValue(VariableNameString, 0);
-	}
-	else if (VariableType.MatchesTagExact(XMSVariableType::Float))
-	{
-		SpellExecutor->SetFlotValue(VariableNameString, 0.f);
-	}
-	else if (VariableType.MatchesTagExact(XMSVariableType::Vector))
-	{
-		SpellExecutor->SetVectorValue(VariableNameString, FVector::ZeroVector);
-	}
-	else if (VariableType.MatchesTagExact(XMSVariableType::Rotator))
-	{
-		SpellExecutor->SetRotatorValue(VariableNameString, FRotator::ZeroRotator);
-	}
-	else if (VariableType.MatchesTagExact(XMSVariableType::String))
-	{
-		SpellExecutor->SetStringValue(VariableNameString, FString());
-	}
-	else if (VariableType.MatchesTagExact(XMSVariableType::Object))
-	{
-		SpellExecutor->SetObjectValue(VariableNameString, nullptr);
-	}
-
+	SpellExecutor->DefineVariable(VariableNameString, VariableTypeNode->GetVariableType());
 	return 1;
 }
 
