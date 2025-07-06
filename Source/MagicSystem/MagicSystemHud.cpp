@@ -12,16 +12,16 @@ void AMagicSystemHud::DrawHUD()
 {
 	Super::DrawHUD();
 	
-	UXMSNodeCanvasWidget* Canvas = NodeCanvasWidget.Get();
-	if (Canvas)
-	{
-		Canvas->ForceLayoutPrepass();
-		for (UWidget* Entry : Canvas->NodesWrapBox->GetAllChildren())
-		{
-			FVector2D PixelPos;
-			FVector2D ViewportPos;
-			USlateBlueprintLibrary::LocalToViewport(this, Entry->GetCachedGeometry(), FVector2D(0.0f, 0.0f), PixelPos, ViewportPos);
-			DrawRect(FLinearColor::Red, ViewportPos.X, ViewportPos.Y, 5.0f, 5.0f);
-		}
-	}
+	// UXMSNodeCanvasWidget* Canvas = NodeCanvasWidget.Get();
+	// if (Canvas)
+	// {
+	// 	Canvas->ForceLayoutPrepass();
+	// 	for (UWidget* Entry : Canvas->NodesWrapBox->GetAllChildren())
+	// 	{
+	// 		FVector2D PixelPos;
+	// 		FVector2D ViewportPos;
+	// 		USlateBlueprintLibrary::LocalToViewport(this, Entry->GetCachedGeometry(), Entry->GetCachedGeometry().Size / 2, PixelPos, ViewportPos);
+	// 		DrawRect(FLinearColor::Red, PixelPos.X, PixelPos.Y, 5.0f, 5.0f);
+	// 	}
+	// }
 }

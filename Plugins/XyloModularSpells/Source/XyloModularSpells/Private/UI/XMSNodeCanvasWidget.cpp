@@ -73,8 +73,8 @@ void UXMSNodeCanvasWidget::OnOptionsRequested(UWidget* OptionsRequestingWidget)
 		OptionsWidget->SetAlignmentInViewport(FVector2D(0.5f, 0.5f));
 		FVector2D PixelPos;
 		FVector2D ViewportPos;
-		USlateBlueprintLibrary::LocalToViewport(this, OptionsRequestingWidget->GetCachedGeometry(), FVector2D(0.0f, 0.0f), PixelPos, ViewportPos);
-		OptionsWidget->SetPositionInViewport(ViewportPos);
+		USlateBlueprintLibrary::LocalToViewport(this, OptionsRequestingWidget->GetCachedGeometry(), OptionsRequestingWidget->GetCachedGeometry().Size / 2, PixelPos, ViewportPos);
+		OptionsWidget->SetPositionInViewport(PixelPos);
 	}
 }
 
