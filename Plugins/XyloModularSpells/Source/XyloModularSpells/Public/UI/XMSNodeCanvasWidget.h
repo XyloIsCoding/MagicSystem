@@ -46,7 +46,7 @@ public:
 	int32 GetNodeWidgetIndex(UXMSNodeCanvasEntryWidget* NodeWidget) const;
 protected:
 	int32 AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidget* NodeWidget);
-protected:
+public: //TODO make protected
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UXMSWrapBox> NodesWrapBox;
 

@@ -34,7 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false)
 	virtual UTexture2D* GetSubNodeTypeIcon() const;
 protected:
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UXMSNodeIconWidget> NodeTypeIcon;
 
 	// ~Icon

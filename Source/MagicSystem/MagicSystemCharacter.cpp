@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "MagicSystemHud.h"
 #include "XMSNodeStaticLibrary.h"
 #include "Node/Runnable/XMSProgramNode.h"
 #include "Node/Runnable/Instruction/XMSPrintInstructionNode.h"
@@ -89,6 +90,7 @@ void AMagicSystemCharacter::CreateWidget()
 	{
 		NodeCanvasWidget = SpellEditorComponent->CreateNodeCanvas(GetController<APlayerController>(), TestNode);
 		if (!NodeCanvasWidget) return;
+		GetController<APlayerController>()->GetHUD<AMagicSystemHud>()->NodeCanvasWidget = NodeCanvasWidget;
 	}
 
 	if (!NodeCanvasWidget->IsInViewport())
