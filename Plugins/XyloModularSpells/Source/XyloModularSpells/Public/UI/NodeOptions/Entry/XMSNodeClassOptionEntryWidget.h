@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSNodeOptionEntryWidget.h"
+#include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 #include "XMSNodeClassOptionEntryWidget.generated.h"
 
 class UXMSNodeIconWidget;

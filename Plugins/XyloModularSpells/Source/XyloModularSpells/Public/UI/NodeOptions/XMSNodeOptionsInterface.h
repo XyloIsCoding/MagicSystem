@@ -19,7 +19,7 @@ class UXMSNodeOptionsInterface : public UInterface
 };
 
 /**
- * 
+ * Must be implemented by UXMSNodeCanvasEntryWidget classes that require having a UXMSNodeOptionsSelectionWidget
  */
 class XYLOMODULARSPELLS_API IXMSNodeOptionsInterface
 {

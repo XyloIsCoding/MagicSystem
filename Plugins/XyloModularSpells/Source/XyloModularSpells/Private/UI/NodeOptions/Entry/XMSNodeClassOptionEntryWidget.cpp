@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/NodeOptions/XMSNodeClassOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSNodeClassOptionEntryWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "Node/Base/XMSNode.h"

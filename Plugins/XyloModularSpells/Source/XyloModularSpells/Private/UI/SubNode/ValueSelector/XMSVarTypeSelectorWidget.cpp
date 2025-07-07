@@ -6,7 +6,7 @@
 #include "XMSNodeStaticLibrary.h"
 #include "Node/Variable/XMSVariableTypeValueNode.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
-#include "UI/NodeOptions/XMSVarTypeOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSVarTypeOptionEntryWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

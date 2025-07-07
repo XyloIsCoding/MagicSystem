@@ -7,7 +7,7 @@
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Variable/XMSVariableNameValueNode.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
-#include "UI/NodeOptions/XMSVarNameOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

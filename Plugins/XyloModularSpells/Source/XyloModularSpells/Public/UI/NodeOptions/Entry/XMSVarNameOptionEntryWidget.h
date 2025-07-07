@@ -3,19 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
-#include "XMSNodeOptionEntryWidget.h"
-#include "XMSVarTypeOptionEntryWidget.generated.h"
+#include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
+#include "XMSVarNameOptionEntryWidget.generated.h"
 
 class UXMSNodeIconWidget;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSVarTypeOptionSelectedSignature, const FGameplayTag&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSVarNameOptionSelectedSignature, const FString&)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVarTypeOptionEntryWidget : public UXMSNodeOptionEntryWidget
+class XYLOMODULARSPELLS_API UXMSVarNameOptionEntryWidget : public UXMSNodeOptionEntryWidget
 {
 	GENERATED_BODY()
 
@@ -40,14 +39,14 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVarTypeOptionEntryWidget
+	 * UXMSVarNameOptionEntryWidget
 	 */
 
 public:
-	FXMSVarTypeOptionSelectedSignature VarTypeOptionSelectedDelegate;
-	void SetValueType(const FGameplayTag& InValueType);
+	FXMSVarNameOptionSelectedSignature VarNameOptionSelectedDelegate;
+	void SetVarName(const FString& InVarName);
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> ValueTypeIcon;
-	FGameplayTag ValueType;
+	TObjectPtr<UXMSNodeIconWidget> VarNameIcon;
+	FString VarName;
 };

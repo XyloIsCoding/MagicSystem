@@ -9,7 +9,7 @@
 #include "Node/Base/XMSNode.h"
 #include "Node/Base/XMSNodeWithArray.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
-#include "UI/NodeOptions/XMSNodeClassOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSNodeClassOptionEntryWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 
 

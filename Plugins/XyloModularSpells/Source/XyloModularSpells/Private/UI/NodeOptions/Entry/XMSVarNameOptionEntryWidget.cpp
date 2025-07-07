@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/NodeOptions/XMSVarNameOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
 
 
 // TODO: implement functions
