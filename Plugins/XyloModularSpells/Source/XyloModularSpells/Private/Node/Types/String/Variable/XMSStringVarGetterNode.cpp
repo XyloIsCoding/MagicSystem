@@ -71,5 +71,5 @@ bool UXMSStringVarGetterNode::GetString(FString& OutString)
 	}
 	
 	OutString = VariableValueString;
-	return false;
+	return true;
 }

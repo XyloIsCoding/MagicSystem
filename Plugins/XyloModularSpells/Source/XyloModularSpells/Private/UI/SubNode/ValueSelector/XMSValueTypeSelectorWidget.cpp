@@ -66,7 +66,7 @@ void UXMSValueTypeSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidg
 	{
 		if (!Options.IsValidIndex(It.GetIndex()))
 		{
-			UE_LOG(LogXyloModularSpells, Warning, TEXT("UXMSNodeContainerWidget::InitializeOptions >> No matching class option for option widget??"))
+			UE_LOG(LogXyloModularSpells, Warning, TEXT("UXMSValueTypeSelectorWidget::InitializeOptions >> No matching class option for option widget??"))
 			break;
 		}
 		if (UXMSValueTypeOptionEntryWidget* OptionWidget = *It)
