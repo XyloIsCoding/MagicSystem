@@ -6,9 +6,27 @@
 #include "XMSNodeStaticLibrary.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Variable/XMSVariableNameValueNode.h"
+#include "UI/BaseWidget/XMSNodeTextWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UUserWidget Interface
+ */
+
+void UXMSVarNameSelectorWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (VarNameText)
+	{
+		VarNameText->NodeTextClickedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -20,13 +38,7 @@ void UXMSVarNameSelectorWidget::OnOwningNodeSet()
 {
 	Super::OnOwningNodeSet();
 
-	UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
-	if (!VariableNameNode) return;
-
-	FString NewName;
-	VariableNameNode->GetString(NewName);
-	OnVarNameChanged(NewName);
-	BP_OnVarNameChanged(NewName);
+	NotifyNameChange();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,13 +94,25 @@ void UXMSVarNameSelectorWidget::ChangeVarName(const FString& InName)
 	if (!VariableNameNode) return;
 
 	VariableNameNode->SetName(InName);
+	NotifyNameChange();
+}
+
+void UXMSVarNameSelectorWidget::NotifyNameChange()
+{
+	UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
+	if (!VariableNameNode) return;
 
 	FString NewName;
-	VariableNameNode->GetString(NewName);
+	if (!VariableNameNode->GetString(NewName))
+	{
+		NewName = FString(TEXT("[None]"));
+	}
+	
 	OnVarNameChanged(NewName);
 	BP_OnVarNameChanged(NewName);
 }
 
 void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName)
 {
+	VarNameText->SetDisplayText(InName);
 }

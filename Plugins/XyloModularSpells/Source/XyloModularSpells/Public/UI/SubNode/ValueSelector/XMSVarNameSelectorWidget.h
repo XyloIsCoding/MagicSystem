@@ -6,6 +6,7 @@
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 #include "XMSVarNameSelectorWidget.generated.h"
 
+class UXMSNodeTextWidget;
 class UXMSVarNameOptionEntryWidget;
 
 /**
@@ -16,6 +17,14 @@ class XYLOMODULARSPELLS_API UXMSVarNameSelectorWidget : public UXMSNodeValueSele
 {
 	GENERATED_BODY()
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UUserWidget Interface
+	 */
+	
+	virtual void NativeOnInitialized() override;
+	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -46,11 +55,14 @@ public:
 
 protected:
 	virtual void ChangeVarName(const FString& InName);
+	void NotifyNameChange();
 	virtual void OnVarNameChanged(const FString& InName);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnVarNameChanged(const FString& InName);
 
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeTextWidget> VarNameText;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSVarNameOptionEntryWidget> VarNameOptionWidgetClass;
 };

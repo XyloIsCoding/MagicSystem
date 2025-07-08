@@ -6,7 +6,7 @@
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 #include "XMSVarNameOptionEntryWidget.generated.h"
 
-class UXMSNodeIconWidget;
+class UXMSNodeTextWidget;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSVarNameOptionSelectedSignature, const FString&)
 
@@ -48,6 +48,6 @@ public:
 	void SetVarName(const FString& InVarName);
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> VarNameIcon;
+	TObjectPtr<UXMSNodeTextWidget> VarNameText;
 	FString VarName;
 };

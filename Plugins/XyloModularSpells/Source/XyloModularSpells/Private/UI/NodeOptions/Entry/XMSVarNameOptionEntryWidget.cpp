@@ -4,6 +4,7 @@
 #include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
 
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
+#include "UI/BaseWidget/XMSNodeTextWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,9 +17,9 @@ void UXMSVarNameOptionEntryWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (VarNameIcon)
+	if (VarNameText)
 	{
-		VarNameIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSVarNameOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		VarNameText->NodeTextClickedDelegate.AddUObject(this, &UXMSVarNameOptionEntryWidget::BroadcastOptionSelectedDelegate);
 	}
 }
 
@@ -55,5 +56,5 @@ void UXMSVarNameOptionEntryWidget::SetVarName(const FString& InVarName)
 {
 	VarName = InVarName;
 
-	VarNameIcon->SetDisplayName(VarName);
+	VarNameText->SetDisplayText(VarName);
 }
