@@ -102,7 +102,10 @@ void UXMSNodeStaticLibrary::GetAllValueTypes(TArray<FGameplayTag>& OutTypes)
 	{
 		NodeDataRegistry->GetTypesData().GetKeys(OutTypes);
 	}
-	OutTypes.Insert(XMSValueType::None, 0);
+	if (OutTypes.IsEmpty())
+	{
+		OutTypes.Add(XMSValueType::None);
+	}
 }
 
 FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
