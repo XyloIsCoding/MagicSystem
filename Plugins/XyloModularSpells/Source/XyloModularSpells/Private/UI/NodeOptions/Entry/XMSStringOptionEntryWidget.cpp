@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/BaseWidget/XMSNodeTextWidget.h"
@@ -13,13 +13,13 @@
  * UUserWidget Interface
  */
 
-void UXMSVarNameOptionEntryWidget::NativeOnInitialized()
+void UXMSStringOptionEntryWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (VarNameText)
+	if (OptionText)
 	{
-		VarNameText->NodeTextClickedDelegate.AddUObject(this, &UXMSVarNameOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		OptionText->NodeTextClickedDelegate.AddUObject(this, &UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate);
 	}
 }
 
@@ -29,32 +29,32 @@ void UXMSVarNameOptionEntryWidget::NativeOnInitialized()
  * UXMSNodeOptionEntryWidget Interface
  */
 
-void UXMSVarNameOptionEntryWidget::ClearDelegates()
+void UXMSStringOptionEntryWidget::ClearDelegates()
 {
 	Super::ClearDelegates();
-	VarNameOptionSelectedDelegate.Clear();
+	StringOptionSelectedDelegate.Clear();
 }
 
-void UXMSVarNameOptionEntryWidget::InitializeOption(int32 InOptionIndex)
+void UXMSStringOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	Super::InitializeOption(InOptionIndex);
 }
 
-void UXMSVarNameOptionEntryWidget::BroadcastOptionSelectedDelegate()
+void UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate()
 {
-	VarNameOptionSelectedDelegate.Broadcast(VarName);
+	StringOptionSelectedDelegate.Broadcast(OptionString);
 	Super::BroadcastOptionSelectedDelegate();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSVarNameOptionEntryWidget
+ * UXMSStringOptionEntryWidget
  */
 
-void UXMSVarNameOptionEntryWidget::SetVarName(const FString& InVarName)
+void UXMSStringOptionEntryWidget::SetOptionName(const FString& InVarName)
 {
-	VarName = InVarName;
+	OptionString = InVarName;
 
-	VarNameText->SetDisplayText(VarName);
+	OptionText->SetDisplayText(OptionString);
 }

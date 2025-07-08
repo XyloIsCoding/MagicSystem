@@ -8,7 +8,7 @@
 #include "Node/Variable/XMSVariableNameValueNode.h"
 #include "UI/BaseWidget/XMSNodeTextWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
-#include "UI/NodeOptions/Entry/XMSVarNameOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
 
 
@@ -71,8 +71,8 @@ void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget
 	TArray<FString> Options;
 	VariableNameNode->GetOptions(Options);
 	
-	TArray<UXMSVarNameOptionEntryWidget*> OptionWidgets;
-	OptionsSelectionWidget->InitializeOptions<UXMSVarNameOptionEntryWidget>(Options.Num(), VarNameOptionWidgetClass, OptionWidgets, true);
+	TArray<UXMSStringOptionEntryWidget*> OptionWidgets;
+	OptionsSelectionWidget->InitializeOptions<UXMSStringOptionEntryWidget>(Options.Num(), VarNameOptionWidgetClass, OptionWidgets, true);
 
 	for (auto It = OptionWidgets.CreateIterator(); It; ++It)
 	{
@@ -81,10 +81,10 @@ void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget
 			UE_LOG(LogXyloModularSpells, Warning, TEXT("UXMSNodeContainerWidget::InitializeOptions >> No matching class option for option widget??"))
 			break;
 		}
-		if (UXMSVarNameOptionEntryWidget* OptionWidget = *It)
+		if (UXMSStringOptionEntryWidget* OptionWidget = *It)
 		{
-			OptionWidget->SetVarName(Options[It.GetIndex()]);
-			OptionWidget->VarNameOptionSelectedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::ChangeVarName);
+			OptionWidget->SetOptionName(Options[It.GetIndex()]);
+			OptionWidget->StringOptionSelectedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::ChangeVarName);
 		}
 	}
 }

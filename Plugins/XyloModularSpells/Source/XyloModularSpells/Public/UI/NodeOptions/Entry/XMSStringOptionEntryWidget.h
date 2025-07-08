@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
-#include "XMSVarNameOptionEntryWidget.generated.h"
+#include "XMSStringOptionEntryWidget.generated.h"
 
 class UXMSNodeTextWidget;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSVarNameOptionSelectedSignature, const FString&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSStringOptionSelectedSignature, const FString&)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVarNameOptionEntryWidget : public UXMSNodeOptionEntryWidget
+class XYLOMODULARSPELLS_API UXMSStringOptionEntryWidget : public UXMSNodeOptionEntryWidget
 {
 	GENERATED_BODY()
 
@@ -40,14 +40,14 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVarNameOptionEntryWidget
+	 * UXMSStringOptionEntryWidget
 	 */
 
 public:
-	FXMSVarNameOptionSelectedSignature VarNameOptionSelectedDelegate;
-	void SetVarName(const FString& InVarName);
+	FXMSStringOptionSelectedSignature StringOptionSelectedDelegate;
+	void SetOptionName(const FString& InVarName);
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTextWidget> VarNameText;
-	FString VarName;
+	TObjectPtr<UXMSNodeTextWidget> OptionText;
+	FString OptionString;
 };
