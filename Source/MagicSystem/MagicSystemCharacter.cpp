@@ -112,9 +112,9 @@ void AMagicSystemCharacter::CreateNode()
 
 	UXMSVariableDeclarationNode* Variable1Declaration = NewObject<UXMSVariableDeclarationNode>(this);
 	Program->Instructions.Add(Variable1Declaration);
-	UXMSVariableTypeValueNode* Variable1Type = NewObject<UXMSVariableTypeValueNode>(this);
+	UXMSValueTypeValueNode* Variable1Type = NewObject<UXMSValueTypeValueNode>(this);
 	Variable1Declaration->VariableType.Set(Variable1Type);
-	Variable1Type->SetVariableType(XMSVariableType::Integer);
+	Variable1Type->SetValueType(XMSValueType::Integer);
 	UXMSStringValueNode* Variable1Name = NewObject<UXMSStringValueNode>(this);
 	Variable1Declaration->VariableName.Set(Variable1Name);
 	Variable1Name->SetString("Pippo");
@@ -142,9 +142,9 @@ void AMagicSystemCharacter::CreateNode()
 
 	UXMSVariableDeclarationNode* Variable2Declaration = NewObject<UXMSVariableDeclarationNode>(this);
 	Program->Instructions.Add(Variable2Declaration);
-	UXMSVariableTypeValueNode* Variable2Type = NewObject<UXMSVariableTypeValueNode>(this);
+	UXMSValueTypeValueNode* Variable2Type = NewObject<UXMSValueTypeValueNode>(this);
 	Variable2Declaration->VariableType.Set(Variable2Type);
-	Variable2Type->SetVariableType(XMSVariableType::Integer);
+	Variable2Type->SetValueType(XMSValueType::Integer);
 	UXMSStringValueNode* Variable2Name = NewObject<UXMSStringValueNode>(this);
 	Variable2Declaration->VariableName.Set(Variable2Name);
 	Variable2Name->SetString("Pluto");

@@ -31,7 +31,7 @@ bool FXMSNodePath::GetPathElement(int32 Index, FXMSNodePathElement& OutPathEleme
 	return true;
 }
 
-namespace XMSVariableType
+namespace XMSValueType
 {
 	UE_DEFINE_GAMEPLAY_TAG(None, "XMS.Node.Type.None")
 	UE_DEFINE_GAMEPLAY_TAG(Integer, "XMS.Node.Type.Integer")

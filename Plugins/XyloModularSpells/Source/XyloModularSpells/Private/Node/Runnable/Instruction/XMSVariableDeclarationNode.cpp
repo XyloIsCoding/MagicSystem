@@ -13,7 +13,7 @@
 
 UXMSVariableDeclarationNode::UXMSVariableDeclarationNode()
 {
-	VariableType.Set(NewObject<UXMSVariableTypeValueNode>(GetOuter()));
+	VariableType.Set(NewObject<UXMSValueTypeValueNode>(GetOuter()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,13 +41,13 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 	
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableType)))
 	{
-		if (UXMSVariableTypeValueNode* VariableTypeNode = VariableType.Get())
+		if (UXMSValueTypeValueNode* VariableTypeNode = VariableType.Get())
 		{
 			// Bind delegate
-			VariableTypeNode->VariableTypeChangedDelegate.AddUObject(this, &ThisClass::OnVariableTypeChanged);
+			VariableTypeNode->ValueTypeChangedDelegate.AddUObject(this, &ThisClass::OnVariableTypeChanged);
 
 			// Set initial value
-			OnVariableTypeChanged(VariableTypeNode->GetVariableType(), XMSVariableType::None);
+			OnVariableTypeChanged(VariableTypeNode->GetValueType(), XMSValueType::None);
 		}
 	}
 
@@ -79,7 +79,7 @@ int32 UXMSVariableDeclarationNode::ExecuteNode()
 	UXMSSpellExecutorComponent* SpellExecutor = UXMSNodeStaticLibrary::GetSpellExecutorComponent(GetOuter());
 	if (!SpellExecutor) return 0;
 	
-	IXMSVariableTypeValueInterface* VariableTypeNode = VariableType.GetInterface();
+	IXMSValueTypeValueInterface* VariableTypeNode = VariableType.GetInterface();
 	if (!VariableTypeNode) return 0;
 
 	IXMSStringValueInterface* VariableNameNode = VariableName.GetInterface();
@@ -89,7 +89,7 @@ int32 UXMSVariableDeclarationNode::ExecuteNode()
 	if (!VariableNameNode->GetString(VariableNameString)) return 0;
 	if (VariableNameString.IsEmpty()) return 0;
 
-	SpellExecutor->DefineVariable(VariableNameString, VariableTypeNode->GetVariableType());
+	SpellExecutor->DefineVariable(VariableNameString, VariableTypeNode->GetValueType());
 	return 1;
 }
 
@@ -117,10 +117,10 @@ void UXMSVariableDeclarationNode::OnVariableNameChanged(const FString& NewName, 
 	
 	if (UXMSSpellEditorComponent* SpellEditor = UXMSNodeStaticLibrary::GetSpellEditorComponent(GetOuter()))
 	{
-		IXMSVariableTypeValueInterface* VariableTypeNode = VariableType.GetInterface();
+		IXMSValueTypeValueInterface* VariableTypeNode = VariableType.GetInterface();
 		if (!VariableTypeNode) return;
 		
-		SpellEditor->RegisterOrUpdateVariable(this, NewName, VariableTypeNode->GetVariableType());
+		SpellEditor->RegisterOrUpdateVariable(this, NewName, VariableTypeNode->GetValueType());
 
 		// TODO: if variable name is already used, then broadcast error to gui
 	}

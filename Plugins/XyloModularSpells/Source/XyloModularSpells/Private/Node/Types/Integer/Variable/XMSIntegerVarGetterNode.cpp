@@ -29,7 +29,7 @@ void UXMSIntegerVarGetterNode::OnSubNodeChanged(FName Identifier)
 	{
 		if (UXMSVariableNameValueNode* VariableNameNode = VariableName.Get())
 		{
-			VariableNameNode->SetType(XMSVariableType::Integer);
+			VariableNameNode->SetType(XMSValueType::Integer);
 		}
 	}
 }

@@ -7,8 +7,8 @@
 #include "Node/Runnable/XMSRunnableNodeInterface.h"
 #include "Node/Types/String/XMSStringValueInterface.h"
 #include "Node/Types/String/XMSStringValueNode.h"
-#include "Node/Variable/XMSVariableTypeValueInterface.h"
-#include "Node/Variable/XMSVariableTypeValueNode.h"
+#include "Node/Variable/XMSValueTypeValueInterface.h"
+#include "Node/Variable/XMSValueTypeValueNode.h"
 #include "XMSVariableDeclarationNode.generated.h"
 
 /**
@@ -52,7 +52,7 @@ public:
 	virtual void OnVariableNameChanged(const FString& NewName, const FString& OldName);
 	
 public:
-	TXMSNodeContainer<UXMSVariableTypeValueNode, IXMSVariableTypeValueInterface> VariableType = {
+	TXMSNodeContainer<UXMSValueTypeValueNode, IXMSValueTypeValueInterface> VariableType = {
 		this,
 		GET_MEMBER_NAME_CHECKED(ThisClass, VariableType),
 		[](UClass* NodeClass){ return true; } };

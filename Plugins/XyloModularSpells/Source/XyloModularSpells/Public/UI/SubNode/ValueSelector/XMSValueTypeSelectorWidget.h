@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
-#include "XMSVarTypeSelectorWidget.generated.h"
+#include "XMSValueTypeSelectorWidget.generated.h"
 
-class UXMSVarTypeOptionEntryWidget;
+class UXMSValueTypeOptionEntryWidget;
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVarTypeSelectorWidget : public UXMSNodeValueSelectorWidget, public IXMSNodeOptionsInterface
+class XYLOMODULARSPELLS_API UXMSValueTypeSelectorWidget : public UXMSNodeValueSelectorWidget, public IXMSNodeOptionsInterface
 {
 	GENERATED_BODY()
 
@@ -49,7 +49,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVarTypeSelectorWidget
+	 * UXMSValueTypeSelectorWidget
 	 */
 
 protected:
@@ -60,7 +60,7 @@ protected:
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> VarTypeIcon;
+	TObjectPtr<UXMSNodeIconWidget> ValueTypeIcon;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
-	TSubclassOf<UXMSVarTypeOptionEntryWidget> ValueTypeOptionWidgetClass;
+	TSubclassOf<UXMSValueTypeOptionEntryWidget> ValueTypeOptionWidgetClass;
 };

@@ -71,12 +71,12 @@ FXMSValueTypeData* UXMSNodeDataRegistry::GetTypeData(const FGameplayTag& InType)
 
 void UXMSNodeDataRegistry::UpdateTypesMap()
 {
-	ValueTypesData.Add(XMSVariableType::Integer);
-	ValueTypesData.Add(XMSVariableType::Float);
-	ValueTypesData.Add(XMSVariableType::Vector);
-	ValueTypesData.Add(XMSVariableType::Rotator);
-	ValueTypesData.Add(XMSVariableType::String);
-	ValueTypesData.Add(XMSVariableType::Object);
+	ValueTypesData.Add(XMSValueType::Integer);
+	ValueTypesData.Add(XMSValueType::Float);
+	ValueTypesData.Add(XMSValueType::Vector);
+	ValueTypesData.Add(XMSValueType::Rotator);
+	ValueTypesData.Add(XMSValueType::String);
+	ValueTypesData.Add(XMSValueType::Object);
 }
 
 // ~ValueTypes

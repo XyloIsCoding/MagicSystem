@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XMSVariableTypeValueInterface.h"
+#include "XMSValueTypeValueInterface.h"
 #include "Node/Base/XMSNodeWithValue.h"
-#include "XMSVariableTypeValueNode.generated.h"
+#include "XMSValueTypeValueNode.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableTypeChangedSignature, const FGameplayTag& /* New */ , const FGameplayTag& /* Old */ )
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSValueTypeChangedSignature, const FGameplayTag& /* New */ , const FGameplayTag& /* Old */ )
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVariableTypeValueNode : public UXMSNodeWithValue, public IXMSVariableTypeValueInterface
+class XYLOMODULARSPELLS_API UXMSValueTypeValueNode : public UXMSNodeWithValue, public IXMSValueTypeValueInterface
 {
 	GENERATED_BODY()
 
@@ -30,22 +30,22 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * IXMSVariableTypeValueInterface Interface
+	 * IXMSValueTypeValueInterface Interface
 	 */
 	
 public:
-	virtual const FGameplayTag& GetVariableType() override { return VariableType; }
+	virtual const FGameplayTag& GetValueType() override { return ValueType; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVariableTypeValueNode
+	 * UXMSValueTypeValueNode
 	 */
 
 public:
-	FXMSVariableTypeChangedSignature VariableTypeChangedDelegate;
+	FXMSValueTypeChangedSignature ValueTypeChangedDelegate;
 	virtual void GetPossibleTypes(TArray<FGameplayTag>& OutTypes);
-	virtual void SetVariableType(const FGameplayTag& InType);
+	virtual void SetValueType(const FGameplayTag& InType);
 private:
-	FGameplayTag VariableType = XMSVariableType::None;
+	FGameplayTag ValueType = XMSValueType::None;
 };

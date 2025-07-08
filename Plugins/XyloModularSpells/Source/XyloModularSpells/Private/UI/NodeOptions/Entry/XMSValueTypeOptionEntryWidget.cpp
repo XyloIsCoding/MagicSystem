@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/NodeOptions/Entry/XMSVarTypeOptionEntryWidget.h"
+#include "UI/NodeOptions/Entry/XMSValueTypeOptionEntryWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
@@ -13,13 +13,13 @@
  * UUserWidget Interface
  */
 
-void UXMSVarTypeOptionEntryWidget::NativeOnInitialized()
+void UXMSValueTypeOptionEntryWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
 	if (ValueTypeIcon)
 	{
-		ValueTypeIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSVarTypeOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		ValueTypeIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSValueTypeOptionEntryWidget::BroadcastOptionSelectedDelegate);
 	}
 }
 
@@ -29,30 +29,30 @@ void UXMSVarTypeOptionEntryWidget::NativeOnInitialized()
  * UXMSNodeOptionEntryWidget Interface
  */
 
-void UXMSVarTypeOptionEntryWidget::ClearDelegates()
+void UXMSValueTypeOptionEntryWidget::ClearDelegates()
 {
 	Super::ClearDelegates();
-	VarTypeOptionSelectedDelegate.Clear();
+	ValueTypeOptionSelectedDelegate.Clear();
 }
 
-void UXMSVarTypeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
+void UXMSValueTypeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	Super::InitializeOption(InOptionIndex);
 }
 
-void UXMSVarTypeOptionEntryWidget::BroadcastOptionSelectedDelegate()
+void UXMSValueTypeOptionEntryWidget::BroadcastOptionSelectedDelegate()
 {
-	VarTypeOptionSelectedDelegate.Broadcast(ValueType);
+	ValueTypeOptionSelectedDelegate.Broadcast(ValueType);
 	Super::BroadcastOptionSelectedDelegate();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UXMSVarTypeOptionEntryWidget
+ * UXMSValueTypeOptionEntryWidget
  */
 
-void UXMSVarTypeOptionEntryWidget::SetValueType(const FGameplayTag& InValueType)
+void UXMSValueTypeOptionEntryWidget::SetValueType(const FGameplayTag& InValueType)
 {
 	ValueType = InValueType;
 

@@ -102,13 +102,13 @@ void UXMSNodeStaticLibrary::GetAllValueTypes(TArray<FGameplayTag>& OutTypes)
 	{
 		NodeDataRegistry->GetTypesData().GetKeys(OutTypes);
 	}
-	OutTypes.Insert(XMSVariableType::None, 0);
+	OutTypes.Insert(XMSValueType::None, 0);
 }
 
 FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
 {
 	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
-	if (!NodeDataRegistry) return XMSVariableType::None;
+	if (!NodeDataRegistry) return XMSValueType::None;
 
 	for (TPair<FGameplayTag, FXMSValueTypeData> TypeDataPair : NodeDataRegistry->GetTypesData())
 	{
@@ -117,7 +117,7 @@ FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
 			return TypeDataPair.Key;
 		}
 	}
-	return XMSVariableType::None;
+	return XMSValueType::None;
 }
 
 UTexture2D* UXMSNodeStaticLibrary::GetValueTypeIcon(const FGameplayTag& Type)

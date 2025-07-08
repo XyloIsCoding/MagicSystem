@@ -5,17 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
-#include "XMSVarTypeOptionEntryWidget.generated.h"
+#include "XMSValueTypeOptionEntryWidget.generated.h"
 
 class UXMSNodeIconWidget;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSVarTypeOptionSelectedSignature, const FGameplayTag&)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSValueTypeOptionSelectedSignature, const FGameplayTag&)
 
 /**
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSVarTypeOptionEntryWidget : public UXMSNodeOptionEntryWidget
+class XYLOMODULARSPELLS_API UXMSValueTypeOptionEntryWidget : public UXMSNodeOptionEntryWidget
 {
 	GENERATED_BODY()
 
@@ -41,11 +41,11 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UXMSVarTypeOptionEntryWidget
+	 * UXMSValueTypeOptionEntryWidget
 	 */
 
 public:
-	FXMSVarTypeOptionSelectedSignature VarTypeOptionSelectedDelegate;
+	FXMSValueTypeOptionSelectedSignature ValueTypeOptionSelectedDelegate;
 	void SetValueType(const FGameplayTag& InValueType);
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

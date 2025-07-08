@@ -22,37 +22,37 @@ UXMSSpellExecutorComponent::UXMSSpellExecutorComponent()
 
 void UXMSSpellExecutorComponent::DefineVariable(const FString& Name, const FGameplayTag& Type)
 {
-	if (Type.MatchesTagExact(XMSVariableType::Integer))
+	if (Type.MatchesTagExact(XMSValueType::Integer))
 	{
 		SetIntegerValue(Name, 0);
 		return;
 	}
 
-	if (Type.MatchesTagExact(XMSVariableType::Float))
+	if (Type.MatchesTagExact(XMSValueType::Float))
 	{
 		SetFlotValue(Name, 0.f);
 		return;
 	}
 
-	if (Type.MatchesTagExact(XMSVariableType::Vector))
+	if (Type.MatchesTagExact(XMSValueType::Vector))
 	{
 		SetVectorValue(Name, FVector::ZeroVector);
 		return;
 	}
 
-	if (Type.MatchesTagExact(XMSVariableType::Rotator))
+	if (Type.MatchesTagExact(XMSValueType::Rotator))
 	{
 		SetRotatorValue(Name, FRotator::ZeroRotator);
 		return;
 	}
 
-	if (Type.MatchesTagExact(XMSVariableType::String))
+	if (Type.MatchesTagExact(XMSValueType::String))
 	{
 		SetStringValue(Name, FString());
 		return;
 	}
 
-	if (Type.MatchesTagExact(XMSVariableType::Object))
+	if (Type.MatchesTagExact(XMSValueType::Object))
 	{
 		SetObjectValue(Name, nullptr);
 		return;

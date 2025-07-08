@@ -20,11 +20,11 @@ void UXMSVarNameSelectorWidget::OnOwningNodeSet()
 {
 	Super::OnOwningNodeSet();
 
-	UXMSVariableNameValueNode* VariableTypeNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
-	if (!VariableTypeNode) return;
+	UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
+	if (!VariableNameNode) return;
 
 	FString NewName;
-	VariableTypeNode->GetString(NewName);
+	VariableNameNode->GetString(NewName);
 	OnVarNameChanged(NewName);
 	BP_OnVarNameChanged(NewName);
 }
@@ -78,13 +78,13 @@ void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget
 
 void UXMSVarNameSelectorWidget::ChangeVarName(const FString& InName)
 {
-	UXMSVariableNameValueNode* VariableTypeNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
-	if (!VariableTypeNode) return;
+	UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
+	if (!VariableNameNode) return;
 
-	VariableTypeNode->SetName(InName);
+	VariableNameNode->SetName(InName);
 
 	FString NewName;
-	VariableTypeNode->GetString(NewName);
+	VariableNameNode->GetString(NewName);
 	OnVarNameChanged(NewName);
 	BP_OnVarNameChanged(NewName);
 }

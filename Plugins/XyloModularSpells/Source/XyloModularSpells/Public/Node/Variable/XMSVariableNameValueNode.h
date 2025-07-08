@@ -59,7 +59,7 @@ protected:
 private:
 	/** Non serialized. It is set by parent node */
 	UPROPERTY()
-	FGameplayTag VariableType = XMSVariableType::None;
+	FGameplayTag VariableType = XMSValueType::None;
 	UPROPERTY()
 	FString CachedName = FString();
 };

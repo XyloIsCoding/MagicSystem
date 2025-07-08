@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "XMSVariableTypeValueInterface.generated.h"
+#include "XMSValueTypeValueInterface.generated.h"
 
 struct FGameplayTag;
 
 // This class does not need to be modified.
 UINTERFACE()
-class UXMSVariableTypeValueInterface : public UInterface
+class UXMSValueTypeValueInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -18,10 +18,10 @@ class UXMSVariableTypeValueInterface : public UInterface
 /**
  * 
  */
-class XYLOMODULARSPELLS_API IXMSVariableTypeValueInterface
+class XYLOMODULARSPELLS_API IXMSValueTypeValueInterface
 {
 	GENERATED_BODY()
 
 public:
-	virtual const FGameplayTag& GetVariableType() = 0;
+	virtual const FGameplayTag& GetValueType() = 0;
 };

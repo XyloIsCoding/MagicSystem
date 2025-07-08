@@ -139,7 +139,7 @@ bool UXMSSpellEditorComponent::HasVariableInScope(UXMSNode* RequestingNode, cons
 	TArray<UXMSNode*> RequestingNodeHierarchy;
 	RequestingNode->GetHierarchy(RequestingNodeHierarchy);
 	
-	if (!Type.MatchesTagExact(XMSVariableType::None))
+	if (!Type.MatchesTagExact(XMSValueType::None))
 	{
 		// Check by type first to decrease string comparison
 		return ScopedVariables.ContainsByPredicate([RequestingNode, RequestingNodeHierarchy, Name, Type](const FXMSScopedVariable& Variable)

@@ -19,7 +19,7 @@ struct FXMSScopedVariable
 
 	FXMSScopedVariable()
 		: Name(FString())
-		, Type(XMSVariableType::None)
+		, Type(XMSValueType::None)
 		, DeclarationNode(nullptr)
 	{
 		
@@ -80,7 +80,7 @@ public:
 	void UnRegisterVariable(UXMSVariableDeclarationNode* DeclarationNode);
 	void GetVariablesNamesByType(const UXMSNode* RequestingNode, const FGameplayTag& Type, TArray<FString>& OutVariableNames) const;
 protected:
-	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, const FGameplayTag& Type = XMSVariableType::None) const;
+	bool HasVariableInScope(UXMSNode* RequestingNode, const FString& Name, const FGameplayTag& Type = XMSValueType::None) const;
 	bool HasVariable(UXMSVariableDeclarationNode* DeclarationNode) const;
 	FXMSScopedVariable* GetVariable(UXMSVariableDeclarationNode* DeclarationNode);
 private:
