@@ -52,6 +52,7 @@ protected:
 public:
 	FXMSSelectionCompletedSignature SelectionCompletedDelegate;
 protected:
+	UFUNCTION(BlueprintCallable)
 	void BroadcastSelectionCompleted();
 	virtual void SelectionCompleted();
 	UFUNCTION(BlueprintImplementableEvent)
