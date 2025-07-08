@@ -56,8 +56,8 @@ public: //TODO make protected
 protected:
 	/** Bound to all SubNode Widgets */
 	virtual void OnOptionsRequested(UWidget* OptionsRequestingWidget);
-	/** Bound to ClassOptionsWidget */
-	virtual void OnNodeOptionSelected(int32 Index);
+	/** Bound to OptionsSelectionWidget */
+	virtual void OnOptionsSelectionCompleted();
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode);
 	/** Bound to all SubNode Widgets */
@@ -94,7 +94,7 @@ public:
 	virtual UXMSNodeOptionsSelectionWidget* GetOrCreateOptionsWidgetForNode(IXMSNodeOptionsInterface* NodeOptionsInterface);
 protected:
 	UPROPERTY()
-	TWeakObjectPtr<UXMSNodeOptionsSelectionWidget> ClassOptionsWidget;
+	TWeakObjectPtr<UXMSNodeOptionsSelectionWidget> OptionsSelectionWidget;
 	
 	// ~Class Options
 /*--------------------------------------------------------------------------------------------------------------------*/

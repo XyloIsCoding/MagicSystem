@@ -19,10 +19,29 @@ class XYLOMODULARSPELLS_API UXMSVarTypeSelectorWidget : public UXMSNodeValueSele
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UUserWidget Interface
+	 */
+	
+	virtual void NativeOnInitialized() override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeCanvasEntryWidget
+	 */
+
+public:
+	virtual void OnOwningNodeSet() override;
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * IXMSNodeOptionsInterface Interface
 	 */
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void BroadcastOptionsRequestedDelegate();
 	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
 	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override { return OptionsRequestedDelegate; }
 	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
@@ -35,8 +54,13 @@ public:
 
 protected:
 	virtual void ChangeValueType(const FGameplayTag& InType);
+	virtual void OnValueTypeChanged(const FGameplayTag& NewType);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OnValueTypeChanged(const FGameplayTag& NewType);
 	
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeIconWidget> VarTypeIcon;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSVarTypeOptionEntryWidget> ValueTypeOptionWidgetClass;
 };

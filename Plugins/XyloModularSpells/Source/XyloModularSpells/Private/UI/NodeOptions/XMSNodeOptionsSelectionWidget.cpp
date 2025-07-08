@@ -16,14 +16,36 @@
 /*--------------------------------------------------------------------------------------------------------------------*/
 // OptionSelection
 
+void UXMSNodeOptionsSelectionWidget::ClearDelegates()
+{
+	OptionSelectedDelegate.Clear();
+	SelectionCompletedDelegate.Clear();
+}
+
 void UXMSNodeOptionsSelectionWidget::SelectOption(int32 Index)
 {
 	OptionSelected(Index);
 	BP_OptionSelected(Index);
 	OptionSelectedDelegate.Broadcast(Index);
+
+	if (bSingleChoice)
+	{
+		BroadcastSelectionCompleted();
+	}
 }
 
 void UXMSNodeOptionsSelectionWidget::OptionSelected(int32 Index)
+{
+}
+
+void UXMSNodeOptionsSelectionWidget::BroadcastSelectionCompleted()
+{
+	SelectionCompleted();
+	BP_SelectionCompleted();
+	SelectionCompletedDelegate.Broadcast();
+}
+
+void UXMSNodeOptionsSelectionWidget::SelectionCompleted()
 {
 }
 

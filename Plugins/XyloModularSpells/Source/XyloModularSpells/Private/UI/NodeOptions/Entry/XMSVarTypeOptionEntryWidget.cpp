@@ -29,10 +29,15 @@ void UXMSVarTypeOptionEntryWidget::NativeOnInitialized()
  * UXMSNodeOptionEntryWidget Interface
  */
 
+void UXMSVarTypeOptionEntryWidget::ClearDelegates()
+{
+	Super::ClearDelegates();
+	VarTypeOptionSelectedDelegate.Clear();
+}
+
 void UXMSVarTypeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	Super::InitializeOption(InOptionIndex);
-	VarTypeOptionSelectedDelegate.Clear();
 }
 
 void UXMSVarTypeOptionEntryWidget::BroadcastOptionSelectedDelegate()

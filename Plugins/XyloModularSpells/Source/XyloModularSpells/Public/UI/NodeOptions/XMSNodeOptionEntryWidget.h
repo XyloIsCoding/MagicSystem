@@ -24,6 +24,7 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 	
 public:
 	FXMSNodeOptionEntrySelectedSignature NodeOptionEntrySelectedDelegate;
+	virtual void ClearDelegates();
 	virtual void InitializeOption(int32 InOptionIndex);
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastOptionSelectedDelegate();

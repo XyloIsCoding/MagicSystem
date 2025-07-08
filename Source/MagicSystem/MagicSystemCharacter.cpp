@@ -125,7 +125,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1Setter->Setter.Set(Variable1IntegerSetter);
 	UXMSVariableNameValueNode* Variable1NameGetter = NewObject<UXMSVariableNameValueNode>(this);
 	Variable1IntegerSetter->VariableName.Set(Variable1NameGetter);
-	Variable1NameGetter->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
+	Variable1NameGetter->SetName("Pippo"); // 0 is Pippo because it is the first int variable declared
 	UXMSIntegerValueNode* Variable1Value = NewObject<UXMSIntegerValueNode>(this);
 	Variable1IntegerSetter->IntegerValue.Set(Variable1Value);
 	Variable1Value->SetInteger(10);
@@ -138,7 +138,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable1IntegerProvider->IntegerNode.Set(Variable1IntegerGetter);
 	UXMSVariableNameValueNode* Variable1NameGetterP2 = NewObject<UXMSVariableNameValueNode>(this);
 	Variable1IntegerGetter->VariableName.Set(Variable1NameGetterP2);
-	Variable1NameGetterP2->SelectByIndex(0); // 0 is Pippo because it is the first int variable declared
+	Variable1NameGetterP2->SetName("Pippo"); // 0 is Pippo because it is the first int variable declared
 
 	UXMSVariableDeclarationNode* Variable2Declaration = NewObject<UXMSVariableDeclarationNode>(this);
 	Program->Instructions.Add(Variable2Declaration);
@@ -155,7 +155,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable2Setter->Setter.Set(Variable2IntegerSetter);
 	UXMSVariableNameValueNode* Variable2NameGetter = NewObject<UXMSVariableNameValueNode>(this);
 	Variable2IntegerSetter->VariableName.Set(Variable2NameGetter);
-	Variable2NameGetter->SelectByIndex(1); // 1 is Pluto because it is the second int variable declared
+	Variable2NameGetter->SetName("Pluto"); // 1 is Pluto because it is the second int variable declared
 	UXMSIntegerValueNode* Variable2Value = NewObject<UXMSIntegerValueNode>(this);
 	Variable2IntegerSetter->IntegerValue.Set(Variable2Value);
 	Variable2Value->SetInteger(15);
@@ -168,7 +168,7 @@ void AMagicSystemCharacter::CreateNode()
 	Variable2IntegerProvider->IntegerNode.Set(Variable2IntegerGetter);
 	UXMSVariableNameValueNode* Variable2NameGetterP2 = NewObject<UXMSVariableNameValueNode>(this);
 	Variable2IntegerGetter->VariableName.Set(Variable2NameGetterP2);
-	Variable2NameGetterP2->SelectByIndex(1); // 1 is Pluto because it is the second int variable declared
+	Variable2NameGetterP2->SetName("Pluto"); // 1 is Pluto because it is the second int variable declared
 }
 
 void AMagicSystemCharacter::ExecuteTestNode()

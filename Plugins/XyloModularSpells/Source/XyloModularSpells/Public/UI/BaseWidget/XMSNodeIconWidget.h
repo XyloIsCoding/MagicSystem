@@ -18,11 +18,11 @@ class XYLOMODULARSPELLS_API UXMSNodeIconWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetDisplayName(const FString& ClassName);
+	void SetDisplayName(const FString& InName);
 protected:
-	virtual void DisplayNameSet(const FString& ClassName);
+	virtual void DisplayNameSet(const FString& InName);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_DisplayNameSet(const FString& ClassName);
+	void BP_DisplayNameSet(const FString& InName);
 
 public:
 	UFUNCTION(BlueprintCallable)

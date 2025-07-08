@@ -33,6 +33,7 @@ class XYLOMODULARSPELLS_API UXMSVarNameOptionEntryWidget : public UXMSNodeOption
 	 */
 	
 public:
+	virtual void ClearDelegates() override;
 	virtual void InitializeOption(int32 InOptionIndex) override;
 	virtual void BroadcastOptionSelectedDelegate() override;
 

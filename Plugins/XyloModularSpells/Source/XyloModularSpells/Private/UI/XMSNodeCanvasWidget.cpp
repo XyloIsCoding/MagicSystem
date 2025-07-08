@@ -78,8 +78,12 @@ void UXMSNodeCanvasWidget::OnOptionsRequested(UWidget* OptionsRequestingWidget)
 	}
 }
 
-void UXMSNodeCanvasWidget::OnNodeOptionSelected(int32 Index)
+void UXMSNodeCanvasWidget::OnOptionsSelectionCompleted()
 {
+	if (UXMSNodeOptionsSelectionWidget* OptionsSelection = OptionsSelectionWidget.Get())
+	{
+		OptionsSelection->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
 
 void UXMSNodeCanvasWidget::OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode)
@@ -271,20 +275,18 @@ UXMSNodeOptionsSelectionWidget* UXMSNodeCanvasWidget::GetOrCreateOptionsWidgetFo
 {
 	if (!NodeOptionsInterface) return nullptr;
 	
-	UXMSNodeOptionsSelectionWidget* OptionsWidget = ClassOptionsWidget.Get();
+	UXMSNodeOptionsSelectionWidget* OptionsWidget = OptionsSelectionWidget.Get();
 	if (!OptionsWidget)
 	{
-		UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-		if (!MSS) return nullptr;
-		UXMSNodeDataRegistry* NodesData = MSS->GetNodeDataRegistry();
+		UXMSNodeDataRegistry* NodesData = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 		if (!NodesData) return nullptr;
 	
-		ClassOptionsWidget = OptionsWidget = CreateWidget<UXMSNodeOptionsSelectionWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
+		OptionsSelectionWidget = OptionsWidget = CreateWidget<UXMSNodeOptionsSelectionWidget>(GetOwningPlayer(), NodesData->NodeOptionsWidgetClass);
 		if (!OptionsWidget) return nullptr;
-		
-		OptionsWidget->OptionSelectedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnNodeOptionSelected);
 	}
 
+	OptionsWidget->ClearDelegates(); // Important to do, since we are reusing this widget
+	OptionsWidget->SelectionCompletedDelegate.AddUObject(this, &UXMSNodeCanvasWidget::OnOptionsSelectionCompleted);
 	NodeOptionsInterface->InitializeOptions(OptionsWidget);
 	return OptionsWidget;
 }

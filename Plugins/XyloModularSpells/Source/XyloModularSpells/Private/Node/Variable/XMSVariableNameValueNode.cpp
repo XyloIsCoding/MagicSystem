@@ -73,15 +73,8 @@ void UXMSVariableNameValueNode::OnDeclaredVariablesListChanged(const FString& Ne
 	GetOptions(Strings);
 	if (!Strings.Contains(CachedName))
 	{
-		CacheString(-1);
+		InvalidateName();
 	}
-}
-
-void UXMSVariableNameValueNode::SelectByIndex(int32 InStringIndex)
-{
-	if (!IsInSpellEditorContext()) return;
-	
-	CacheString(InStringIndex);
 }
 
 void UXMSVariableNameValueNode::SetType(const FGameplayTag& InVariableType)
@@ -89,9 +82,7 @@ void UXMSVariableNameValueNode::SetType(const FGameplayTag& InVariableType)
 	if (!IsInSpellEditorContext()) return;
 	
 	VariableType = InVariableType;
-	// We use -1 because we do not want a random variable to be selected without the user noticing,
-	// so we ask to cache an empty string so gui can show error.
-	CacheString(-1);
+	InvalidateName();
 }
 
 void UXMSVariableNameValueNode::GetOptions(TArray<FString>& OutStringOptions) const
@@ -102,27 +93,31 @@ void UXMSVariableNameValueNode::GetOptions(TArray<FString>& OutStringOptions) co
 	SpellEditor->GetVariablesNamesByType(this, VariableType, OutStringOptions);
 }
 
-void UXMSVariableNameValueNode::CacheString(int32 Index)
+void UXMSVariableNameValueNode::SetName(const FString& InName)
 {
-	FString OldName = CachedName;
-
-	if (Index >= 0)
+	if (InName.IsEmpty())
 	{
-		TArray<FString> Strings;
-		GetOptions(Strings);
-		if (Strings.IsValidIndex(Index))
-		{
-			CachedName = Strings[Index];
-		}
-		else
-		{
-			CachedName.Empty();
-		}
-	}
-	else
-	{
-		CachedName.Empty();
+		InvalidateName();
+		return;
 	}
 	
+	TArray<FString> Options;
+	GetOptions(Options);
+	if (!Options.Contains(InName))
+	{
+		InvalidateName();
+		return;
+	}
+	
+	FString OldName = CachedName;
+	CachedName = InName;
 	VariableNameChangedDelegate.Broadcast(CachedName, OldName);
 }
+
+void UXMSVariableNameValueNode::InvalidateName()
+{
+	FString OldName = CachedName;
+	CachedName.Empty();
+	VariableNameChangedDelegate.Broadcast(CachedName, OldName);
+}
+

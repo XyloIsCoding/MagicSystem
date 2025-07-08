@@ -19,10 +19,21 @@ class XYLOMODULARSPELLS_API UXMSVarNameSelectorWidget : public UXMSNodeValueSele
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UXMSNodeCanvasEntryWidget
+	 */
+
+public:
+	virtual void OnOwningNodeSet() override;
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * IXMSNodeOptionsInterface Interface
 	 */
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void BroadcastOptionsRequestedDelegate();
 	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
 	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override { return OptionsRequestedDelegate; }
 	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
@@ -32,6 +43,12 @@ public:
 	/*
 	 * UXMSVarNameSelectorWidget
 	 */
+
+protected:
+	virtual void ChangeVarName(const FString& InName);
+	virtual void OnVarNameChanged(const FString& InName);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OnVarNameChanged(const FString& InName);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")

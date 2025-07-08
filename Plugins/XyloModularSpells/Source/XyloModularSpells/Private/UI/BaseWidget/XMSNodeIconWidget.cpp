@@ -3,13 +3,13 @@
 
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
-void UXMSNodeIconWidget::SetDisplayName(const FString& ClassName)
+void UXMSNodeIconWidget::SetDisplayName(const FString& InName)
 {
-	DisplayNameSet(ClassName);
-	BP_DisplayNameSet(ClassName);
+	DisplayNameSet(InName);
+	BP_DisplayNameSet(InName);
 }
 
-void UXMSNodeIconWidget::DisplayNameSet(const FString& ClassName)
+void UXMSNodeIconWidget::DisplayNameSet(const FString& InName)
 {
 }
 

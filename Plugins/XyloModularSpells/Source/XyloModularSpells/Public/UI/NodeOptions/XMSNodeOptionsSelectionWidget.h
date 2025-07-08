@@ -10,7 +10,9 @@
 #include "XMSNodeOptionsSelectionWidget.generated.h"
 
 class UXMSNodeIconWidget;
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSOptionSelectedSignature, int32)
+DECLARE_MULTICAST_DELEGATE(FXMSSelectionCompletedSignature)
 
 /**
  * 
@@ -28,13 +30,16 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionsSelectionWidget : public UUserWidget
 
 public:
 	template <typename EntryClass> requires std::is_base_of_v<UXMSNodeOptionEntryWidget, EntryClass>
-	void InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries);
+	void InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries, bool bInSingleChoice);
 protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UPanelWidget> OptionsContainer;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// OptionSelection
+
+public:
+	void ClearDelegates();
 	
 public:
 	FXMSOptionSelectedSignature OptionSelectedDelegate;
@@ -43,6 +48,16 @@ protected:
 	virtual void OptionSelected(int32 Index);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OptionSelected(int32 Index);
+	
+public:
+	FXMSSelectionCompletedSignature SelectionCompletedDelegate;
+protected:
+	void BroadcastSelectionCompleted();
+	virtual void SelectionCompleted();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_SelectionCompleted();
+protected:
+	bool bSingleChoice = true;
 
 	// ~OptionSelection
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -53,14 +68,17 @@ protected:
 
 
 template <typename EntryClass> requires std::is_base_of_v<UXMSNodeOptionEntryWidget, EntryClass>
-void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries)
+void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries, bool bInSingleChoice)
 {
 	if (!OptionsContainer) return;
 
 	if (!OptionWidgetClass)
 	{
 		UE_LOG(LogXyloModularSpells, Warning, TEXT("UXMSNodeOptionsSelectionWidget::InitializeOptions >> No OptionWidgetClass"))
+		return;
 	}
+
+	bSingleChoice = bInSingleChoice;
 
 	int32 MaxIndex = Size - 1;
 	int32 FoundIndex = -1;
@@ -74,8 +92,11 @@ void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<E
 		
 		if (EntryClass* CastedEntry = Cast<EntryClass>(Entry))
 		{
+			CastedEntry->ClearDelegates();
 			CastedEntry->InitializeOption(++FoundIndex);
 			OutEntries.Add(CastedEntry);
+
+			CastedEntry->NodeOptionEntrySelectedDelegate.AddUObject(this, &ThisClass::SelectOption);
 		}
 		else
 		{

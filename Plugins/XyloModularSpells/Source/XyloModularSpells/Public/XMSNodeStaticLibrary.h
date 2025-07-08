@@ -30,6 +30,7 @@ public:
 
 	static void GetAllValueTypes(TArray<FGameplayTag>& OutTypes);
 	static FGameplayTag GetValueTypeFromName(FName TypeName);
+	UFUNCTION(BlueprintCallable)
 	static UTexture2D* GetValueTypeIcon(const FGameplayTag& Type);
 	
 	static UClass* GetNodeClassByName(const FString& ClassName);

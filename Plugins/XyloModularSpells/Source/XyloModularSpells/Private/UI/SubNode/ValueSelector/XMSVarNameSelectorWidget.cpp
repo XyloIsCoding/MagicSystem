@@ -13,8 +13,32 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+ * UXMSNodeCanvasEntryWidget
+ */
+
+void UXMSVarNameSelectorWidget::OnOwningNodeSet()
+{
+	Super::OnOwningNodeSet();
+
+	UXMSVariableNameValueNode* VariableTypeNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
+	if (!VariableTypeNode) return;
+
+	FString NewName;
+	VariableTypeNode->GetString(NewName);
+	OnVarNameChanged(NewName);
+	BP_OnVarNameChanged(NewName);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
  * IXMSNodeOptionsInterface Interface
  */
+
+void UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate()
+{
+	OptionsRequestedDelegate.Broadcast(this);
+}
 
 void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
@@ -29,7 +53,7 @@ void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget
 	VariableNameNode->GetOptions(Options);
 	
 	TArray<UXMSVarNameOptionEntryWidget*> OptionWidgets;
-	OptionsSelectionWidget->InitializeOptions<UXMSVarNameOptionEntryWidget>(Options.Num(), VarNameOptionWidgetClass, OptionWidgets);
+	OptionsSelectionWidget->InitializeOptions<UXMSVarNameOptionEntryWidget>(Options.Num(), VarNameOptionWidgetClass, OptionWidgets, true);
 
 	for (auto It = OptionWidgets.CreateIterator(); It; ++It)
 	{
@@ -41,7 +65,30 @@ void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget
 		if (UXMSVarNameOptionEntryWidget* OptionWidget = *It)
 		{
 			OptionWidget->SetVarName(Options[It.GetIndex()]);
-			OptionWidget->VarNameOptionSelectedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::ChangeVarName); //TODO: add ChangeVarName
+			OptionWidget->VarNameOptionSelectedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::ChangeVarName);
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UXMSVarNameSelectorWidget
+ */
+
+void UXMSVarNameSelectorWidget::ChangeVarName(const FString& InName)
+{
+	UXMSVariableNameValueNode* VariableTypeNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
+	if (!VariableTypeNode) return;
+
+	VariableTypeNode->SetName(InName);
+
+	FString NewName;
+	VariableTypeNode->GetString(NewName);
+	OnVarNameChanged(NewName);
+	BP_OnVarNameChanged(NewName);
+}
+
+void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName)
+{
 }

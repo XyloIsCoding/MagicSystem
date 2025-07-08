@@ -34,10 +34,15 @@ void UXMSNodeClassOptionEntryWidget::NativeOnInitialized()
  * UXMSNodeOptionEntryWidget Interface
  */
 
+void UXMSNodeClassOptionEntryWidget::ClearDelegates()
+{
+	Super::ClearDelegates();
+	NodeClassOptionSelectedDelegate.Clear();
+}
+
 void UXMSNodeClassOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	Super::InitializeOption(InOptionIndex);
-	NodeClassOptionSelectedDelegate.Clear();
 }
 
 void UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate()

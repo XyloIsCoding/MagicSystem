@@ -10,6 +10,11 @@
  * UXMSNodeOptionEntryWidget
  */
 
+void UXMSNodeOptionEntryWidget::ClearDelegates()
+{
+	NodeOptionEntrySelectedDelegate.Clear();
+}
+
 void UXMSNodeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	OptionIndex = InOptionIndex;
