@@ -36,7 +36,11 @@ void UXMSValueTypeSelectorWidget::OnOwningNodeSet()
 {
 	Super::OnOwningNodeSet();
 
-	NotifyTypeChange();
+	if (UXMSValueTypeValueNode* ValueTypeNode = Cast<UXMSValueTypeValueNode>(OwningNode.Get()))
+	{
+		ValueTypeNode->ValueTypeChangedDelegate.AddUObject(this, &UXMSValueTypeSelectorWidget::OnOwningNodeValueTypeChanged);
+		OnOwningNodeValueTypeChanged(ValueTypeNode->GetValueType(), XMSValueType::None);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,11 +89,9 @@ void UXMSValueTypeSelectorWidget::ChangeValueType(const FGameplayTag& InType)
 	if (!ValueTypeNode) return;
 
 	ValueTypeNode->SetValueType(InType);
-
-	NotifyTypeChange();
 }
 
-void UXMSValueTypeSelectorWidget::NotifyTypeChange()
+void UXMSValueTypeSelectorWidget::OnOwningNodeValueTypeChanged(const FGameplayTag& NewType, const FGameplayTag& OldType)
 {
 	UXMSValueTypeValueNode* ValueTypeNode = Cast<UXMSValueTypeValueNode>(OwningNode.Get());
 	if (!ValueTypeNode) return;

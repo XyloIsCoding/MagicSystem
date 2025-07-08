@@ -38,7 +38,14 @@ void UXMSVarNameSelectorWidget::OnOwningNodeSet()
 {
 	Super::OnOwningNodeSet();
 
-	NotifyNameChange();
+	if (UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get()))
+	{
+		VariableNameNode->VariableNameChangedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged);
+
+		FString InitialName;
+		VariableNameNode->GetString(InitialName);
+		OnOwningNodeVarNameChanged(InitialName, FString());
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,25 +101,15 @@ void UXMSVarNameSelectorWidget::ChangeVarName(const FString& InName)
 	if (!VariableNameNode) return;
 
 	VariableNameNode->SetName(InName);
-	NotifyNameChange();
 }
 
-void UXMSVarNameSelectorWidget::NotifyNameChange()
+void UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName)
 {
-	UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get());
-	if (!VariableNameNode) return;
-
-	FString NewName;
-	if (!VariableNameNode->GetString(NewName))
-	{
-		NewName = FString(TEXT("[None]"));
-	}
-	
 	OnVarNameChanged(NewName);
 	BP_OnVarNameChanged(NewName);
 }
 
 void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName)
 {
-	VarNameText->SetDisplayText(InName);
+	VarNameText->SetDisplayText(!InName.IsEmpty() ? InName : FString(TEXT("[None]")));
 }

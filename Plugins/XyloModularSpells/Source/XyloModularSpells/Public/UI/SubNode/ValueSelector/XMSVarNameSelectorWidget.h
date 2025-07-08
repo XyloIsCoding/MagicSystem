@@ -55,7 +55,7 @@ public:
 
 protected:
 	virtual void ChangeVarName(const FString& InName);
-	void NotifyNameChange();
+	void OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName);
 	virtual void OnVarNameChanged(const FString& InName);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnVarNameChanged(const FString& InName);

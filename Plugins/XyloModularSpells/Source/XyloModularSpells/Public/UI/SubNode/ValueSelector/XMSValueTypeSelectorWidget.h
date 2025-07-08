@@ -54,7 +54,7 @@ public:
 
 protected:
 	virtual void ChangeValueType(const FGameplayTag& InType);
-	void NotifyTypeChange();
+	void OnOwningNodeValueTypeChanged(const FGameplayTag& NewType, const FGameplayTag& OldType);
 	virtual void OnValueTypeChanged(const FGameplayTag& NewType);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnValueTypeChanged(const FGameplayTag& NewType);
