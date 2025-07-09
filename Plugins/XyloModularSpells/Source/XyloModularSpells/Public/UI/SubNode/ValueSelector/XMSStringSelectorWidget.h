@@ -16,7 +16,6 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSStringSelectorWidget : public UXMSNodeValueSelectorWidget, public IXMSNodeOptionsInterface
 {
 	GENERATED_BODY()
-
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,12 +54,14 @@ public:
 	 */
 
 protected:
+	virtual void SelectionCompleted(bool bSuccess);
 	virtual void AppendString(const FString& InString);
 	void OnOwningNodeStringValueChanged(const FString& NewString, const FString& OldString);
 	virtual void OnStringChanged(const FString& InString);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnStringChanged(const FString& InString);
-	
+protected:
+	FString CachedString;
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

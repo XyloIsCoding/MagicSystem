@@ -78,7 +78,7 @@ void UXMSNodeCanvasWidget::OnOptionsRequested(UWidget* OptionsRequestingWidget)
 	}
 }
 
-void UXMSNodeCanvasWidget::OnOptionsSelectionCompleted()
+void UXMSNodeCanvasWidget::OnOptionsSelectionCompleted(bool bSuccess)
 {
 	if (UXMSNodeOptionsSelectionWidget* OptionsSelection = OptionsSelectionWidget.Get())
 	{

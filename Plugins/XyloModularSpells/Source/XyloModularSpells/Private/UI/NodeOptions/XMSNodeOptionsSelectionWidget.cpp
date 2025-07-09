@@ -13,6 +13,10 @@
  * UXMSNodeOptionsSelectionWidget
  */
 
+void UXMSNodeOptionsSelectionWidget::OnOptionsInitialized()
+{
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 // OptionSelection
 
@@ -30,7 +34,7 @@ void UXMSNodeOptionsSelectionWidget::SelectOption(int32 Index)
 
 	if (bSingleChoice)
 	{
-		BroadcastSelectionCompleted();
+		BroadcastSelectionCompleted(true);
 	}
 }
 
@@ -38,14 +42,14 @@ void UXMSNodeOptionsSelectionWidget::OptionSelected(int32 Index)
 {
 }
 
-void UXMSNodeOptionsSelectionWidget::BroadcastSelectionCompleted()
+void UXMSNodeOptionsSelectionWidget::BroadcastSelectionCompleted(bool bSuccess)
 {
-	SelectionCompleted();
-	BP_SelectionCompleted();
-	SelectionCompletedDelegate.Broadcast();
+	SelectionCompleted(bSuccess);
+	BP_SelectionCompleted(bSuccess);
+	SelectionCompletedDelegate.Broadcast(bSuccess);
 }
 
-void UXMSNodeOptionsSelectionWidget::SelectionCompleted()
+void UXMSNodeOptionsSelectionWidget::SelectionCompleted(bool bSuccess)
 {
 }
 

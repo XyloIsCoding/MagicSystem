@@ -88,6 +88,8 @@ void UXMSStringSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget*
 			OptionWidget->StringOptionSelectedDelegate.AddUObject(this, &UXMSStringSelectorWidget::AppendString);
 		}
 	}
+
+	OptionsSelectionWidget->SelectionCompletedDelegate.AddUObject(this, &UXMSStringSelectorWidget::SelectionCompleted);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,27 +98,40 @@ void UXMSStringSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget*
  * UXMSStringSelectorWidget
  */
 
-void UXMSStringSelectorWidget::AppendString(const FString& InString)
+void UXMSStringSelectorWidget::SelectionCompleted(bool bSuccess)
 {
 	UXMSStringValueNode* StringNode = Cast<UXMSStringValueNode>(OwningNode.Get());
 	if (!StringNode) return;
 
-	FString CurrentString;
-	StringNode->GetString(CurrentString);
-	
+	if (bSuccess)
+	{
+		// Push CachedString to node
+		StringNode->SetString(CachedString);
+	}
+	else
+	{
+		// Reset widget cached string to node's one
+		FString InitialName;
+		StringNode->GetString(InitialName);
+		OnOwningNodeStringValueChanged(InitialName, FString());
+	}
+}
+
+void UXMSStringSelectorWidget::AppendString(const FString& InString)
+{
 	if (InString.Equals(FString(TEXT("\u232B"))))
 	{
-		if (!CurrentString.IsEmpty())
+		if (!CachedString.IsEmpty())
 		{
-			CurrentString = CurrentString.Left(CurrentString.Len() - 1);
+			CachedString = CachedString.Left(CachedString.Len() - 1);
 		}
 	}
 	else
 	{
-		CurrentString.Append(InString);
+		CachedString.Append(InString);
 	}
 
-	StringNode->SetString(CurrentString);
+	OnOwningNodeStringValueChanged(CachedString, FString());
 }
 
 void UXMSStringSelectorWidget::OnOwningNodeStringValueChanged(const FString& NewString, const FString& OldString)
@@ -127,6 +142,7 @@ void UXMSStringSelectorWidget::OnOwningNodeStringValueChanged(const FString& New
 
 void UXMSStringSelectorWidget::OnStringChanged(const FString& InString)
 {
+	CachedString = InString;
 	StringText->SetDisplayText(!InString.IsEmpty() ? InString : FString(TEXT("[None]")));
 }
 

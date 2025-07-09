@@ -57,7 +57,7 @@ protected:
 	/** Bound to all SubNode Widgets */
 	virtual void OnOptionsRequested(UWidget* OptionsRequestingWidget);
 	/** Bound to OptionsSelectionWidget */
-	virtual void OnOptionsSelectionCompleted();
+	virtual void OnOptionsSelectionCompleted(bool bSuccess);
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode);
 	/** Bound to all SubNode Widgets */

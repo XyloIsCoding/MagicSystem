@@ -33,5 +33,8 @@ void UXMSIntegerValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 
 void UXMSIntegerValueNode::SetInteger(int32 InInteger)
 {
+	int32 OldInteger = Integer;
 	Integer = InInteger;
+
+	IntegerValueChangedDelegate.Broadcast(Integer, OldInteger);
 }

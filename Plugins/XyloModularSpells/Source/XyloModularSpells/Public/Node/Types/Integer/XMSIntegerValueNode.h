@@ -7,6 +7,8 @@
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSIntegerValueNode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSIntegerValueChangedSignature, int32 /* New */ , int32 /* Old */ )
+
 /**
  * Contains a raw integer value.
  */
@@ -41,6 +43,7 @@ public:
 	 */
 
 public:
+	FXMSIntegerValueChangedSignature IntegerValueChangedDelegate;
 	virtual void SetInteger(int32 InInteger);
 private:
 	int32 Integer = 0;

@@ -12,7 +12,7 @@
 class UXMSNodeIconWidget;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSOptionSelectedSignature, int32)
-DECLARE_MULTICAST_DELEGATE(FXMSSelectionCompletedSignature)
+DECLARE_MULTICAST_DELEGATE_OneParam(FXMSSelectionCompletedSignature, bool /* Success */)
 
 /**
  * 
@@ -32,6 +32,9 @@ public:
 	template <typename EntryClass> requires std::is_base_of_v<UXMSNodeOptionEntryWidget, EntryClass>
 	void InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries, bool bInSingleChoice);
 protected:
+	virtual void OnOptionsInitialized();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OnOptionsInitialized();
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UPanelWidget> OptionsContainer;
 
@@ -53,11 +56,12 @@ public:
 	FXMSSelectionCompletedSignature SelectionCompletedDelegate;
 protected:
 	UFUNCTION(BlueprintCallable)
-	void BroadcastSelectionCompleted();
-	virtual void SelectionCompleted();
+	void BroadcastSelectionCompleted(bool bSuccess);
+	virtual void SelectionCompleted(bool bSuccess);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_SelectionCompleted();
+	void BP_SelectionCompleted(bool bSuccess);
 protected:
+	UPROPERTY(BlueprintReadOnly)
 	bool bSingleChoice = true;
 
 	// ~OptionSelection
@@ -121,5 +125,8 @@ void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<E
 			}
 		}
 	}
+
+	OnOptionsInitialized();
+	BP_OnOptionsInitialized();
 }
 
