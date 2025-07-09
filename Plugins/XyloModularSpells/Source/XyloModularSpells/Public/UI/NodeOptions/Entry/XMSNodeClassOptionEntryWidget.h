@@ -18,10 +18,7 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeClassOptionEntryWidget : public UXMSNodeOptionEntryWidget
 {
 	GENERATED_BODY()
-
-public:
-	UXMSNodeClassOptionEntryWidget();
-
+	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
