@@ -10,6 +10,11 @@
  * UXMSNodeOptionEntryWidget
  */
 
+void UXMSNodeOptionEntryWidget::BroadcastOptionSelectedDelegate()
+{
+	NodeOptionEntrySelectedDelegate.Broadcast(OptionIndex);
+}
+
 void UXMSNodeOptionEntryWidget::ClearDelegates()
 {
 	NodeOptionEntrySelectedDelegate.Clear();
@@ -18,9 +23,4 @@ void UXMSNodeOptionEntryWidget::ClearDelegates()
 void UXMSNodeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
 {
 	OptionIndex = InOptionIndex;
-}
-
-void UXMSNodeOptionEntryWidget::BroadcastOptionSelectedDelegate()
-{
-	NodeOptionEntrySelectedDelegate.Broadcast(OptionIndex);
 }

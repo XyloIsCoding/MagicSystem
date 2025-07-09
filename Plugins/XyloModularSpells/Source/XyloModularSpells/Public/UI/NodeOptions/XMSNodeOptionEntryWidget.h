@@ -24,10 +24,16 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 	
 public:
 	FXMSNodeOptionEntrySelectedSignature NodeOptionEntrySelectedDelegate;
-	virtual void ClearDelegates();
-	virtual void InitializeOption(int32 InOptionIndex);
+	/** Broadcasts NodeOptionEntrySelectedDelegate. Should be overridden to also broadcast sub-class-specific
+	 * selection delegates */
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastOptionSelectedDelegate();
+	/** called by UXMSNodeOptionsSelectionWidget::InitializeOptions
+	 * It is used to clear every delegate to allow for reusing this widget */
+	virtual void ClearDelegates();
+	/** called by UXMSNodeOptionsSelectionWidget::InitializeOptions
+	 * Initialize this widget */
+	virtual void InitializeOption(int32 InOptionIndex);
 protected:
 	int32 OptionIndex = 0;
 };
