@@ -55,10 +55,10 @@ public:
 
 protected:
 	virtual void ChangeVarName(const FString& InName);
-	void OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName);
-	virtual void OnVarNameChanged(const FString& InName);
+	void OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName, bool bValidName);
+	virtual void OnVarNameChanged(const FString& InName, bool bValidName);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_OnVarNameChanged(const FString& InName);
+	void BP_OnVarNameChanged(const FString& InName, bool bValidName);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

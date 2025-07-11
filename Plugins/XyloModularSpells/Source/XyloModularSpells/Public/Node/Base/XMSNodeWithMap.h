@@ -61,6 +61,7 @@ public:
 	virtual UXMSNode* GetSubNode(FName Identifier) const;
 	virtual void SetSubNode(FName Identifier, UXMSNode* InNode);
 protected:
+	/** @remark Spell Editor Only */
 	virtual void OnSubNodeChanged(FName Identifier);
 private:
 	/** Map containing sub-nodes owned by this node. Is automatically updated when a sub-node is initialized */

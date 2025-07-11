@@ -36,9 +36,6 @@ void UXMSVariableDeclarationNode::OnSubNodeChanged(FName Identifier)
 {
 	Super::OnSubNodeChanged(Identifier);
 
-	// We do not need to deal with OnVariableTypeChanged and OnVariableNameChanged outside of editor
-	if (!IsInSpellEditorContext()) return;
-	
 	if (Identifier.IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, VariableType)))
 	{
 		if (UXMSValueTypeValueNode* VariableTypeNode = VariableType.Get())

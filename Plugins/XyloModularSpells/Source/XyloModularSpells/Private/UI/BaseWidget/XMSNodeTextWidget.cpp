@@ -3,13 +3,13 @@
 
 #include "UI/BaseWidget/XMSNodeTextWidget.h"
 
-void UXMSNodeTextWidget::SetDisplayText(const FString& InText)
+void UXMSNodeTextWidget::SetDisplayText(const FString& InText, const FLinearColor& Color)
 {
-	DisplayTextSet(InText);
-	BP_DisplayTextSet(InText);
+	DisplayTextSet(InText, Color);
+	BP_DisplayTextSet(InText, Color);
 }
 
-void UXMSNodeTextWidget::DisplayTextSet(const FString& InText)
+void UXMSNodeTextWidget::DisplayTextSet(const FString& InText, const FLinearColor& Color)
 {
 }
 

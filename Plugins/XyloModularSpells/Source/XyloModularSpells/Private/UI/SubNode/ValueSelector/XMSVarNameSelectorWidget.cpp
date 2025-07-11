@@ -41,10 +41,7 @@ void UXMSVarNameSelectorWidget::OnOwningNodeSet()
 	if (UXMSVariableNameValueNode* VariableNameNode = Cast<UXMSVariableNameValueNode>(OwningNode.Get()))
 	{
 		VariableNameNode->VariableNameChangedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged);
-
-		FString InitialName;
-		VariableNameNode->GetString(InitialName);
-		OnOwningNodeVarNameChanged(InitialName, FString());
+		VariableNameNode->BroadcastVariableNameChangedDelegate();
 	}
 }
 
@@ -103,13 +100,13 @@ void UXMSVarNameSelectorWidget::ChangeVarName(const FString& InName)
 	VariableNameNode->SetName(InName);
 }
 
-void UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName)
+void UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged(const FString& NewName, const FString& OldName, bool bValidName)
 {
-	OnVarNameChanged(NewName);
-	BP_OnVarNameChanged(NewName);
+	OnVarNameChanged(bValidName ? NewName : OldName, bValidName);
+	BP_OnVarNameChanged(bValidName ? NewName : OldName, bValidName);
 }
 
-void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName)
+void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName, bool bValidName)
 {
-	VarNameText->SetDisplayText(!InName.IsEmpty() ? InName : FString(TEXT("[None]")));
+	VarNameText->SetDisplayText(!InName.IsEmpty() ? InName : FString(TEXT("[None]")), bValidName ? FLinearColor::White : FLinearColor::Red);
 }

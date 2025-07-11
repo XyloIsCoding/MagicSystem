@@ -7,7 +7,28 @@
 #include "Node/Base/XMSNodeWithValue.h"
 #include "XMSVariableNameValueNode.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSVariableNameChangedSignature, const FString& /* New */ , const FString& /* Old */ )
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FXMSVariableNameChangedSignature, const FString& /* New */ , const FString& /* Old */, bool /* bValidName */)
+
+USTRUCT()
+struct FXMSCachedVariableName
+{
+	GENERATED_BODY()
+
+public:
+	const FString& GetName() const { return CachedName; }
+	bool IsValidName() const { return bValidName; }
+	bool GetValidName(FString& OutName);
+
+	void SetName(const FString& InName);
+	void InvalidateName();
+	
+protected:
+	UPROPERTY()
+	FString CachedName;
+	UPROPERTY()
+	bool bValidName = true;
+};
+
 
 /**
  * Call SetType from the parent node!!!
@@ -45,13 +66,18 @@ public:
 	 */
 
 public:
+	/** @remark Only bound if in spell editor */
 	virtual void OnDeclaredVariablesListChanged(const FString& NewVariableName, const FGameplayTag& NewVariableType, const FString& OldVariableName, const FGameplayTag& OldVariableType);
 	/** Set the type of variables that can be used by this node. Usually only called by parent node */
 	virtual void SetType(const FGameplayTag& InVariableType);
+
+public:
+	virtual void GetOptions(TArray<FString>& OutStringOptions) const;
 	
 public:
 	FXMSVariableNameChangedSignature VariableNameChangedDelegate;
-	virtual void GetOptions(TArray<FString>& OutStringOptions) const;
+	void BroadcastVariableNameChangedDelegate(const FString& OldName = FString());
+	virtual bool GetLastValidName(FString& OutName);
 	virtual void SetName(const FString& InName);
 protected:
 	virtual void InvalidateName();
@@ -61,5 +87,5 @@ private:
 	UPROPERTY()
 	FGameplayTag VariableType = XMSValueType::None;
 	UPROPERTY()
-	FString CachedName = FString();
+	FXMSCachedVariableName CachedVariableName;
 };

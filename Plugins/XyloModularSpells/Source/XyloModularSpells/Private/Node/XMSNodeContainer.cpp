@@ -25,8 +25,11 @@ void FXMSNodeContainer::NodeSet(UXMSNode* InNode, UXMSNode* OldNode)
 	if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, 0));
 	if (UXMSNodeWithMap* OwnerPtr = Owner.Get())
 	{
-		OwnerPtr->OnSubNodeChanged(Identifier);
-		OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, 0));
+		if (OwnerPtr->IsInSpellEditorContext())
+		{
+			OwnerPtr->OnSubNodeChanged(Identifier);
+			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, 0));
+		}
 	}
 }
 
@@ -56,8 +59,11 @@ void FXMSMultiNodeContainer::NodeSet(UXMSNode* InNode, int32 Index, UXMSNode* Ol
 	if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
 	if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 	{
-		OwnerPtr->OnSubNodeChanged(Identifier, Index);
-		OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		if (OwnerPtr->IsInSpellEditorContext())
+		{
+			OwnerPtr->OnSubNodeChanged(Identifier, Index);
+			OwnerPtr->SubNodeChangedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
 	}
 }
 
@@ -71,8 +77,11 @@ void FXMSMultiNodeContainer::NodeAdded(UXMSNode* InNode, int32 Index)
 	if (InNode) InNode->ReparentNode(Owner.Get(), FXMSNodePathElement(Identifier, Index));
 	if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 	{
-		OwnerPtr->OnSubNodeAdded(Identifier, Index);
-		OwnerPtr->SubNodeAddedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		if (OwnerPtr->IsInSpellEditorContext())
+		{
+			OwnerPtr->OnSubNodeAdded(Identifier, Index);
+			OwnerPtr->SubNodeAddedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
 	}
 }
 
@@ -87,8 +96,11 @@ void FXMSMultiNodeContainer::NodeRemoved(int32 Index, UXMSNode* OldNode)
 		
 	if (UXMSNodeWithArray* OwnerPtr = Owner.Get())
 	{
-		OwnerPtr->OnSubNodeRemoved(Identifier, Index);
-		OwnerPtr->SubNodeRemovedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		if (OwnerPtr->IsInSpellEditorContext())
+		{
+			OwnerPtr->OnSubNodeRemoved(Identifier, Index);
+			OwnerPtr->SubNodeRemovedDelegate.Broadcast(FXMSNodePathElement(Identifier, Index));
+		}
 	}
 }
 
@@ -97,7 +109,11 @@ void FXMSMultiNodeContainer::ShiftPathIndex(UXMSNode* Node, int32 Amount)
 	if (Node)
 	{
 		Node->PathFromParentNode.Index += Amount;
-		Node->PathIndexChangedDelegate.Broadcast(Node->PathFromParentNode.Index);
+		
+		if (Node->IsInSpellEditorContext())
+		{
+			Node->PathIndexChangedDelegate.Broadcast(Node->PathFromParentNode.Index);
+		}
 	}
 }
 

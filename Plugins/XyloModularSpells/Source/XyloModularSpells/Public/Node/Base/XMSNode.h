@@ -72,6 +72,7 @@ public:
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// SubNodes
 
+	/** @remark Spell Editor Only */
 	FXMSSubNodeChangedSignature SubNodeChangedDelegate;
 	virtual UXMSNode* GetSubNode(const FXMSNodePathElement& PathElement) const { return nullptr; }
 	virtual void GetAllSubNodes(FXMSNodeQueryResult& OutNodes) const {}
@@ -105,6 +106,7 @@ public:
 	// ParentNode
 	
 public:
+	/** @remark Spell Editor Only */
 	FXMSPathIndexChangedSignature PathIndexChangedDelegate; 
 	FXMSRemovedFromParentSignature RemovedFromParentDelegate;
 	UXMSNode* GetParentNode() const { return ParentNode.Get(); }

@@ -18,11 +18,11 @@ class XYLOMODULARSPELLS_API UXMSNodeTextWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetDisplayText(const FString& InText);
+	void SetDisplayText(const FString& InText, const FLinearColor& Color = FLinearColor::White);
 protected:
-	virtual void DisplayTextSet(const FString& InText);
+	virtual void DisplayTextSet(const FString& InText, const FLinearColor& Color);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_DisplayTextSet(const FString& InText);
+	void BP_DisplayTextSet(const FString& InText, const FLinearColor& Color);
 
 public:
 	FXMSNodeTextClickedSignature NodeTextClickedDelegate;
