@@ -79,7 +79,7 @@ public:
 	virtual void GetAllSubNodes(TArray<UXMSNode*>& OutNodes) const {}
 	virtual void SetSubNode(const FXMSNodePathElement& PathElement, UXMSNode* InNode) {}
 
-	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions) {}
+	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<TSubclassOf<UXMSNode>>& OutClassOptions) {}
 	/** @return: the Identifiers of all sub-nodes */
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
 

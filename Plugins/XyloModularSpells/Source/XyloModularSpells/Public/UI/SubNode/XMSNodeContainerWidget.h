@@ -107,7 +107,7 @@ public:
 	virtual FString GetNodeName() const;
 public:
 	UXMSNode* GetNode() const;
-	virtual void GetNodeClassOptions(TArray<UClass*>& OutClassOptions);
+	virtual void GetNodeClassOptions(TArray<TSubclassOf<UXMSNode>>& OutClassOptions);
 	void ChangeNodeClass(TSubclassOf<UXMSNode> NewClass);
 
 	// ~ContainedNode

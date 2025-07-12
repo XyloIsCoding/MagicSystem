@@ -107,9 +107,10 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	UXMSNodeData* GetNodeData(UClass* NodeClass);
+	const TMap<TSubclassOf<UXMSNode>, UXMSNodeData*>& GetNodesData() const { return NodesData; }
 private:
 	void UpdateNodeDataMap();
-	UPROPERTY(EditAnywhere, meta = (TitleProperty = "NodeClass", ReadOnlyKeys))
+	UPROPERTY(EditAnywhere, meta = (TitleProperty = "NodeClass"))
 	TMap<TSubclassOf<UXMSNode>, UXMSNodeData*> NodesData;
 
 	// ~NodesData

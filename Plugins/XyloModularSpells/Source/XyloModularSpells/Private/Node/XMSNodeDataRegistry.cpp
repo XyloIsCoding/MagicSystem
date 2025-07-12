@@ -100,7 +100,7 @@ void UXMSNodeDataRegistry::UpdateNodeDataMap()
 	UXMSModularSpellsSubsystem* NodesSubsystem = UXMSModularSpellsSubsystem::Get();
 	if (!NodesSubsystem) return;
 	
-	for (UClass* NodeClass : NodesSubsystem->GetNodeClasses())
+	for (UClass* NodeClass : NodesSubsystem->GetNativeNodeClasses())
 	{
 		UXMSNodeData*& NodeDataPtrRef = NodesData.FindOrAdd(NodeClass);
 		if (NodeDataPtrRef && NodeDataPtrRef->GetNodeClass() != NodeClass)

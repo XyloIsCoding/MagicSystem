@@ -132,9 +132,20 @@ UTexture2D* UXMSNodeStaticLibrary::GetValueTypeIcon(const FGameplayTag& Type)
 	return ValueTypeData ? ValueTypeData->Glyph : nullptr;
 }
 
+bool UXMSNodeStaticLibrary::GetAllNodeClasses(TArray<TSubclassOf<UXMSNode>>& OutClasses)
+{
+	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
+	if (!NodeDataRegistry) return false;
+
+	NodeDataRegistry->GetNodesData().GetKeys(OutClasses);
+	return true;
+}
+
 UClass* UXMSNodeStaticLibrary::GetNodeClassByName(const FString& ClassName)
 {
-	for (UClass* NodeClass : UXMSModularSpellsSubsystem::Get()->GetNodeClasses())
+	TArray<TSubclassOf<UXMSNode>> NodeClasses;
+	GetAllNodeClasses(NodeClasses);
+	for (UClass* NodeClass : NodeClasses)
 	{
 		if (NodeClass->GetName().Equals(ClassName))
 		{

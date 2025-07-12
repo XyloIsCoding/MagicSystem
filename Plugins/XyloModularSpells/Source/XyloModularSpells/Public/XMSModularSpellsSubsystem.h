@@ -74,7 +74,7 @@ private:
 	// NodeClasses
 	
 public:
-	const TArray<UClass*>& GetNodeClasses();
+	const TArray<UClass*>& GetNativeNodeClasses();
 private:
 	FXMSNodeClassCache NodeClassCache;
 

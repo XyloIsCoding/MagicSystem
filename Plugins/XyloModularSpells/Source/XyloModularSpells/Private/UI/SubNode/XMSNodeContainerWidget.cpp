@@ -83,7 +83,7 @@ void UXMSNodeContainerWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* 
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return;
 	
-	TArray<UClass*> Options;
+	TArray<TSubclassOf<UXMSNode>> Options;
 	GetNodeClassOptions(Options);
 	
 	TArray<UXMSNodeClassOptionEntryWidget*> OptionWidgets;
@@ -170,7 +170,7 @@ UXMSNode* UXMSNodeContainerWidget::GetNode() const
 	return OwningNodePtr->GetSubNode(ThisNodePath);
 }
 
-void UXMSNodeContainerWidget::GetNodeClassOptions(TArray<UClass*>& OutClassOptions)
+void UXMSNodeContainerWidget::GetNodeClassOptions(TArray<TSubclassOf<UXMSNode>>& OutClassOptions)
 {
 	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{

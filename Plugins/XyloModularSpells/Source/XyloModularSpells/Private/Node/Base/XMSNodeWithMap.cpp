@@ -131,7 +131,7 @@ void UXMSNodeWithMap::SetSubNode(const FXMSNodePathElement& PathElement, UXMSNod
 	SetSubNode(PathElement.Identifier, InNode);
 }
 
-void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<UClass*>& OutClassOptions)
+void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<TSubclassOf<UXMSNode>>& OutClassOptions)
 {
 	FXMSNodeContainer** NodeContainerFound = SubNodes.Find(PathElement.Identifier);
 	if (!NodeContainerFound)
@@ -140,11 +140,11 @@ void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElem
 		return;
 	}
 	
-	UXMSModularSpellsSubsystem* MSS = UXMSModularSpellsSubsystem::Get();
-	if (!MSS) return;
+	TArray<TSubclassOf<UXMSNode>> NodeClasses;
+	UXMSNodeStaticLibrary::GetAllNodeClasses(NodeClasses);
 
 	FXMSNodeContainer* NodeContainer = *NodeContainerFound;
-	OutClassOptions = MSS->GetNodeClasses().FilterByPredicate([NodeContainer](UClass* NodeClass)
+	OutClassOptions = NodeClasses.FilterByPredicate([NodeContainer](UClass* NodeClass)
 	{
 		return NodeContainer->IsCompatible(NodeClass);
 	});

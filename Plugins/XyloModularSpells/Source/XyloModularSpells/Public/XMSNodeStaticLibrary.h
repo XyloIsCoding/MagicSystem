@@ -32,7 +32,8 @@ public:
 	static FGameplayTag GetValueTypeFromName(FName TypeName);
 	UFUNCTION(BlueprintCallable)
 	static UTexture2D* GetValueTypeIcon(const FGameplayTag& Type);
-	
+
+	static bool GetAllNodeClasses(TArray<TSubclassOf<UXMSNode>>& OutClasses);
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
 	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);

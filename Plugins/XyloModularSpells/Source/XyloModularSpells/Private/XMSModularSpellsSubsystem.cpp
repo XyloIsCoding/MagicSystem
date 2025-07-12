@@ -20,7 +20,7 @@ void FXMSNodeClassCache::InitForType(UClass* InClass)
 	TArray<UClass*> FoundClasses;
 	GetDerivedClasses(InClass, FoundClasses, true);
 	FoundClasses.RemoveAll([](UClass* Class) {
-		return Class->HasAnyClassFlags(CLASS_Abstract);
+		return Class->HasAnyClassFlags(CLASS_Abstract) || !Class->HasAnyClassFlags(CLASS_Native);
 	});
 
 	Classes.Append(FoundClasses);
@@ -86,7 +86,7 @@ void UXMSModularSpellsSubsystem::RegisterNodeDataRegistry()
 /*--------------------------------------------------------------------------------------------------------------------*/
 // NodeClasses
 
-const TArray<UClass*>& UXMSModularSpellsSubsystem::GetNodeClasses()
+const TArray<UClass*>& UXMSModularSpellsSubsystem::GetNativeNodeClasses()
 {
 	return NodeClassCache.Classes;
 }
