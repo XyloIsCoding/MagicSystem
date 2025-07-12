@@ -80,6 +80,7 @@ void AMagicSystemCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CreateNode();
+	CreateWidget();
 }
 
 void AMagicSystemCharacter::CreateWidget()
