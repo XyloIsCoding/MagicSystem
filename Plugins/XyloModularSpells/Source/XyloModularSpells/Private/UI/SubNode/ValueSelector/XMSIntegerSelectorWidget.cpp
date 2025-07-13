@@ -13,22 +13,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSIntegerSelectorWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (NumberText)
-	{
-		NumberText->NodeIconClickedDelegate.AddUObject(this, &UXMSIntegerSelectorWidget::BroadcastOptionsRequestedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeCanvasEntryWidget
  */
 
@@ -49,11 +33,6 @@ void UXMSIntegerSelectorWidget::OnOwningNodeSet()
 /*
  * IXMSNodeOptionsInterface Interface
  */
-
-void UXMSIntegerSelectorWidget::BroadcastOptionsRequestedDelegate()
-{
-	OptionsRequestedDelegate.Broadcast(this);
-}
 
 void UXMSIntegerSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
@@ -135,5 +114,5 @@ void UXMSIntegerSelectorWidget::OnOwningNodeIntegerValueChanged(int32 NewNumber,
 void UXMSIntegerSelectorWidget::OnNumberChanged(int32 InNumber)
 {
 	CachedNumber = InNumber;
-	NumberText->SetDisplayText(FString::FromInt(InNumber));
+	SelectorDisplayWidget->SetDisplayText(FString::FromInt(InNumber));
 }

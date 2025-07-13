@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/SubNode/XMSNodeValueOptionSelectorWidget.h"
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 #include "XMSIntegerSelectorWidget.generated.h"
 
@@ -12,18 +13,10 @@ class UXMSIntegerOptionEntryWidget;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSIntegerSelectorWidget : public UXMSNodeValueSelectorWidget, public IXMSNodeOptionsInterface
+class XYLOMODULARSPELLS_API UXMSIntegerSelectorWidget : public UXMSNodeValueOptionSelectorWidget
 {
 	GENERATED_BODY()
 	
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * UUserWidget Interface
-	 */
-	
-	virtual void NativeOnInitialized() override;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -40,10 +33,6 @@ public:
 	 */
 
 public:
-	UFUNCTION(BlueprintCallable)
-	void BroadcastOptionsRequestedDelegate();
-	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
-	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override { return OptionsRequestedDelegate; }
 	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,10 +51,7 @@ protected:
 protected:
 	int32 CachedNumber;
 	
-	
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> NumberText;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSIntegerOptionEntryWidget> NumberOptionWidgetClass;
 };

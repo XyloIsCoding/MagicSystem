@@ -13,22 +13,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSValueTypeSelectorWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (ValueTypeIcon)
-	{
-		ValueTypeIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSValueTypeSelectorWidget::BroadcastOptionsRequestedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeCanvasEntryWidget
  */
 
@@ -48,11 +32,6 @@ void UXMSValueTypeSelectorWidget::OnOwningNodeSet()
 /*
  * IXMSNodeOptionsInterface Interface
  */
-
-void UXMSValueTypeSelectorWidget::BroadcastOptionsRequestedDelegate()
-{
-	OptionsRequestedDelegate.Broadcast(this);
-}
 
 void UXMSValueTypeSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
@@ -106,6 +85,6 @@ void UXMSValueTypeSelectorWidget::OnValueTypeChanged(const FGameplayTag& NewType
 {
 	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetValueTypeIcon(NewType))
 	{
-		ValueTypeIcon->SetDisplayIcon(Icon);
+		SelectorDisplayWidget->SetDisplayIcon(Icon);
 	}
 }

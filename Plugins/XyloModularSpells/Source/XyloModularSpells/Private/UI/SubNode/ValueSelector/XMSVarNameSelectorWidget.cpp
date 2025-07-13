@@ -9,23 +9,6 @@
 #include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
- * UUserWidget Interface
- */
-
-void UXMSVarNameSelectorWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (VarNameText)
-	{
-		VarNameText->NodeIconClickedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate);
-	}
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -48,11 +31,6 @@ void UXMSVarNameSelectorWidget::OnOwningNodeSet()
 /*
  * IXMSNodeOptionsInterface Interface
  */
-
-void UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate()
-{
-	OptionsRequestedDelegate.Broadcast(this);
-}
 
 void UXMSVarNameSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
@@ -106,5 +84,5 @@ void UXMSVarNameSelectorWidget::OnOwningNodeVarNameChanged(const FString& NewNam
 
 void UXMSVarNameSelectorWidget::OnVarNameChanged(const FString& InName, bool bValidName)
 {
-	VarNameText->SetDisplayText(!InName.IsEmpty() ? InName : FString(TEXT("[None]")), bValidName ? FLinearColor::White : FLinearColor::Red);
+	SelectorDisplayWidget->SetDisplayText(!InName.IsEmpty() ? InName : FString(TEXT("[None]")), bValidName ? FLinearColor::White : FLinearColor::Red);
 }

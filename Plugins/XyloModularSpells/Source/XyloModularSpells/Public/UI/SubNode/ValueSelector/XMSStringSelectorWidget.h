@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/SubNode/XMSNodeValueOptionSelectorWidget.h"
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 #include "XMSStringSelectorWidget.generated.h"
 
@@ -12,18 +13,10 @@ class UXMSStringOptionEntryWidget;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSStringSelectorWidget : public UXMSNodeValueSelectorWidget, public IXMSNodeOptionsInterface
+class XYLOMODULARSPELLS_API UXMSStringSelectorWidget : public UXMSNodeValueOptionSelectorWidget
 {
 	GENERATED_BODY()
 	
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * UUserWidget Interface
-	 */
-	
-	virtual void NativeOnInitialized() override;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -40,10 +33,6 @@ public:
 	 */
 
 public:
-	UFUNCTION(BlueprintCallable)
-	void BroadcastOptionsRequestedDelegate();
-	FXMSOptionsRequestedSignature OptionsRequestedDelegate;
-	virtual FXMSOptionsRequestedSignature& GetOptionsRequestedDelegate() override { return OptionsRequestedDelegate; }
 	virtual void InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +52,6 @@ protected:
 	FString CachedString;
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> StringText;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSStringOptionEntryWidget> StringOptionWidgetClass;
 };

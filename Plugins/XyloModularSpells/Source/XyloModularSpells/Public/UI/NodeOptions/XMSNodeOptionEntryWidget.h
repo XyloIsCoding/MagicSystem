@@ -23,7 +23,8 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 	/*
 	 * UUserWidget Interface
 	 */
-	
+
+public:
 	virtual void NativeOnInitialized() override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

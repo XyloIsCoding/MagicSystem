@@ -13,22 +13,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSStringSelectorWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (StringText)
-	{
-		StringText->NodeIconClickedDelegate.AddUObject(this, &UXMSStringSelectorWidget::BroadcastOptionsRequestedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeCanvasEntryWidget
  */
 
@@ -51,11 +35,6 @@ void UXMSStringSelectorWidget::OnOwningNodeSet()
 /*
  * IXMSNodeOptionsInterface Interface
  */
-
-void UXMSStringSelectorWidget::BroadcastOptionsRequestedDelegate()
-{
-	OptionsRequestedDelegate.Broadcast(this);
-}
 
 void UXMSStringSelectorWidget::InitializeOptions(UXMSNodeOptionsSelectionWidget* OptionsSelectionWidget)
 {
@@ -143,6 +122,6 @@ void UXMSStringSelectorWidget::OnOwningNodeStringValueChanged(const FString& New
 void UXMSStringSelectorWidget::OnStringChanged(const FString& InString)
 {
 	CachedString = InString;
-	StringText->SetDisplayText(!InString.IsEmpty() ? InString : FString(TEXT("[None]")));
+	SelectorDisplayWidget->SetDisplayText(!InString.IsEmpty() ? InString : FString(TEXT("[None]")));
 }
 
