@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipInterface.h"
 #include "XMSNodeCanvasEntryWidget.generated.h"
 
 class UXMSNode;
@@ -12,9 +13,20 @@ class UXMSNode;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget, IXMSNodeTooltipInterface
 {
 	GENERATED_BODY()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSNodeTooltipInterface Interface
+	 */
+
+public:
+	FXMSTooltipRequestedSignature TooltipRequestedDelegate;
+	virtual FXMSTooltipRequestedSignature& GetTooltipRequestedDelegate() override { return TooltipRequestedDelegate; }
+	virtual void InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

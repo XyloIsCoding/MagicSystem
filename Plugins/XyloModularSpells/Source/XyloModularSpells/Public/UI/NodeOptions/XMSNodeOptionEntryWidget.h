@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipInterface.h"
 #include "XMSNodeOptionEntryWidget.generated.h"
 
 class UXMSNodeIconWidget;
@@ -14,7 +15,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeOptionEntrySelectedSignature, int32)
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
+class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget, IXMSNodeTooltipInterface
 {
 	GENERATED_BODY()
 
@@ -26,6 +27,17 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 
 public:
 	virtual void NativeOnInitialized() override;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * IXMSNodeTooltipInterface Interface
+	 */
+
+public:
+	FXMSTooltipRequestedSignature TooltipRequestedDelegate;
+	virtual FXMSTooltipRequestedSignature& GetTooltipRequestedDelegate() override { return TooltipRequestedDelegate; }
+	virtual void InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget) override;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
