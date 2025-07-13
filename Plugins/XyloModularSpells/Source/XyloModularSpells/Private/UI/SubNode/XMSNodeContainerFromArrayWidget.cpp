@@ -79,7 +79,7 @@ void UXMSNodeContainerFromArrayWidget::OnOwningNodeSubNodeAdded(const FXMSNodePa
 	// Look at TXMSMultiNodeContainer::ShiftUpPathIndexes
 	// We do not have to worry about risking increasing the index of the added NodeContainerWidget because
 	// that widget is created in OnSubNodeContainerAdded (still bound to SubNodeContainerAddedDelegate)
-	if (ThisNodePath.Index > PathElement.Index)
+	if (ThisNodePath.Index >= PathElement.Index)
 	{
 		ThisNodePath.Index += 1;
 	}
