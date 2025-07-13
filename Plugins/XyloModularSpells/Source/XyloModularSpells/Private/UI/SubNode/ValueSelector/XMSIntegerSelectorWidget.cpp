@@ -5,10 +5,9 @@
 
 #include "XyloModularSpells.h"
 #include "Node/Types/Integer/XMSIntegerValueNode.h"
-#include "UI/BaseWidget/XMSNodeTextWidget.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/NodeOptions/Entry/XMSIntegerOptionEntryWidget.h"
-#include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +22,7 @@ void UXMSIntegerSelectorWidget::NativeOnInitialized()
 
 	if (NumberText)
 	{
-		NumberText->NodeTextClickedDelegate.AddUObject(this, &UXMSIntegerSelectorWidget::BroadcastOptionsRequestedDelegate);
+		NumberText->NodeIconClickedDelegate.AddUObject(this, &UXMSIntegerSelectorWidget::BroadcastOptionsRequestedDelegate);
 	}
 }
 

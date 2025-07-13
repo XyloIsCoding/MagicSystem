@@ -6,7 +6,6 @@
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
 #include "XMSVarNameSelectorWidget.generated.h"
 
-class UXMSNodeTextWidget;
 class UXMSStringOptionEntryWidget;
 
 /**
@@ -62,7 +61,7 @@ protected:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTextWidget> VarNameText;
+	TObjectPtr<UXMSNodeIconWidget> VarNameText;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSStringOptionEntryWidget> VarNameOptionWidgetClass;
 };

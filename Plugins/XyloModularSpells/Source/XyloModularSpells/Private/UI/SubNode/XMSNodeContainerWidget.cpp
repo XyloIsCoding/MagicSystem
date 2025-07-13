@@ -121,7 +121,7 @@ void UXMSNodeContainerWidget::UpdateNodeClassIcon()
 	}
 	else
 	{
-		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetNode()));
+		NodeClassIcon->SetDisplayIconName(UXMSNodeStaticLibrary::GetNodeClassNameFromNode(GetNode()));
 	}
 }
 

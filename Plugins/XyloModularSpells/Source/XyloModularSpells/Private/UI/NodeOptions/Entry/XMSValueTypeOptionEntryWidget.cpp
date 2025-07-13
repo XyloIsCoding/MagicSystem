@@ -62,6 +62,6 @@ void UXMSValueTypeOptionEntryWidget::SetValueType(const FGameplayTag& InValueTyp
 	}
 	else
 	{
-		ValueTypeIcon->SetDisplayName(ValueType.ToString());
+		ValueTypeIcon->SetDisplayIconName(ValueType.ToString());
 	}
 }

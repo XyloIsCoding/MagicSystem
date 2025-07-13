@@ -3,10 +3,8 @@
 
 #include "UI/SubNode/ValueSelector/XMSVarNameSelectorWidget.h"
 
-#include "XMSNodeStaticLibrary.h"
-#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Variable/XMSVariableNameValueNode.h"
-#include "UI/BaseWidget/XMSNodeTextWidget.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
@@ -24,7 +22,7 @@ void UXMSVarNameSelectorWidget::NativeOnInitialized()
 
 	if (VarNameText)
 	{
-		VarNameText->NodeTextClickedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate);
+		VarNameText->NodeIconClickedDelegate.AddUObject(this, &UXMSVarNameSelectorWidget::BroadcastOptionsRequestedDelegate);
 	}
 }
 

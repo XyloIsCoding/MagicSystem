@@ -16,13 +16,22 @@ class XYLOMODULARSPELLS_API UXMSNodeIconWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeIconWidget
+	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Icon
+	
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetDisplayName(const FString& InName);
+	void SetDisplayIconName(const FString& InName);
 protected:
-	virtual void DisplayNameSet(const FString& InName);
+	virtual void DisplayIconNameSet(const FString& InName);
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_DisplayNameSet(const FString& InName);
+	void BP_DisplayIconNameSet(const FString& InName);
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -31,6 +40,23 @@ protected:
 	virtual void DisplayIconSet(UTexture2D* Icon);
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_DisplayIconSet(UTexture2D* Icon);
+
+	// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Text
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetDisplayText(const FString& InText, const FLinearColor& Color = FLinearColor::White);
+protected:
+	virtual void DisplayTextSet(const FString& InText, const FLinearColor& Color);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_DisplayTextSet(const FString& InText, const FLinearColor& Color);
+
+	// ~Text
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 public:
 	FXMSNodeIconClickedSignature NodeIconClickedDelegate;

@@ -6,7 +6,7 @@
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 #include "XMSStringOptionEntryWidget.generated.h"
 
-class UXMSNodeTextWidget;
+class UXMSNodeIconWidget;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSStringOptionSelectedSignature, const FString&)
 
@@ -48,6 +48,6 @@ public:
 	void SetOptionName(const FString& InVarName);
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTextWidget> OptionText;
+	TObjectPtr<UXMSNodeIconWidget> OptionText;
 	FString OptionString;
 };

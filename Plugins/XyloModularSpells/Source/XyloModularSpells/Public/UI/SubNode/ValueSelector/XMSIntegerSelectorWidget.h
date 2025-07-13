@@ -7,7 +7,6 @@
 #include "XMSIntegerSelectorWidget.generated.h"
 
 class UXMSIntegerOptionEntryWidget;
-class UXMSNodeTextWidget;
 
 /**
  * 
@@ -66,7 +65,7 @@ protected:
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTextWidget> NumberText;
+	TObjectPtr<UXMSNodeIconWidget> NumberText;
 	UPROPERTY(EditAnywhere, Category = "OptionWidget")
 	TSubclassOf<UXMSIntegerOptionEntryWidget> NumberOptionWidgetClass;
 };

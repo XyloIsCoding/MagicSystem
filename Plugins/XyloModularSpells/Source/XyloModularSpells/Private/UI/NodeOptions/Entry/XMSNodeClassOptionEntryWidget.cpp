@@ -63,6 +63,6 @@ void UXMSNodeClassOptionEntryWidget::SetNodeClass(TSubclassOf<UXMSNode> InNodeCl
 	}
 	else
 	{
-		NodeClassIcon->SetDisplayName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
+		NodeClassIcon->SetDisplayIconName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
 	}
 }

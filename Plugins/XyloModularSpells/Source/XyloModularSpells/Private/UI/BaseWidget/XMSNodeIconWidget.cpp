@@ -3,13 +3,23 @@
 
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 
-void UXMSNodeIconWidget::SetDisplayName(const FString& InName)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * UXMSNodeIconWidget
+	 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Icon
+
+void UXMSNodeIconWidget::SetDisplayIconName(const FString& InName)
 {
-	DisplayNameSet(InName);
-	BP_DisplayNameSet(InName);
+	DisplayIconNameSet(InName);
+	BP_DisplayIconNameSet(InName);
 }
 
-void UXMSNodeIconWidget::DisplayNameSet(const FString& InName)
+void UXMSNodeIconWidget::DisplayIconNameSet(const FString& InName)
 {
 }
 
@@ -22,6 +32,25 @@ void UXMSNodeIconWidget::SetDisplayIcon(UTexture2D* Icon)
 void UXMSNodeIconWidget::DisplayIconSet(UTexture2D* Icon)
 {
 }
+
+// ~Icon
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Text
+
+void UXMSNodeIconWidget::SetDisplayText(const FString& InText, const FLinearColor& Color)
+{
+	DisplayTextSet(InText, Color);
+	BP_DisplayTextSet(InText, Color);
+}
+
+void UXMSNodeIconWidget::DisplayTextSet(const FString& InText, const FLinearColor& Color)
+{
+}
+
+// ~Text
+/*--------------------------------------------------------------------------------------------------------------------*/
 
 void UXMSNodeIconWidget::BroadcastNodeIconClickedDelegate()
 {

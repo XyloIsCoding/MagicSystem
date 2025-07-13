@@ -3,7 +3,7 @@
 
 #include "UI/NodeOptions/Entry/XMSIntegerOptionEntryWidget.h"
 
-#include "UI/BaseWidget/XMSNodeTextWidget.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ void UXMSIntegerOptionEntryWidget::NativeOnInitialized()
 
 	if (OptionText)
 	{
-		OptionText->NodeTextClickedDelegate.AddUObject(this, &UXMSIntegerOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		OptionText->NodeIconClickedDelegate.AddUObject(this, &UXMSIntegerOptionEntryWidget::BroadcastOptionSelectedDelegate);
 	}
 }
 

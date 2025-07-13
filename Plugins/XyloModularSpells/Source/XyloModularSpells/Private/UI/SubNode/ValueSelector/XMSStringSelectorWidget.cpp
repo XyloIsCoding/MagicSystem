@@ -5,7 +5,7 @@
 
 #include "XyloModularSpells.h"
 #include "Node/Types/String/XMSStringValueNode.h"
-#include "UI/BaseWidget/XMSNodeTextWidget.h"
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
@@ -22,7 +22,7 @@ void UXMSStringSelectorWidget::NativeOnInitialized()
 
 	if (StringText)
 	{
-		StringText->NodeTextClickedDelegate.AddUObject(this, &UXMSStringSelectorWidget::BroadcastOptionsRequestedDelegate);
+		StringText->NodeIconClickedDelegate.AddUObject(this, &UXMSStringSelectorWidget::BroadcastOptionsRequestedDelegate);
 	}
 }
 

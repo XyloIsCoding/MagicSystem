@@ -6,7 +6,7 @@
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 #include "XMSIntegerOptionEntryWidget.generated.h"
 
-class UXMSNodeTextWidget;
+class UXMSNodeIconWidget;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSIntegerOptionSelectedSignature, int32)
 
@@ -48,6 +48,6 @@ public:
 	void SetOptionValue(int32 InValue, const FString& DisplayOverride = FString());
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTextWidget> OptionText;
+	TObjectPtr<UXMSNodeIconWidget> OptionText;
 	int32 OptionValue;
 };

@@ -4,7 +4,6 @@
 #include "UI/NodeOptions/Entry/XMSStringOptionEntryWidget.h"
 
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
-#include "UI/BaseWidget/XMSNodeTextWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +18,7 @@ void UXMSStringOptionEntryWidget::NativeOnInitialized()
 
 	if (OptionText)
 	{
-		OptionText->NodeTextClickedDelegate.AddUObject(this, &UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		OptionText->NodeIconClickedDelegate.AddUObject(this, &UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate);
 	}
 }
 
