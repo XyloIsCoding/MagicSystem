@@ -3,6 +3,24 @@
 
 #include "UI/NodeOptions/XMSNodeOptionEntryWidget.h"
 
+#include "UI/BaseWidget/XMSNodeIconWidget.h"
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * UUserWidget Interface
+ */
+
+void UXMSNodeOptionEntryWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+	
+	if (OptionDisplayWidget)
+	{
+		OptionDisplayWidget->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeOptionEntryWidget::BroadcastOptionSelectedDelegate);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

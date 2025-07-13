@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "XMSNodeOptionEntryWidget.generated.h"
 
+class UXMSNodeIconWidget;
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeOptionEntrySelectedSignature, int32)
 
 /**
@@ -19,8 +21,20 @@ class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
+	 * UUserWidget Interface
+	 */
+	
+	virtual void NativeOnInitialized() override;
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
 	 * UXMSNodeOptionEntryWidget
 	 */
+
+protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeIconWidget> OptionDisplayWidget;
 	
 public:
 	FXMSNodeOptionEntrySelectedSignature NodeOptionEntrySelectedDelegate;

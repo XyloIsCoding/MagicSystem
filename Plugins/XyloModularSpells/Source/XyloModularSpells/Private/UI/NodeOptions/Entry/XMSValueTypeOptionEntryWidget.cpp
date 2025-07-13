@@ -10,22 +10,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSValueTypeOptionEntryWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (ValueTypeIcon)
-	{
-		ValueTypeIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSValueTypeOptionEntryWidget::BroadcastOptionSelectedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeOptionEntryWidget Interface
  */
 
@@ -33,11 +17,6 @@ void UXMSValueTypeOptionEntryWidget::ClearDelegates()
 {
 	Super::ClearDelegates();
 	ValueTypeOptionSelectedDelegate.Clear();
-}
-
-void UXMSValueTypeOptionEntryWidget::InitializeOption(int32 InOptionIndex)
-{
-	Super::InitializeOption(InOptionIndex);
 }
 
 void UXMSValueTypeOptionEntryWidget::BroadcastOptionSelectedDelegate()
@@ -58,10 +37,10 @@ void UXMSValueTypeOptionEntryWidget::SetValueType(const FGameplayTag& InValueTyp
 
 	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetValueTypeIcon(ValueType))
 	{
-		ValueTypeIcon->SetDisplayIcon(Icon);
+		OptionDisplayWidget->SetDisplayIcon(Icon);
 	}
 	else
 	{
-		ValueTypeIcon->SetDisplayIconName(ValueType.ToString());
+		OptionDisplayWidget->SetDisplayIconName(ValueType.ToString());
 	}
 }

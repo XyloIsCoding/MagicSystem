@@ -21,20 +21,11 @@ class XYLOMODULARSPELLS_API UXMSStringOptionEntryWidget : public UXMSNodeOptionE
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UUserWidget Interface
-	 */
-	
-	virtual void NativeOnInitialized() override;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
 	 * UXMSNodeOptionEntryWidget Interface
 	 */
 	
 public:
 	virtual void ClearDelegates() override;
-	virtual void InitializeOption(int32 InOptionIndex) override;
 	virtual void BroadcastOptionSelectedDelegate() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +38,5 @@ public:
 	FXMSStringOptionSelectedSignature StringOptionSelectedDelegate;
 	void SetOptionName(const FString& InVarName);
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> OptionText;
 	FString OptionString;
 };

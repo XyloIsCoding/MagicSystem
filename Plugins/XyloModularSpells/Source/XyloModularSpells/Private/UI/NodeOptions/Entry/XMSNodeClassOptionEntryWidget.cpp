@@ -11,22 +11,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSNodeClassOptionEntryWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (NodeClassIcon)
-	{
-		NodeClassIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeOptionEntryWidget Interface
  */
 
@@ -34,11 +18,6 @@ void UXMSNodeClassOptionEntryWidget::ClearDelegates()
 {
 	Super::ClearDelegates();
 	NodeClassOptionSelectedDelegate.Clear();
-}
-
-void UXMSNodeClassOptionEntryWidget::InitializeOption(int32 InOptionIndex)
-{
-	Super::InitializeOption(InOptionIndex);
 }
 
 void UXMSNodeClassOptionEntryWidget::BroadcastOptionSelectedDelegate()
@@ -59,10 +38,10 @@ void UXMSNodeClassOptionEntryWidget::SetNodeClass(TSubclassOf<UXMSNode> InNodeCl
 
 	if (UTexture2D* Icon = UXMSNodeStaticLibrary::GetNodeClassIcon(NodeClass))
 	{
-		NodeClassIcon->SetDisplayIcon(Icon);
+		OptionDisplayWidget->SetDisplayIcon(Icon);
 	}
 	else
 	{
-		NodeClassIcon->SetDisplayIconName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
+		OptionDisplayWidget->SetDisplayIconName(UXMSNodeStaticLibrary::GetNodeClassName(NodeClass));
 	}
 }

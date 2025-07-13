@@ -9,22 +9,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
- * UUserWidget Interface
- */
-
-void UXMSStringOptionEntryWidget::NativeOnInitialized()
-{
-	Super::NativeOnInitialized();
-
-	if (OptionText)
-	{
-		OptionText->NodeIconClickedDelegate.AddUObject(this, &UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
  * UXMSNodeOptionEntryWidget Interface
  */
 
@@ -32,11 +16,6 @@ void UXMSStringOptionEntryWidget::ClearDelegates()
 {
 	Super::ClearDelegates();
 	StringOptionSelectedDelegate.Clear();
-}
-
-void UXMSStringOptionEntryWidget::InitializeOption(int32 InOptionIndex)
-{
-	Super::InitializeOption(InOptionIndex);
 }
 
 void UXMSStringOptionEntryWidget::BroadcastOptionSelectedDelegate()
@@ -55,5 +34,5 @@ void UXMSStringOptionEntryWidget::SetOptionName(const FString& InVarName)
 {
 	OptionString = InVarName;
 
-	OptionText->SetDisplayText(OptionString);
+	OptionDisplayWidget->SetDisplayText(OptionString);
 }

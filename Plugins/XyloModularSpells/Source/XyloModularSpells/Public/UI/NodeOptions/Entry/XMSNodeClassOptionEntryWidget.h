@@ -18,14 +18,6 @@ UCLASS()
 class XYLOMODULARSPELLS_API UXMSNodeClassOptionEntryWidget : public UXMSNodeOptionEntryWidget
 {
 	GENERATED_BODY()
-	
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * UUserWidget Interface
-	 */
-	
-	virtual void NativeOnInitialized() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +27,6 @@ class XYLOMODULARSPELLS_API UXMSNodeClassOptionEntryWidget : public UXMSNodeOpti
 	
 public:
 	virtual void ClearDelegates() override;
-	virtual void InitializeOption(int32 InOptionIndex) override;
 	virtual void BroadcastOptionSelectedDelegate() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +39,5 @@ public:
 	FXMSNodeClassOptionSelectedSignature NodeClassOptionSelectedDelegate;
 	void SetNodeClass(TSubclassOf<UXMSNode> InNodeClass);
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> NodeClassIcon;
 	TSubclassOf<UXMSNode> NodeClass;
 };

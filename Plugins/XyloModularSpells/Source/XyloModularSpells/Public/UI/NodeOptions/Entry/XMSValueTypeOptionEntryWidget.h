@@ -22,20 +22,11 @@ class XYLOMODULARSPELLS_API UXMSValueTypeOptionEntryWidget : public UXMSNodeOpti
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
-	 * UUserWidget Interface
-	 */
-	
-	virtual void NativeOnInitialized() override;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
 	 * UXMSNodeOptionEntryWidget Interface
 	 */
 	
 public:
 	virtual void ClearDelegates() override;
-	virtual void InitializeOption(int32 InOptionIndex) override;
 	virtual void BroadcastOptionSelectedDelegate() override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +39,5 @@ public:
 	FXMSValueTypeOptionSelectedSignature ValueTypeOptionSelectedDelegate;
 	void SetValueType(const FGameplayTag& InValueType);
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeIconWidget> ValueTypeIcon;
 	FGameplayTag ValueType;
 };
