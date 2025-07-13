@@ -13,6 +13,14 @@
  * UXMSNodeOptionsSelectionWidget
  */
 
+void UXMSNodeOptionsSelectionWidget::PrepareOptionEntryWidget(UXMSNodeOptionEntryWidget* OptionEntryWidget, int32 Index)
+{
+	OptionEntryWidget->ClearDelegates();
+	OptionEntryWidget->InitializeOption(Index);
+	OptionEntryWidget->NodeOptionEntrySelectedDelegate.AddUObject(this, &ThisClass::SelectOption);
+	OptionEntryWidget->GetTooltipRequestedDelegate().AddUObject(this, &ThisClass::TooltipRequested);
+}
+
 void UXMSNodeOptionsSelectionWidget::OnOptionsInitialized()
 {
 }
@@ -55,3 +63,18 @@ void UXMSNodeOptionsSelectionWidget::SelectionCompleted(bool bSuccess)
 
 // ~OptionSelection
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+// Tooltip
+
+void UXMSNodeOptionsSelectionWidget::TooltipRequested(UWidget* Widget)
+{
+	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
+	if (!TooltipInterface) return;
+
+	TooltipInterface->InitializeTooltip(TooltipWidget);
+}
+
+// ~Tooltip
+/*--------------------------------------------------------------------------------------------------------------------*/
+

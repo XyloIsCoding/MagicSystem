@@ -28,6 +28,11 @@ void UXMSNodeOptionEntryWidget::NativeOnInitialized()
  * IXMSNodeTooltipInterface Interface
  */
 
+void UXMSNodeOptionEntryWidget::BroadcastTooltipRequestedDelegate()
+{
+	TooltipRequestedDelegate.Broadcast(this);
+}
+
 void UXMSNodeOptionEntryWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
 {
 	// Implement in child classes to initialize the tooltip with information about this entry

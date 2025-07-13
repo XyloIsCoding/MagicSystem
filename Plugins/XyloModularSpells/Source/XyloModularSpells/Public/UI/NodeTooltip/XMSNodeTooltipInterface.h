@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Widget.h"
 #include "UObject/Interface.h"
 #include "XMSNodeTooltipInterface.generated.h"
 

@@ -113,6 +113,14 @@ void UXMSNodeCanvasWidget::OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWi
 	NodesWrapBox->Rebuild();
 }
 
+void UXMSNodeCanvasWidget::TooltipRequested(UWidget* Widget)
+{
+	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
+	if (!TooltipInterface) return;
+
+	TooltipInterface->InitializeTooltip(TooltipWidget);
+}
+
 // ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -195,6 +203,16 @@ void UXMSNodeCanvasWidget::AddValueSelectorWidget(UXMSNodeContainerWidget* NodeW
 	}
 }
 
+UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateCanvasEntryWidget(TSubclassOf<UXMSNodeCanvasEntryWidget> WidgetClass)
+{
+	UXMSNodeCanvasEntryWidget* Entry = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), WidgetClass);
+	if (Entry)
+	{
+		Entry->GetTooltipRequestedDelegate().AddUObject(this, &ThisClass::TooltipRequested);
+	}
+	return Entry;
+}
+
 UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode)
 {
 	if (!ParentNode) return nullptr;
@@ -207,12 +225,12 @@ UXMSNodeContainerWidget* UXMSNodeCanvasWidget::CreateNodeWidget(UXMSNode* Parent
 	if (UXMSNodeWithMap* NodeWithMap = Cast<UXMSNodeWithMap>(ParentNode))
 	{
 		// Node with map
-		Widget = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), NodeDataRegistry->NodeWithMapWidgetClass);
+		Widget = Cast<UXMSNodeContainerFromMapWidget>(CreateCanvasEntryWidget(NodeDataRegistry->NodeWithMapWidgetClass));
 	}
 	else if (UXMSNodeWithArray* NodeWithArray = Cast<UXMSNodeWithArray>(ParentNode))
 	{
 		// Node with array
-		Widget = CreateWidget<UXMSNodeContainerFromArrayWidget>(GetOwningPlayer(), NodeDataRegistry->NodeWithArrayWidgetClass);
+		Widget = Cast<UXMSNodeContainerFromArrayWidget>(CreateCanvasEntryWidget(NodeDataRegistry->NodeWithArrayWidgetClass));
 	}
 	if (!Widget) return nullptr;
 
@@ -233,7 +251,7 @@ UXMSArrayTerminatorWidget* UXMSNodeCanvasWidget::CreateArrayTerminationWidget(UX
 	UXMSNodeDataRegistry* NodeDataRegistry = UXMSNodeStaticLibrary::GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 		
-	UXMSArrayTerminatorWidget* SubNodeWidget = CreateWidget<UXMSArrayTerminatorWidget>(GetOwningPlayer(), NodeDataRegistry->ArrayTerminatorWidgetClass);
+	UXMSArrayTerminatorWidget* SubNodeWidget = Cast<UXMSArrayTerminatorWidget>(CreateCanvasEntryWidget(NodeDataRegistry->ArrayTerminatorWidgetClass));
 	if (SubNodeWidget)
 	{
 		SubNodeWidget->SetOwningNode(ArrayNode);
@@ -253,7 +271,7 @@ UXMSNodeValueSelectorWidget* UXMSNodeCanvasWidget::CreateValueSelectorWidget(UXM
 		return nullptr;
 	}
 	
-	UXMSNodeValueSelectorWidget* NodeValueWidget = CreateWidget<UXMSNodeValueSelectorWidget>(GetOwningPlayer(), Data->ValueSelectorWidgetClass);
+	UXMSNodeValueSelectorWidget* NodeValueWidget = Cast<UXMSNodeValueSelectorWidget>(CreateCanvasEntryWidget(Data->ValueSelectorWidgetClass));
 	if (!NodeValueWidget) return nullptr;
 	
 	if (IXMSNodeOptionsInterface* NodeOptionsInterface = Cast<IXMSNodeOptionsInterface>(NodeValueWidget))

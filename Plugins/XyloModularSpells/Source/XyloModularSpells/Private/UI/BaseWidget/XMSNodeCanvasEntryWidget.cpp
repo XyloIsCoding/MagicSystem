@@ -12,6 +12,11 @@
  * IXMSNodeTooltipInterface Interface
  */
 
+void UXMSNodeCanvasEntryWidget::BroadcastTooltipRequestedDelegate()
+{
+	TooltipRequestedDelegate.Broadcast(this);
+}
+
 void UXMSNodeCanvasEntryWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
 {
 	// Implement in child classes to initialize the tooltip with information about this entry

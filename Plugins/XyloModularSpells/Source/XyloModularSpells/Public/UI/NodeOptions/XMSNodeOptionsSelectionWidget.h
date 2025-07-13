@@ -32,10 +32,13 @@ public:
 	template <typename EntryClass> requires std::is_base_of_v<UXMSNodeOptionEntryWidget, EntryClass>
 	void InitializeOptions(int32 Size, TSubclassOf<EntryClass> OptionWidgetClass, TArray<EntryClass*>& OutEntries, bool bInSingleChoice);
 protected:
+	void PrepareOptionEntryWidget(UXMSNodeOptionEntryWidget* OptionEntryWidget, int32 Index);
+
+protected:
 	virtual void OnOptionsInitialized();
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OnOptionsInitialized();
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UPanelWidget> OptionsContainer;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -66,7 +69,17 @@ protected:
 
 	// ~OptionSelection
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+	// Tooltip
+
+protected:
+	virtual void TooltipRequested(UWidget* Widget);
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeTooltipWidget> TooltipWidget;
 	
+	// ~Tooltip
+/*--------------------------------------------------------------------------------------------------------------------*/
 };
 
 
@@ -97,11 +110,8 @@ void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<E
 		
 		if (EntryClass* CastedEntry = Cast<EntryClass>(Entry))
 		{
-			CastedEntry->ClearDelegates();
-			CastedEntry->InitializeOption(++FoundIndex);
+			PrepareOptionEntryWidget(CastedEntry, ++FoundIndex);
 			OutEntries.Add(CastedEntry);
-
-			CastedEntry->NodeOptionEntrySelectedDelegate.AddUObject(this, &ThisClass::SelectOption);
 		}
 		else
 		{
@@ -118,10 +128,8 @@ void UXMSNodeOptionsSelectionWidget::InitializeOptions(int32 Size, TSubclassOf<E
 			if (EntryClass* NewOption = CreateWidget<EntryClass>(GetOwningPlayer(), OptionWidgetClass))
 			{
 				OptionsContainer->AddChild(NewOption);
-				NewOption->InitializeOption(++FoundIndex);
+				PrepareOptionEntryWidget(NewOption, ++FoundIndex);
 				OutEntries.Add(NewOption);
-				
-				NewOption->NodeOptionEntrySelectedDelegate.AddUObject(this, &ThisClass::SelectOption);
 			}
 		}
 	}

@@ -46,9 +46,12 @@ public:
 	int32 GetNodeWidgetIndex(UXMSNodeCanvasEntryWidget* NodeWidget) const;
 protected:
 	int32 AddNodeWidgetAt(int32 Index, UXMSNodeCanvasEntryWidget* NodeWidget);
-public: //TODO make protected
+	
+protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UXMSWrapBox> NodesWrapBox;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UXMSNodeTooltipWidget> TooltipWidget;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events
@@ -56,13 +59,15 @@ public: //TODO make protected
 protected:
 	/** Bound to all SubNode Widgets */
 	virtual void OnOptionsRequested(UWidget* OptionsRequestingWidget);
-	/** Bound to OptionsSelectionWidget */
+	/** Bound to OptionsSelectionWidget in GetOrCreateOptionsWidgetForNode */
 	virtual void OnOptionsSelectionCompleted(bool bSuccess);
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetUpdate(UXMSNodeContainerWidget* NodeWidget, UXMSNode* NewNode);
 	/** Bound to all SubNode Widgets */
 	virtual void OnNodeContainerWidgetSubNodeAdded(UXMSNodeContainerWidget* NodeWidget, UXMSNode* AddedSubNodeParent, const FXMSNodePathElement& AddedSubNodePathFromParent);
-
+	/** Bound to all Canvas Entries */
+	virtual void TooltipRequested(UWidget* Widget);
+	
 	// ~Events
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -80,6 +85,7 @@ protected:
 	void FillNodeCanvasSingleChild(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNode* Node, const FXMSNodePathElement& PathForSubNode);
 	void AddArrayTerminationWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithArray* Node);
 	void AddValueSelectorWidget(UXMSNodeContainerWidget* NodeWidget, int32& Index, UXMSNodeWithValue* Node);
+	UXMSNodeCanvasEntryWidget* CreateCanvasEntryWidget(TSubclassOf<UXMSNodeCanvasEntryWidget> WidgetClass);
 	UXMSNodeContainerWidget* CreateNodeWidget(UXMSNode* ParentNode, const FXMSNodePathElement& PathFromParentNode);
 	UXMSArrayTerminatorWidget* CreateArrayTerminationWidget(UXMSNodeWithArray* ArrayNode);
 	UXMSNodeValueSelectorWidget* CreateValueSelectorWidget(UXMSNodeWithValue* ValueNode);
@@ -98,6 +104,4 @@ protected:
 	
 	// ~Class Options
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-
 };

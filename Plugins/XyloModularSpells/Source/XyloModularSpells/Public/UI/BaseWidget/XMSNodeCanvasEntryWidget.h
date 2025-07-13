@@ -24,6 +24,8 @@ class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget, IXMS
 	 */
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void BroadcastTooltipRequestedDelegate();
 	FXMSTooltipRequestedSignature TooltipRequestedDelegate;
 	virtual FXMSTooltipRequestedSignature& GetTooltipRequestedDelegate() override { return TooltipRequestedDelegate; }
 	virtual void InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget) override;

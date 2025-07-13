@@ -35,6 +35,8 @@ public:
 	 */
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void BroadcastTooltipRequestedDelegate();
 	FXMSTooltipRequestedSignature TooltipRequestedDelegate;
 	virtual FXMSTooltipRequestedSignature& GetTooltipRequestedDelegate() override { return TooltipRequestedDelegate; }
 	virtual void InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget) override;
