@@ -4,6 +4,7 @@
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
+#include "Components/RichTextBlock.h"
 #include "Node/XMSNodeData.h"
 #include "Node/XMSNodeDataRegistry.h"
 #include "Node/Base/XMSNode.h"
@@ -11,6 +12,8 @@
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/NodeOptions/Entry/XMSNodeClassOptionEntryWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
+#include "UI/NodeTooltip/XMSNodeDoubleTooltipWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipWidget.h"
 
 
 UXMSNodeContainerWidget::UXMSNodeContainerWidget(const FObjectInitializer& ObjectInitializer)
@@ -31,20 +34,8 @@ void UXMSNodeContainerWidget::NativeOnInitialized()
 	if (NodeClassIcon)
 	{
 		NodeClassIcon->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeContainerWidget::BroadcastNodeClicked);
+		NodeClassIcon->NodeIconHoveredDelegate.AddUObject(this, &UXMSNodeContainerWidget::BroadcastTooltipRequestedDelegate);
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
- * IXMSNodeTooltipInterface Interface
- */
-
-void UXMSNodeContainerWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
-{
-	Super::InitializeTooltip(TooltipWidget);
-
-	// TODO: initialize tooltip
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +75,43 @@ void UXMSNodeContainerWidget::OnOwningNodeSet()
 
 // ~OwningNode
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * IXMSNodeTooltipInterface Interface
+ */
+
+void UXMSNodeContainerWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
+{
+	Super::InitializeTooltip(TooltipWidget);
+
+	if (!TooltipWidget) return;
+
+	// Container tooltip
+	UXMSNode* OwningNodePtr = OwningNode.Get();
+	if (!OwningNodePtr) return;
+	UXMSNodeData* OwningNodeData = UXMSNodeStaticLibrary::GetNodeClassData(OwningNodePtr->GetClass());
+	if (!OwningNodeData) return;
+	
+	if (FXMSSubNodeData* SubNodeData = OwningNodeData->GetSubNodeData(ThisNodePath.Identifier))
+	{
+		TooltipWidget->Title->SetText(SubNodeData->Name);
+		TooltipWidget->Body->SetText(SubNodeData->Description);
+	}
+
+	// This node tooltip
+	UXMSNodeDoubleTooltipWidget* DoubleTooltipWidget = Cast<UXMSNodeDoubleTooltipWidget>(TooltipWidget);
+	if (!DoubleTooltipWidget) return;
+	UXMSNode* ThisNode = GetNode();
+	if (!ThisNode) return;
+	
+	if (UXMSNodeData* ThisNodeData = UXMSNodeStaticLibrary::GetNodeClassData(ThisNode->GetClass()))
+	{
+		DoubleTooltipWidget->SubTitle->SetText(ThisNodeData->Name);
+		DoubleTooltipWidget->SubBody->SetText(ThisNodeData->Description);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

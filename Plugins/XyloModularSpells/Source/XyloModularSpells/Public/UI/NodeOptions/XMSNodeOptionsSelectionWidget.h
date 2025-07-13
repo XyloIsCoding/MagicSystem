@@ -76,7 +76,7 @@ protected:
 protected:
 	virtual void TooltipRequested(UWidget* Widget);
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTooltipWidget> TooltipWidget;
+	TObjectPtr<UXMSNodeTooltipWidget> OptionTooltipWidget;
 	
 	// ~Tooltip
 /*--------------------------------------------------------------------------------------------------------------------*/

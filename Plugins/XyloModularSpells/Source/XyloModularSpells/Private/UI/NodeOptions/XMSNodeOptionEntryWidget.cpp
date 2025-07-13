@@ -19,6 +19,7 @@ void UXMSNodeOptionEntryWidget::NativeOnInitialized()
 	if (OptionDisplayWidget)
 	{
 		OptionDisplayWidget->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeOptionEntryWidget::BroadcastOptionSelectedDelegate);
+		OptionDisplayWidget->NodeIconHoveredDelegate.AddUObject(this, &UXMSNodeOptionEntryWidget::BroadcastTooltipRequestedDelegate);
 	}
 }
 

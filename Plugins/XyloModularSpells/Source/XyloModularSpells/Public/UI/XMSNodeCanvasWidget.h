@@ -51,7 +51,7 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UXMSWrapBox> NodesWrapBox;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UXMSNodeTooltipWidget> TooltipWidget;
+	TObjectPtr<UXMSNodeTooltipWidget> EntryTooltipWidget;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// Events

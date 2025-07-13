@@ -56,3 +56,8 @@ void UXMSNodeIconWidget::BroadcastNodeIconClickedDelegate()
 {
 	NodeIconClickedDelegate.Broadcast();
 }
+
+void UXMSNodeIconWidget::BroadcastNodeIconHoveredDelegate()
+{
+	NodeIconHoveredDelegate.Broadcast();
+}

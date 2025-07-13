@@ -118,7 +118,7 @@ void UXMSNodeCanvasWidget::TooltipRequested(UWidget* Widget)
 	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
 	if (!TooltipInterface) return;
 
-	TooltipInterface->InitializeTooltip(TooltipWidget);
+	TooltipInterface->InitializeTooltip(EntryTooltipWidget);
 }
 
 // ~Events
@@ -205,7 +205,7 @@ void UXMSNodeCanvasWidget::AddValueSelectorWidget(UXMSNodeContainerWidget* NodeW
 
 UXMSNodeCanvasEntryWidget* UXMSNodeCanvasWidget::CreateCanvasEntryWidget(TSubclassOf<UXMSNodeCanvasEntryWidget> WidgetClass)
 {
-	UXMSNodeCanvasEntryWidget* Entry = CreateWidget<UXMSNodeContainerFromMapWidget>(GetOwningPlayer(), WidgetClass);
+	UXMSNodeCanvasEntryWidget* Entry = CreateWidget<UXMSNodeCanvasEntryWidget>(GetOwningPlayer(), WidgetClass);
 	if (Entry)
 	{
 		Entry->GetTooltipRequestedDelegate().AddUObject(this, &ThisClass::TooltipRequested);

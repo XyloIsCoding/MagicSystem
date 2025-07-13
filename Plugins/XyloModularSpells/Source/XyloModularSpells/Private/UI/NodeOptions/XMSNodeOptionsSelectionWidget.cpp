@@ -72,7 +72,7 @@ void UXMSNodeOptionsSelectionWidget::TooltipRequested(UWidget* Widget)
 	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
 	if (!TooltipInterface) return;
 
-	TooltipInterface->InitializeTooltip(TooltipWidget);
+	TooltipInterface->InitializeTooltip(OptionTooltipWidget);
 }
 
 // ~Tooltip

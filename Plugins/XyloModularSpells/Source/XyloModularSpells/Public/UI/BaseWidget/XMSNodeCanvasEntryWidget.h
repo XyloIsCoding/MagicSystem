@@ -13,7 +13,7 @@ class UXMSNode;
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget, IXMSNodeTooltipInterface
+class XYLOMODULARSPELLS_API UXMSNodeCanvasEntryWidget : public UUserWidget, public IXMSNodeTooltipInterface
 {
 	GENERATED_BODY()
 

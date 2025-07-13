@@ -60,6 +60,9 @@ protected:
 
 public:
 	FXMSNodeIconClickedSignature NodeIconClickedDelegate;
+	FXMSNodeIconClickedSignature NodeIconHoveredDelegate;
 	UFUNCTION(BlueprintCallable)
 	void BroadcastNodeIconClickedDelegate();
+	UFUNCTION(BlueprintCallable)
+	void BroadcastNodeIconHoveredDelegate();
 };

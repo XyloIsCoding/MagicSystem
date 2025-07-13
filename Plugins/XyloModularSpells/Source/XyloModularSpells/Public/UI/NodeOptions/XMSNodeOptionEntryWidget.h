@@ -15,7 +15,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeOptionEntrySelectedSignature, int32)
  * 
  */
 UCLASS()
-class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget, IXMSNodeTooltipInterface
+class XYLOMODULARSPELLS_API UXMSNodeOptionEntryWidget : public UUserWidget, public IXMSNodeTooltipInterface
 {
 	GENERATED_BODY()
 
