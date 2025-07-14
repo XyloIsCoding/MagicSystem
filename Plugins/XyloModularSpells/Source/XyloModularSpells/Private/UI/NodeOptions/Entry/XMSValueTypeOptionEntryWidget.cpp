@@ -4,8 +4,31 @@
 #include "UI/NodeOptions/Entry/XMSValueTypeOptionEntryWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
+#include "Components/RichTextBlock.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipWidget.h"
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * IXMSNodeTooltipInterface Interface
+ */
+
+void UXMSValueTypeOptionEntryWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
+{
+	Super::InitializeTooltip(TooltipWidget);
+
+	if (!TooltipWidget) return;
+
+	// Container tooltip
+	if (FXMSValueTypeData* ValueTypeData = UXMSNodeStaticLibrary::GetValueTypeData(ValueType))
+	{
+		TooltipWidget->Title->SetText(ValueTypeData->Name);
+		TooltipWidget->Body->SetText(ValueTypeData->Description);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

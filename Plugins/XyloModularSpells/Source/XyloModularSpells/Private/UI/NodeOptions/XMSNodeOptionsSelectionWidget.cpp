@@ -5,6 +5,7 @@
 
 #include "XMSNodeStaticLibrary.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +73,7 @@ void UXMSNodeOptionsSelectionWidget::TooltipRequested(UWidget* Widget)
 	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
 	if (!TooltipInterface) return;
 
+	OptionTooltipWidget->ClearTooltip();
 	TooltipInterface->InitializeTooltip(OptionTooltipWidget);
 }
 

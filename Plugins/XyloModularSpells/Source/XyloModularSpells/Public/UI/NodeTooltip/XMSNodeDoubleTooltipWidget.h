@@ -15,6 +15,9 @@ class XYLOMODULARSPELLS_API UXMSNodeDoubleTooltipWidget : public UXMSNodeTooltip
 	GENERATED_BODY()
 
 public:
+	virtual void ClearTooltip() override;
+	
+public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<URichTextBlock> SubTitle;
 	

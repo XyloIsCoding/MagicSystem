@@ -17,6 +17,9 @@ class XYLOMODULARSPELLS_API UXMSNodeTooltipWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void ClearTooltip();
+	
+public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<URichTextBlock> Title;
 	

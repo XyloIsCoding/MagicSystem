@@ -123,12 +123,17 @@ FGameplayTag UXMSNodeStaticLibrary::GetValueTypeFromName(FName TypeName)
 	return XMSValueType::None;
 }
 
-UTexture2D* UXMSNodeStaticLibrary::GetValueTypeIcon(const FGameplayTag& Type)
+FXMSValueTypeData* UXMSNodeStaticLibrary::GetValueTypeData(const FGameplayTag& Type)
 {
 	UXMSNodeDataRegistry* NodeDataRegistry = GetNodeClassDataRegistry();
 	if (!NodeDataRegistry) return nullptr;
 
-	FXMSValueTypeData* ValueTypeData = NodeDataRegistry->GetTypeData(Type);
+	return NodeDataRegistry->GetTypeData(Type);
+}
+
+UTexture2D* UXMSNodeStaticLibrary::GetValueTypeIcon(const FGameplayTag& Type)
+{
+	FXMSValueTypeData* ValueTypeData = GetValueTypeData(Type);
 	return ValueTypeData ? ValueTypeData->Glyph : nullptr;
 }
 

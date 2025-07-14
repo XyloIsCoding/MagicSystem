@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+struct FXMSValueTypeData;
 class UXMSSpellExecutorComponent;
 struct FGameplayTag;
 class UXMSNodeDataRegistry;
@@ -30,6 +31,7 @@ public:
 
 	static void GetAllValueTypes(TArray<FGameplayTag>& OutTypes);
 	static FGameplayTag GetValueTypeFromName(FName TypeName);
+	static FXMSValueTypeData* GetValueTypeData(const FGameplayTag& Type);
 	UFUNCTION(BlueprintCallable)
 	static UTexture2D* GetValueTypeIcon(const FGameplayTag& Type);
 

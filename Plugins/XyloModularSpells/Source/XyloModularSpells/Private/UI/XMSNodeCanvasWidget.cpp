@@ -19,6 +19,7 @@
 #include "UI/SubNode/XMSNodeContainerWidget.h"
 #include "UI/BaseWidget/XMSWrapBox.h"
 #include "UI/NodeOptions/XMSNodeOptionsInterface.h"
+#include "UI/NodeTooltip/XMSNodeTooltipWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromArrayWidget.h"
 #include "UI/SubNode/XMSNodeContainerFromMapWidget.h"
 #include "UI/SubNode/XMSNodeValueSelectorWidget.h"
@@ -118,6 +119,7 @@ void UXMSNodeCanvasWidget::TooltipRequested(UWidget* Widget)
 	IXMSNodeTooltipInterface* TooltipInterface = Cast<IXMSNodeTooltipInterface>(Widget);
 	if (!TooltipInterface) return;
 
+	EntryTooltipWidget->ClearTooltip();
 	TooltipInterface->InitializeTooltip(EntryTooltipWidget);
 }
 

@@ -19,6 +19,7 @@ void UXMSNodeValueOptionSelectorWidget::NativeOnInitialized()
 	if (SelectorDisplayWidget)
 	{
 		SelectorDisplayWidget->NodeIconClickedDelegate.AddUObject(this, &UXMSNodeValueOptionSelectorWidget::BroadcastOptionsRequestedDelegate);
+		SelectorDisplayWidget->NodeIconHoveredDelegate.AddUObject(this, &UXMSNodeContainerWidget::BroadcastTooltipRequestedDelegate);
 	}
 }
 

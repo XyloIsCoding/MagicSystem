@@ -4,10 +4,15 @@
 #include "UI/SubNode/ValueSelector/XMSValueTypeSelectorWidget.h"
 
 #include "XMSNodeStaticLibrary.h"
+#include "Components/RichTextBlock.h"
+#include "Node/XMSNodeData.h"
+#include "Node/XMSNodeDataRegistry.h"
 #include "Node/Variable/XMSValueTypeValueNode.h"
 #include "UI/BaseWidget/XMSNodeIconWidget.h"
 #include "UI/NodeOptions/XMSNodeOptionsSelectionWidget.h"
 #include "UI/NodeOptions/Entry/XMSValueTypeOptionEntryWidget.h"
+#include "UI/NodeTooltip/XMSNodeDoubleTooltipWidget.h"
+#include "UI/NodeTooltip/XMSNodeTooltipWidget.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +29,64 @@ void UXMSValueTypeSelectorWidget::OnOwningNodeSet()
 	{
 		ValueTypeNode->ValueTypeChangedDelegate.AddUObject(this, &UXMSValueTypeSelectorWidget::OnOwningNodeValueTypeChanged);
 		OnOwningNodeValueTypeChanged(ValueTypeNode->GetValueType(), XMSValueType::None);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * IXMSNodeTooltipInterface Interface
+ */
+
+void UXMSValueTypeSelectorWidget::InitializeTooltip(UXMSNodeTooltipWidget* TooltipWidget)
+{
+	Super::InitializeTooltip(TooltipWidget);
+
+	if (!TooltipWidget) return;
+	
+	UXMSNode* OwningNodePtr = OwningNode.Get();
+	if (!OwningNodePtr) return;
+	UXMSNodeData* OwningNodeData = UXMSNodeStaticLibrary::GetNodeClassData(OwningNodePtr->GetClass());
+	if (!OwningNodeData) return;
+
+	// If this selector's owning node (NodeWithValue) is visible, then the tooltip of this selector should
+	// just show the value's description
+	if (!OwningNodeData->bHideInSpellEditor)
+	{
+		UXMSValueTypeValueNode* ValueTypeNode = Cast<UXMSValueTypeValueNode>(OwningNodePtr);
+		if (!ValueTypeNode) return;
+	
+		if (FXMSValueTypeData* ValueTypeData = UXMSNodeStaticLibrary::GetValueTypeData(ValueTypeNode->GetValueType()))
+		{
+			TooltipWidget->Title->SetText(ValueTypeData->Name);
+			TooltipWidget->Body->SetText(ValueTypeData->Description);
+		}
+		return;
+	}
+
+	// Otherwise we need to give some context to this selector, so as main tooltip we use the tooltip data that the
+	// owning node (NodeWithValue) would have as sub-node of its parent node
+	UXMSNode* OwningNodeParentPtr = OwningNodePtr->GetParentNode();
+	if (!OwningNodeParentPtr) return;
+	UXMSNodeData* OwningNodeParentData = UXMSNodeStaticLibrary::GetNodeClassData(OwningNodeParentPtr->GetClass());
+	if (!OwningNodeParentData) return;
+	
+	if (FXMSSubNodeData* SubNodeData = OwningNodeParentData->GetSubNodeData(OwningNodePtr->GetPathFromParentNode().Identifier))
+	{
+		TooltipWidget->Title->SetText(SubNodeData->Name);
+		TooltipWidget->Body->SetText(SubNodeData->Description);
+	}
+
+	// And as second tooltip we display the value
+	UXMSNodeDoubleTooltipWidget* DoubleTooltipWidget = Cast<UXMSNodeDoubleTooltipWidget>(TooltipWidget);
+	if (!DoubleTooltipWidget) return;
+	UXMSValueTypeValueNode* ValueTypeNode = Cast<UXMSValueTypeValueNode>(OwningNodePtr);
+	if (!ValueTypeNode) return;
+	
+	if (FXMSValueTypeData* ValueTypeData = UXMSNodeStaticLibrary::GetValueTypeData(ValueTypeNode->GetValueType()))
+	{
+		DoubleTooltipWidget->SubTitle->SetText(ValueTypeData->Name);
+		DoubleTooltipWidget->SubBody->SetText(ValueTypeData->Description);
 	}
 }
 
