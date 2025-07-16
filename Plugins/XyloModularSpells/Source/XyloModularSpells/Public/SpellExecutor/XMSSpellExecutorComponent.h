@@ -18,6 +18,9 @@ struct FXMSSpellBrain
 	TMap<FString, int32> IntegerVariables;
 
 	UPROPERTY(BlueprintReadWrite)
+	TMap<FString, bool> BoolVariables;
+
+	UPROPERTY(BlueprintReadWrite)
 	TMap<FString, float> FloatVariables;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -54,6 +57,9 @@ public:
 public:
 	/** This function should handle all the value types registered in UXMSNodeDataRegistry */
 	virtual void DefineVariable(const FString& Name, const FGameplayTag& Type);
+
+	virtual void SetBoolValue(const FString& Name, bool Value);
+	virtual bool GetBoolValue(const FString& Name, bool& OutValue);
 	
 	virtual void SetIntegerValue(const FString& Name, int32 Value);
 	virtual bool GetIntegerValue(const FString& Name, int32& OutValue);

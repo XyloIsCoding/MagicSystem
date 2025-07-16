@@ -72,6 +72,7 @@ FXMSValueTypeData* UXMSNodeDataRegistry::GetTypeData(const FGameplayTag& InType)
 void UXMSNodeDataRegistry::UpdateTypesMap()
 {
 	ValueTypesData.FindOrAdd(XMSValueType::None);
+	ValueTypesData.FindOrAdd(XMSValueType::Bool);
 	ValueTypesData.FindOrAdd(XMSValueType::Integer);
 	ValueTypesData.FindOrAdd(XMSValueType::Float);
 	ValueTypesData.FindOrAdd(XMSValueType::Vector);

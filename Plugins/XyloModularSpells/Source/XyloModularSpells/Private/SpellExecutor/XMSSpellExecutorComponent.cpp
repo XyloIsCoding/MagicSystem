@@ -59,6 +59,20 @@ void UXMSSpellExecutorComponent::DefineVariable(const FString& Name, const FGame
 	}
 }
 
+void UXMSSpellExecutorComponent::SetBoolValue(const FString& Name, bool Value)
+{
+	Brain.BoolVariables.Add(Name, Value);
+}
+
+bool UXMSSpellExecutorComponent::GetBoolValue(const FString& Name, bool& OutValue)
+{
+	bool* ValuePtr = Brain.BoolVariables.Find(Name);
+	if (!ValuePtr) return false;
+	
+	OutValue = *ValuePtr;
+	return true;
+}
+
 void UXMSSpellExecutorComponent::SetIntegerValue(const FString& Name, int32 Value)
 {
 	Brain.IntegerVariables.Add(Name, Value);
