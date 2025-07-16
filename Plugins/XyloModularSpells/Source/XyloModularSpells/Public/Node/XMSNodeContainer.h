@@ -14,9 +14,6 @@ concept NodeClass = std::is_base_of_v<UXMSNode, Derived>;
 template<typename Derived, typename BaseClass, typename BaseInterface>
 concept DerivedNode = std::is_base_of_v<UXMSNode, Derived> && std::is_base_of_v<BaseClass, Derived> && std::is_base_of_v<BaseInterface, Derived>;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FXMSNodeChangedSignature, FName)
-DECLARE_MULTICAST_DELEGATE_TwoParams(FXMSArrayNodeChangedSignature, FName, int32)
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
