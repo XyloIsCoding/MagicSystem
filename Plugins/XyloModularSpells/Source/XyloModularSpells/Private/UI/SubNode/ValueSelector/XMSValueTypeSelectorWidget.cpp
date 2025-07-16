@@ -43,15 +43,18 @@ void UXMSValueTypeSelectorWidget::InitializeTooltip(UXMSNodeTooltipWidget* Toolt
 	Super::InitializeTooltip(TooltipWidget);
 
 	if (!TooltipWidget) return;
-	
+
+
+	// NodeWithValue owning this ValueSelectorWidget
 	UXMSNode* OwningNodePtr = OwningNode.Get();
 	if (!OwningNodePtr) return;
-	UXMSNodeData* OwningNodeData = UXMSNodeStaticLibrary::GetNodeClassData(OwningNodePtr->GetClass());
-	if (!OwningNodeData) return;
+	// Node owning the NodeWithValue
+	UXMSNode* OwningNodeParentPtr = OwningNodePtr->GetParentNode();
+	if (!OwningNodeParentPtr) return;
 
-	// If this selector's owning node (NodeWithValue) is visible, then the tooltip of this selector should
+	// If the NodeWithValue owning this SelectorWidget is visible, then the tooltip of this selector should
 	// just show the value's description
-	if (!OwningNodeData->bHideInSpellEditor)
+	if (!UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(OwningNodeParentPtr->GetClass(), OwningNodePtr->GetPathFromParentNode()))
 	{
 		UXMSValueTypeValueNode* ValueTypeNode = Cast<UXMSValueTypeValueNode>(OwningNodePtr);
 		if (!ValueTypeNode) return;
@@ -66,8 +69,6 @@ void UXMSValueTypeSelectorWidget::InitializeTooltip(UXMSNodeTooltipWidget* Toolt
 
 	// Otherwise we need to give some context to this selector, so as main tooltip we use the tooltip data that the
 	// owning node (NodeWithValue) would have as sub-node of its parent node
-	UXMSNode* OwningNodeParentPtr = OwningNodePtr->GetParentNode();
-	if (!OwningNodeParentPtr) return;
 	UXMSNodeData* OwningNodeParentData = UXMSNodeStaticLibrary::GetNodeClassData(OwningNodeParentPtr->GetClass());
 	if (!OwningNodeParentData) return;
 	

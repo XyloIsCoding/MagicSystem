@@ -260,10 +260,10 @@ void UXMSNodeContainerWidget::OnNodeChanged()
 		NodeWithArray->SubNodeRemovedDelegate.AddUObject(this, &ThisClass::OnSubNodeContainerRemoved);
 	}
 
-	if (UXMSNodeData* NodeData = UXMSNodeStaticLibrary::GetNodeClassData(NewNode->GetClass()))
+	if (UXMSNode* OwningNodePtr = OwningNode.Get())
 	{
 		// Hide this widget if requested
-		if (NodeData->bHideInSpellEditor)
+		if (UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(OwningNodePtr->GetClass(), ThisNodePath))
 		{
 			SetVisibility(ESlateVisibility::Collapsed);
 		}

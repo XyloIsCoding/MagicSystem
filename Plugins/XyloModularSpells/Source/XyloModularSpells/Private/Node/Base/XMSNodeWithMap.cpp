@@ -155,6 +155,30 @@ void UXMSNodeWithMap::GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) cons
 	SubNodes.GetKeys(OutIdentifiers);
 }
 
+UClass* UXMSNodeWithMap::GetSubNodeInterface(FName Identifier) const
+{
+	FXMSNodeContainer* const* NodeContainerFound = SubNodes.Find(Identifier);
+	if (!NodeContainerFound)
+	{
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::GetAllSubNodes >> Sub-node container ptr not found for [%s]"), *Identifier.ToString())
+		return nullptr;
+	}
+
+	return (*NodeContainerFound)->GetInterfaceClass();
+}
+
+UClass* UXMSNodeWithMap::GetSubNodeClass(FName Identifier) const
+{
+	FXMSNodeContainer* const* NodeContainerFound = SubNodes.Find(Identifier);
+	if (!NodeContainerFound)
+	{
+		UE_LOG(LogXyloModularSpells, Error, TEXT("UXMSNodeWithMap::GetSubNodeClass >> Sub-node container ptr not found for [%s]"), *Identifier.ToString())
+		return nullptr;
+	}
+
+	return (*NodeContainerFound)->GetBaseClass();
+}
+
 // ~SubNodes
 /*--------------------------------------------------------------------------------------------------------------------*/
 

@@ -24,6 +24,15 @@ struct FXMSSubNodeData
 	{
 	}
 
+public:
+	void SetClasses(UClass* BaseClass, UClass* InterfaceClass);
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (EditCondition = "bHideStuff", EditConditionHides, HideEditConditionToggle))
+	FString SubNodeClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (EditCondition = "bHideStuff", EditConditionHides, HideEditConditionToggle))
+	FString SubNodeInterface;
+
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FName Identifier;
 	
@@ -35,6 +44,17 @@ struct FXMSSubNodeData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> Glyph;
+
+	/** SubNodes with this property set to true will not be displayed in spell editor, which means that the
+	 * ContainerWidget set to display this node, will disappear, and the node of the container will no longer be modifiable.
+	 * This is only useful if this sub node is supposed to have a non-modifiable default value
+	 * (es: UXMSValueTypeValueNode is usually hidden, so that only its selector is visible) */
+	UPROPERTY(EditAnywhere)
+	bool bHideInSpellEditor = false;
+
+private:
+	UPROPERTY()
+	bool bHideStuff = false;
 };
 
 
@@ -75,6 +95,10 @@ public:
 	 * UXMSNodeData
 	 */
 
+protected:
+	UPROPERTY(EditAnywhere)
+	bool bRefreshData = false;
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// NodeClass
 	
@@ -106,12 +130,6 @@ public:
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
 	TSubclassOf<UXMSNodeValueSelectorWidget> ValueSelectorWidgetClass;
 
-	/** Node with this property set to true will not be displayed in spell editor, which means that the ContainerWidget
-	 * set to display this node, will disappear, and the node of the container will no longer be modifiable.
-	 * This is only useful if this node class is only going to be used as default value for a node */
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
-	bool bHideInSpellEditor = false;
-
 /*--------------------------------------------------------------------------------------------------------------------*/
 	// SubNodes
 	
@@ -121,7 +139,7 @@ public:
 	bool GetSubNodeData(FName SubNodeIdentifier, FXMSSubNodeData& OutSubNodeData);
 	FXMSSubNodeData* GetSubNodeData(FName SubNodeIdentifier);
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta = (TitleProperty = "Identifier"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, EditFixedSize, meta = (TitleProperty = "{Identifier} : [{SubNodeClass} | {SubNodeInterface}]"))
 	TArray<FXMSSubNodeData> SubNodes;
 
 	// ~SubNodes

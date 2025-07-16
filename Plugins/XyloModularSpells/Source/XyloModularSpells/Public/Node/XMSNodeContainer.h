@@ -55,6 +55,8 @@ struct FXMSNodeContainer
 public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
+	virtual UClass* GetInterfaceClass() const { return nullptr; }
+	virtual UClass* GetBaseClass() const { return nullptr; }
 protected:
 	virtual UXMSNode* GetGeneric() const { return nullptr; }
 	virtual void SetGeneric(UXMSNode* InNode) {}
@@ -136,6 +138,16 @@ public:
 		}
 		
 		return true;
+	}
+
+	virtual UClass* GetInterfaceClass() const override
+	{
+		return BaseInterface::UClassType::StaticClass();
+	}
+
+	virtual UClass* GetBaseClass() const override
+	{
+		return BaseClass::StaticClass();
 	}
 	
 protected:
@@ -225,6 +237,8 @@ struct FXMSMultiNodeContainer
 public:
 	/** Checks if a class is compatible with this container */
 	virtual bool IsCompatible(UClass* NodeClass) const { return false; }
+	virtual UClass* GetInterfaceClass() const { return nullptr; }
+	virtual UClass* GetBaseClass() const { return nullptr; }
 protected:
 	virtual UXMSNode* GetGeneric(int32 Index) const { return nullptr; }
 	/** @return All stored nodes, even if nullptr */
@@ -318,6 +332,16 @@ public:
 		}
 		
 		return true;
+	}
+
+	virtual UClass* GetInterfaceClass() const override
+	{
+		return BaseInterface::UClassType::StaticClass();
+	}
+
+	virtual UClass* GetBaseClass() const override
+	{
+		return BaseClass::StaticClass();
 	}
 
 	virtual void Remove(int32 Index) override

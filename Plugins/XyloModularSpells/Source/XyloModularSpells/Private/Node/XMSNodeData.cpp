@@ -6,6 +6,12 @@
 #include "Node/Base/XMSNodeWithValue.h"
 
 
+void FXMSSubNodeData::SetClasses(UClass* BaseClass, UClass* InterfaceClass)
+{
+	if (BaseClass) SubNodeClass = BaseClass->GetName();
+	if (InterfaceClass) SubNodeInterface = InterfaceClass->GetName();
+}
+
 UXMSNodeData::UXMSNodeData(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -24,6 +30,12 @@ void UXMSNodeData::PostEditChangeChainProperty(struct FPropertyChangedChainEvent
 {
 	Super::PostEditChangeChainProperty(PropertyChangedEvent);
 
+	if (PropertyChangedEvent.GetPropertyName().IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, bRefreshData)))
+	{
+		bRefreshData = false;
+		OnNodeClassChanged();
+	}
+	
 	if (PropertyChangedEvent.GetPropertyName().IsEqual(GET_MEMBER_NAME_CHECKED(ThisClass, NodeClass)))
 	{
 		OnNodeClassChanged();
@@ -77,13 +89,22 @@ void UXMSNodeData::UpdateSubNodes()
 		});
 		if (OldData)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeData::UpdateSubNodes >> Retriving %s"), *Identifier.ToString())
+			UE_LOG(LogTemp, Warning, TEXT("UXMSNodeData::UpdateSubNodes >> Retriving %s"), *Identifier.ToString())
+			OldData->SetClasses(
+				DefaultNode->GetSubNodeClass(Identifier),
+				DefaultNode->GetSubNodeInterface(Identifier)
+			);
 			TempArray.Add(*OldData);
 		}
 		else
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("UXMSNodeData::UpdateSubNodes >> Adding %s"), *Identifier.ToString())
-			TempArray.Add(FXMSSubNodeData(Identifier));
+			UE_LOG(LogTemp, Warning, TEXT("UXMSNodeData::UpdateSubNodes >> Adding %s"), *Identifier.ToString())
+			FXMSSubNodeData NewData {Identifier};
+			NewData.SetClasses(
+				DefaultNode->GetSubNodeClass(Identifier),
+				DefaultNode->GetSubNodeInterface(Identifier)
+			);
+			TempArray.Add(NewData);
 		}
 	}
 

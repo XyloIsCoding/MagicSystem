@@ -44,6 +44,8 @@ public:
 
 	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<TSubclassOf<UXMSNode>>& OutClassOptions) override;
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const override;
+	virtual UClass* GetSubNodeInterface(FName Identifier) const override;
+	virtual UClass* GetSubNodeClass(FName Identifier) const override;
 
 	// ~SubNodes
 /*--------------------------------------------------------------------------------------------------------------------*/

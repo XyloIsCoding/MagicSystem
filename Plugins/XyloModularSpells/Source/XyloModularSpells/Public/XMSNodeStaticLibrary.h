@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
+struct FXMSNodePathElement;
 struct FXMSValueTypeData;
 class UXMSSpellExecutorComponent;
 struct FGameplayTag;
@@ -39,6 +40,7 @@ public:
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
 	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);
+	static bool IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode);
 	/** If Node is not valid, falls back to using a default texture */
 	static UTexture2D* GetNodeClassIconFromNode(UXMSNode* Node);
 	static FString GetNodeClassNameFromNode(UXMSNode* Node);

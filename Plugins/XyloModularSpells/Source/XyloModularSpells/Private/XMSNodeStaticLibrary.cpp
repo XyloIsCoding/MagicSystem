@@ -175,6 +175,17 @@ UXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
 	return NodeDataRegistry->GetNodeData(NodeClass);
 }
 
+bool UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode)
+{
+	UXMSNodeData* NodeData = GetNodeClassData(ParentNode);
+	if (!NodeData) return false;
+
+	FXMSSubNodeData* SubNodeData = NodeData->GetSubNodeData(PathToSubNode.Identifier);
+	if (!SubNodeData) return false;
+
+	return SubNodeData->bHideInSpellEditor;
+}
+
 UTexture2D* UXMSNodeStaticLibrary::GetNodeClassIconFromNode(UXMSNode* Node)
 {
 	if (Node)

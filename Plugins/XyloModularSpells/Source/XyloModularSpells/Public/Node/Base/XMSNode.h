@@ -82,6 +82,8 @@ public:
 	virtual void GetSubNodeClassOptions(const FXMSNodePathElement& PathElement, TArray<TSubclassOf<UXMSNode>>& OutClassOptions) {}
 	/** @return: the Identifiers of all sub-nodes */
 	virtual void GetSubNodesIdentifiers(TArray<FName>& OutIdentifiers) const {}
+	virtual UClass* GetSubNodeInterface(FName Identifier) const { return nullptr; }
+	virtual UClass* GetSubNodeClass(FName Identifier) const { return nullptr; }
 
 	// ~SubNodes
 /*--------------------------------------------------------------------------------------------------------------------*/
