@@ -21,5 +21,5 @@ class XYLOMODULARSPELLS_API IXMSStringOperatorInterface
 	GENERATED_BODY()
 
 public:
-	virtual FString ApplyStringOperation() = 0;
+	virtual bool ApplyStringOperation(FString& OutResult) = 0;
 };

@@ -19,6 +19,5 @@ bool UXMSStringOperationNode::GetString(FString& OutString)
 		return false;
 	}
 	
-	OutString = StringOperatorInterface->ApplyStringOperation();
-	return true;
+	return StringOperatorInterface->ApplyStringOperation(OutString);
 }

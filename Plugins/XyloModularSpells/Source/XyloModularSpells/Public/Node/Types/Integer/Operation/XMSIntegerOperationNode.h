@@ -24,7 +24,7 @@ class XYLOMODULARSPELLS_API UXMSIntegerOperationNode : public UXMSNodeWithMap, p
 	 */
 	
 public:
-	virtual int32 GetInteger() override;
+	virtual bool GetInteger(int32& OutInteger) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -8,16 +8,19 @@ UXMSIntegerProviderNode::UXMSIntegerProviderNode()
 	
 }
 
-int32 UXMSIntegerProviderNode::GetInteger()
+bool UXMSIntegerProviderNode::GetInteger(int32& OutInteger)
 {
 	IXMSIntegerValueInterface* IntegerValueInterface = IntegerNode.GetInterface();
-	if (!IntegerValueInterface) return 0;
+	if (!IntegerValueInterface) return false;
 	
-	return IntegerValueInterface->GetInteger();
+	return IntegerValueInterface->GetInteger(OutInteger);
 }
 
 bool UXMSIntegerProviderNode::GetString(FString& OutString)
 {
-	OutString = FString::FromInt(GetInteger());
+	int32 Integer;
+	if (!GetInteger(Integer)) return false;
+	
+	OutString = FString::FromInt(Integer);
 	return true;
 }

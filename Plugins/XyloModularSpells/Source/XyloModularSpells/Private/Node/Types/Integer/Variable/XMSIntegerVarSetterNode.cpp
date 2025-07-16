@@ -54,7 +54,9 @@ bool UXMSIntegerVarSetterNode::SetVariable()
 	FString VariableNameString;
 	if (!VariableNameNode->GetString(VariableNameString)) return false;
 	if (VariableNameString.IsEmpty()) return false;
-	
-	SpellExecutor->SetIntegerValue(VariableNameString, Value->GetInteger());
+
+	int32 IntegerValue = 0;
+	Value->GetInteger(IntegerValue);
+	SpellExecutor->SetIntegerValue(VariableNameString, IntegerValue);
 	return true;
 }

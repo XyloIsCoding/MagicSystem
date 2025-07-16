@@ -25,6 +25,12 @@ void UXMSIntegerValueNode::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObjec
 	JsonObject->TryGetNumberField(ValueJsonKey, Integer);
 }
 
+bool UXMSIntegerValueNode::GetInteger(int32& OutInteger)
+{
+	OutInteger = Integer;
+	return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

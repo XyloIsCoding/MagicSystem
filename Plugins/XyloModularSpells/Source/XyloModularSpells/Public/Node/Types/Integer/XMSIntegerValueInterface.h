@@ -21,5 +21,5 @@ class XYLOMODULARSPELLS_API IXMSIntegerValueInterface
 	GENERATED_BODY()
 
 public:
-	virtual int32 GetInteger() = 0;
+	virtual bool GetInteger(int32& OutInteger) = 0;
 };

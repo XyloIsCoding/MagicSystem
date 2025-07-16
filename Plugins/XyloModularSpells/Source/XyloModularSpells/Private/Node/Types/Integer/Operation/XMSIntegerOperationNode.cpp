@@ -10,11 +10,11 @@
  * IXMSIntegerValueInterface Interface
  */
 
-int32 UXMSIntegerOperationNode::GetInteger()
+bool UXMSIntegerOperationNode::GetInteger(int32& OutInteger)
 {
 	if (IXMSIntegerOperatorInterface* IntegerOperatorInterface = IntegerOperator.GetInterface())
 	{
-		return IntegerOperatorInterface->ApplyIntegerOperation();
+		return IntegerOperatorInterface->ApplyIntegerOperation(OutInteger);
 	}
-	return 0;
+	return false;
 }

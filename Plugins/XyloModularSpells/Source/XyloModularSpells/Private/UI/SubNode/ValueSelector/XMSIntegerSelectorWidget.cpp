@@ -23,8 +23,7 @@ void UXMSIntegerSelectorWidget::OnOwningNodeSet()
 	if (UXMSIntegerValueNode* IntegerNode = Cast<UXMSIntegerValueNode>(OwningNode.Get()))
 	{
 		IntegerNode->IntegerValueChangedDelegate.AddUObject(this, &UXMSIntegerSelectorWidget::OnOwningNodeIntegerValueChanged);
-		
-		OnOwningNodeIntegerValueChanged(IntegerNode->GetInteger(), 0);
+		OnOwningNodeIntegerValueChanged(IntegerNode->GetIntegerUnsafe(), 0);
 	}
 }
 
@@ -87,7 +86,7 @@ void UXMSIntegerSelectorWidget::SelectionCompleted(bool bSuccess)
 	else
 	{
 		// Reset widget CachedNumber to node's one
-		OnOwningNodeIntegerValueChanged(IntegerNode->GetInteger(), 0);
+		OnOwningNodeIntegerValueChanged(IntegerNode->GetIntegerUnsafe(), 0);
 	}
 }
 

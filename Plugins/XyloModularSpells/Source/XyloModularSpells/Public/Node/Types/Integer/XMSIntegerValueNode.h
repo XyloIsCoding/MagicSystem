@@ -34,7 +34,7 @@ public:
 	 */
 	
 public:
-	virtual int32 GetInteger() override { return Integer; }
+	virtual bool GetInteger(int32& OutInteger) override;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,6 +45,7 @@ public:
 public:
 	FXMSIntegerValueChangedSignature IntegerValueChangedDelegate;
 	virtual void SetInteger(int32 InInteger);
+	virtual int32 GetIntegerUnsafe() const { return Integer; }
 private:
 	int32 Integer = 0;
 };

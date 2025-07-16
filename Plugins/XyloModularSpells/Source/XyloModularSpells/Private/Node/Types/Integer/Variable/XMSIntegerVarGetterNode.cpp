@@ -40,31 +40,19 @@ void UXMSIntegerVarGetterNode::OnSubNodeChanged(FName Identifier)
  * IXMSIntegerValueInterface Interface
  */
 
-int32 UXMSIntegerVarGetterNode::GetInteger()
+bool UXMSIntegerVarGetterNode::GetInteger(int32& OutInteger)
 {
 	UXMSSpellExecutorComponent* SpellExecutor = UXMSNodeStaticLibrary::GetSpellExecutorComponent(GetOuter());
-	if (!SpellExecutor)
-	{
-		return 0;
-	}
+	if (!SpellExecutor) return false;
 
 	IXMSStringValueInterface* VariableNameNode = VariableName.GetInterface();
-	if (!VariableNameNode)
-	{
-		return 0;
-	}
+	if (!VariableNameNode) return false;
 	
 	FString VariableNameString;
 	if (!VariableNameNode->GetString(VariableNameString))
 	{
-		return 0;
-	}
-
-	int32 VariableValueInt;
-	if (!SpellExecutor->GetIntegerValue(VariableNameString, VariableValueInt))
-	{
-		return  0;
+		return false;
 	}
 	
-	return VariableValueInt;
+	return SpellExecutor->GetIntegerValue(VariableNameString, OutInteger);
 }
