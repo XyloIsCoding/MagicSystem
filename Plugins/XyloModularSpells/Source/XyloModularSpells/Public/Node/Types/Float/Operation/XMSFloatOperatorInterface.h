@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSFloatOperatorInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool ApplyFloatOperation(float& OutResult) = 0;
 };

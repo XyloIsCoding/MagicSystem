@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSVectorOperatorInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool ApplyVectorOperation(FVector& OutResult) = 0;
 };

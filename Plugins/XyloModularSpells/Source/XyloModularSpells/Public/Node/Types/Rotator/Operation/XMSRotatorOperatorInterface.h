@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSRotatorOperatorInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool ApplyRotatorOperation(FRotator& OutResult) = 0;
 };
