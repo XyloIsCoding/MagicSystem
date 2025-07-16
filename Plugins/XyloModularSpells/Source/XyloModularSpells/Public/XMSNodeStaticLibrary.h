@@ -43,7 +43,7 @@ public:
 	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);
 	static void GetNodeClassRequiredFlags(UClass* NodeClass, FGameplayTagContainer& OutFlags);
 	static bool AreNodeClassFlagsSatisfied(UClass* NodeClass, const FGameplayTagContainer& AvailableFlags);
-	static bool IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode);
+	static bool IsSubNodeHiddenInEditor(UClass* ParentNodeClass, const FXMSNodePathElement& PathToSubNode);
 	/** If Node is not valid, falls back to using a default texture */
 	static UTexture2D* GetNodeClassIconFromNode(UXMSNode* Node);
 	static FString GetNodeClassNameFromNode(UXMSNode* Node);

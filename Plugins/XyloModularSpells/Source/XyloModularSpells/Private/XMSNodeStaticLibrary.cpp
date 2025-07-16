@@ -195,9 +195,9 @@ bool UXMSNodeStaticLibrary::AreNodeClassFlagsSatisfied(UClass* NodeClass, const 
 	return AvailableFlags.HasAllExact(NodeData->RequiredContextFlags);
 }
 
-bool UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode)
+bool UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(UClass* ParentNodeClass, const FXMSNodePathElement& PathToSubNode)
 {
-	UXMSNodeData* NodeData = GetNodeClassData(ParentNode);
+	UXMSNodeData* NodeData = GetNodeClassData(ParentNodeClass);
 	if (!NodeData) return false;
 
 	FXMSSubNodeData* SubNodeData = NodeData->GetSubNodeData(PathToSubNode.Identifier);
