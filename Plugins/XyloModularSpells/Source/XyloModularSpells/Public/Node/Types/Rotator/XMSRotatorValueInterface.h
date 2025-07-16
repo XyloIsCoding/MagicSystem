@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSRotatorValueInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool GetRotator(FRotator& OutRotator) = 0;
 };

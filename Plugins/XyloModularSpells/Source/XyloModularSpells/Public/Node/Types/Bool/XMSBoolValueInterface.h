@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSBoolValueInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool GetBool(bool& OutBool) = 0;
 };

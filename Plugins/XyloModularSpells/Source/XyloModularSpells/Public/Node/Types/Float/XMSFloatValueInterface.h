@@ -21,4 +21,5 @@ class XYLOMODULARSPELLS_API IXMSFloatValueInterface
 	GENERATED_BODY()
 
 public:
+	virtual bool GetFloat(float& OutFloat) = 0;
 };
