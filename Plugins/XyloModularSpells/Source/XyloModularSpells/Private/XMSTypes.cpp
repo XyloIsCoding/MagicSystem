@@ -41,3 +41,9 @@ namespace XMSValueType
 	UE_DEFINE_GAMEPLAY_TAG(String, "XMS.Node.Type.String")
 	UE_DEFINE_GAMEPLAY_TAG(Object, "XMS.Node.Type.Object")
 }
+
+namespace XMSNodeFlag
+{
+	UE_DEFINE_GAMEPLAY_TAG(Impossible, "XMS.Node.Flag.Impossible")
+	UE_DEFINE_GAMEPLAY_TAG(Loop, "XMS.Node.Flag.Loop")
+}

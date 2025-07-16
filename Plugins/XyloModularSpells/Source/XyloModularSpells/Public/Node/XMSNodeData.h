@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
 #include "XMSNodeData.generated.h"
 
@@ -127,6 +128,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UTexture2D> Glyph;
+
+	/** Flags to filter the context where this node class can be selected (checked in spell editor only).
+	 * @remark In UXMSNode::GetSubNodeClassOptions for each class we check if the result of GetNodeFlagsRecursive
+	 * contains all the flags specified by this property, and only in this case we allow the class to be an option. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTagContainer RequiredContextFlags;
 	
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "bIsNodeWithValue", EditConditionHides, HideEditConditionToggle))
 	TSubclassOf<UXMSNodeValueSelectorWidget> ValueSelectorWidgetClass;

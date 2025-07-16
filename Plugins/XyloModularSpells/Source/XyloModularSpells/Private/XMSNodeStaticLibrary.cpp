@@ -175,6 +175,26 @@ UXMSNodeData* UXMSNodeStaticLibrary::GetNodeClassData(UClass* NodeClass)
 	return NodeDataRegistry->GetNodeData(NodeClass);
 }
 
+void UXMSNodeStaticLibrary::GetNodeClassRequiredFlags(UClass* NodeClass, FGameplayTagContainer& OutFlags)
+{
+	UXMSNodeData* NodeData = GetNodeClassData(NodeClass);
+	if (!NodeData) return;
+
+	OutFlags = NodeData->RequiredContextFlags;
+}
+
+bool UXMSNodeStaticLibrary::AreNodeClassFlagsSatisfied(UClass* NodeClass, const FGameplayTagContainer& AvailableFlags)
+{
+	UXMSNodeData* NodeData = GetNodeClassData(NodeClass);
+	if (!NodeData) return false;
+
+	// No required flags, so we can return true
+	if (NodeData->RequiredContextFlags.IsEmpty()) return true;
+
+	// Returns true if AvailableFlags has all the required flags
+	return AvailableFlags.HasAllExact(NodeData->RequiredContextFlags);
+}
+
 bool UXMSNodeStaticLibrary::IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode)
 {
 	UXMSNodeData* NodeData = GetNodeClassData(ParentNode);

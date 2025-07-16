@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XMSNodeStaticLibrary.generated.h"
 
@@ -40,6 +41,8 @@ public:
 	static UClass* GetNodeClassByName(const FString& ClassName);
 	static UXMSNodeDataRegistry* GetNodeClassDataRegistry();
 	static UXMSNodeData* GetNodeClassData(UClass* NodeClass);
+	static void GetNodeClassRequiredFlags(UClass* NodeClass, FGameplayTagContainer& OutFlags);
+	static bool AreNodeClassFlagsSatisfied(UClass* NodeClass, const FGameplayTagContainer& AvailableFlags);
 	static bool IsSubNodeHiddenInEditor(UClass* ParentNode, const FXMSNodePathElement& PathToSubNode);
 	/** If Node is not valid, falls back to using a default texture */
 	static UTexture2D* GetNodeClassIconFromNode(UXMSNode* Node);

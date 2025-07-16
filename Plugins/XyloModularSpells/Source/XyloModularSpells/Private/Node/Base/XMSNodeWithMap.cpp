@@ -143,10 +143,13 @@ void UXMSNodeWithMap::GetSubNodeClassOptions(const FXMSNodePathElement& PathElem
 	TArray<TSubclassOf<UXMSNode>> NodeClasses;
 	UXMSNodeStaticLibrary::GetAllNodeClasses(NodeClasses);
 
+	FGameplayTagContainer ThisNodeFlags;
+	GetNodeFlagsRecursive(ThisNodeFlags);
+	
 	FXMSNodeContainer* NodeContainer = *NodeContainerFound;
-	OutClassOptions = NodeClasses.FilterByPredicate([NodeContainer](UClass* NodeClass)
+	OutClassOptions = NodeClasses.FilterByPredicate([NodeContainer, ThisNodeFlags](UClass* NodeClass)
 	{
-		return NodeContainer->IsCompatible(NodeClass);
+		return NodeContainer->IsCompatible(NodeClass) && UXMSNodeStaticLibrary::AreNodeClassFlagsSatisfied(NodeClass, ThisNodeFlags);
 	});
 }
 
