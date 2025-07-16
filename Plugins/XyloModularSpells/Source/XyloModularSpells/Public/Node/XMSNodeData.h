@@ -53,6 +53,7 @@ public:
 	bool bHideInSpellEditor = false;
 
 private:
+	// Used to hide properties that we want to use as TitleProperty (since thy must be marked as VisibleAnywhere)
 	UPROPERTY()
 	bool bHideStuff = false;
 };
